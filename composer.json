@@ -23,6 +23,7 @@
         "phpunit/phpunit": "5.2"
     },
     "require": {
-        "venta/container": "dev-development"
+        "venta/container": "dev-development",
+        "psr/http-message": "^1.0"
     }
 }
