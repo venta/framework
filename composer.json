@@ -23,7 +23,7 @@
         "phpunit/phpunit": "5.2"
     },
     "require": {
-        "venta/container": "dev-master",
+        "ventaframework/container": "dev-master",
         "psr/http-message": "^1.0"
     }
 }
