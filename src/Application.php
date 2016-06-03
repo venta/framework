@@ -2,6 +2,8 @@
 
 namespace Venta\Framework;
 
+use Venta\Container\Container;
+
 /**
  * Class Application
  *
