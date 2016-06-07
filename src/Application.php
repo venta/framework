@@ -16,10 +16,37 @@ use Zend\Diactoros\Response;
 abstract class Application extends Container implements ApplicationContract
 {
     /**
-     * Construct function
+     * Array of defined extension providers
+     *
+     * @var array
      */
-    public function __construct()
+    protected $extensions = [];
+
+    /**
+     * Root path
+     *
+     * @var string
+     */
+    protected $root;
+
+    /**
+     * File with array of extension providers
+     *
+     * @var string
+     */
+    protected $extensionsFile;
+
+    /**
+     * Construct function
+     *
+     * @param string $root
+     * @param string $extensionsFile
+     */
+    public function __construct(string $root, string $extensionsFile = 'bootstrap/extensions.php')
     {
+        $this->extensionsFile = $extensionsFile;
+        $this->root = $root;
+
         $this->configure();
     }
 
@@ -37,21 +64,68 @@ abstract class Application extends Container implements ApplicationContract
     public function run(RequestInterface $request): ResponseInterface
     {
         $this->singleton(RequestInterface::class, $request);
-        $this->singleton(ResponseInterface::class, new Response);
+        $this->singleton(ResponseInterface::class, $response = new Response);
 
-        $this->make(ResponseInterface::class)->getBody()->write('Hi there. I\'m Venta');
+        $this->loadExtensionProviders();
+        $this->callExtensionProvidersMethod('bindings', $this);
 
-        return $this->make(ResponseInterface::class);
+        $response->getBody()->write('Hi there. I\'m Venta');
+
+        return $response;
     }
 
     /**
      * Function, called in order to terminate application.
      *
-     * @param RequestInterface $request
+     * @param RequestInterface  $request
      * @param ResponseInterface $response
      */
     public function terminate(RequestInterface $request, ResponseInterface $response)
     {
+        $this->callExtensionProvidersMethod('terminate', $this, $request, $response);
+    }
 
+    /**
+     * Add extension provider to application
+     *
+     * @param string $provider
+     */
+    public function addExtensionProvider(string $provider)
+    {
+        if (!isset($this->extensions[$provider])) {
+            $this->extensions[$provider] = new $provider;
+        }
+    }
+
+    /**
+     * Calls passed in method on all extension providers
+     *
+     * @param string $method
+     * @param array  $arguments
+     */
+    protected function callExtensionProvidersMethod(string $method, ...$arguments)
+    {
+        foreach ($this->extensions as $provider) {
+            if (is_callable([$provider, $method])) {
+                $provider->$method(...$arguments);
+            }
+        }
+    }
+
+    /**
+     * Loads all extension providers from file
+     */
+    protected function loadExtensionProviders()
+    {
+        $path = $this->root . '/' . $this->extensionsFile;
+
+        if (file_exists($path) && is_file($path) && is_readable($path)) {
+            $providers = require $path;
+            $providers = is_array($providers) ? $providers : [];
+
+            foreach ($providers as $provider) {
+                $this->addExtensionProvider($provider);
+            }
+        }
     }
 }
