@@ -6,6 +6,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Venta\Container\Container;
 use Venta\Framework\Contracts\ApplicationContract;
+use Venta\Routing\Contract\MiddlewareContract;
 use Zend\Diactoros\Response;
 
 /**
@@ -66,10 +67,13 @@ abstract class Application extends Container implements ApplicationContract
         $this->singleton(RequestInterface::class, $request);
         $this->singleton(ResponseInterface::class, $response = new Response);
 
+        $this->singleton('response', ResponseInterface::class);
+        $this->singleton('request', RequestInterface::class);
+
         $this->loadExtensionProviders();
         $this->callExtensionProvidersMethod('bindings', $this);
-
-        $response->getBody()->write('Hi there. I\'m Venta');
+        
+        $this->make('router')->dispatch($request->getMethod(), $request->getUri()->getPath());
 
         return $response;
     }
