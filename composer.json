@@ -24,6 +24,7 @@
     },
     "require": {
         "ventaframework/container": "dev-master",
-        "psr/http-message": "^1.0"
+        "psr/http-message": "^1.0",
+        "symfony/console": "^3.1"
     }
 }
