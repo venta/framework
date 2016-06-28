@@ -80,6 +80,19 @@ abstract class Application extends Container implements ApplicationContract
     }
 
     /**
+     * Emits response to client
+     * Sends status code, headers, echoes body
+     *
+     * @param ResponseInterface $response
+     */
+    public function emit(ResponseInterface $response)
+    {
+        /** @var \Zend\Diactoros\Response\EmitterInterface $emitter */
+        $emitter = $this->make(\Zend\Diactoros\Response\EmitterInterface::class);
+        $emitter->emit($response);
+    }
+
+    /**
      * Function, called in order to terminate application.
      *
      * @param RequestInterface  $request
