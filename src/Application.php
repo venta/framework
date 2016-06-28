@@ -73,10 +73,10 @@ abstract class Application extends Container implements ApplicationContract
         $this->loadExtensionProviders();
         $this->callExtensionProvidersMethod('bindings', $this);
         $this->callExtensionProvidersMethod('bootstrap', $this);
-        
-        $this->make('router')->dispatch($request->getMethod(), $request->getUri()->getPath());
 
-        return $response;
+        /** @var \Venta\Routing\Router $router */
+        $router = $this->make('router');
+        return $router->dispatch($request->getMethod(), $request->getUri()->getPath());
     }
 
     /**
