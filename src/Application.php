@@ -6,8 +6,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Venta\Container\Container;
 use Venta\Framework\Contracts\ApplicationContract;
-use Venta\Routing\Contract\MiddlewareContract;
-use Zend\Diactoros\Response;
+use Venta\Routing\Response;
 
 /**
  * Class Application
@@ -22,6 +21,13 @@ abstract class Application extends Container implements ApplicationContract
      * @var array
      */
     protected $extensions = [];
+
+    /**
+     * Version string holder
+     *
+     * @var string
+     */
+    protected $version = '0.0.1-wp';
 
     /**
      * Root path
@@ -54,13 +60,18 @@ abstract class Application extends Container implements ApplicationContract
     /**
      * {@inheritdoc}
      */
+    public function version(): string
+    {
+        return $this->version;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     abstract public function configure();
 
     /**
-     * Function, called in order to run application.
-     *
-     * @param  RequestInterface $request
-     * @return ResponseInterface
+     * {@inheritdoc}
      */
     public function run(RequestInterface $request): ResponseInterface
     {
@@ -72,7 +83,6 @@ abstract class Application extends Container implements ApplicationContract
 
         $this->loadExtensionProviders();
         $this->callExtensionProvidersMethod('bindings', $this);
-        $this->callExtensionProvidersMethod('bootstrap', $this);
 
         /** @var \Venta\Routing\Router $router */
         $router = $this->make('router');
@@ -93,10 +103,7 @@ abstract class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Function, called in order to terminate application.
-     *
-     * @param RequestInterface  $request
-     * @param ResponseInterface $response
+     * {@inheritdoc}
      */
     public function terminate(RequestInterface $request, ResponseInterface $response)
     {

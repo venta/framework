@@ -21,7 +21,7 @@ class ErrorHandlerProvider
         /** @todo Add environment check here */
         $app->singleton(
             \Whoops\Handler\HandlerInterface::class,
-            preg_match($accept, '/^(application|text)/.*json.*$/') ?
+            preg_match('/^(application|text)\.*json.*$/', $accept) ?
                 \Whoops\Handler\JsonResponseHandler::class : \Whoops\Handler\PrettyPageHandler::class
         );
     }
