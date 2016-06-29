@@ -40,6 +40,15 @@ class HttpKernel implements HttpKernelContract
     /**
      * {@inheritdoc}
      */
+    public function emit(ResponseInterface $response)
+    {
+        $this->application->emit($response);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function terminate(RequestInterface $request, ResponseInterface $response)
     {
         $this->application->terminate($request, $response);

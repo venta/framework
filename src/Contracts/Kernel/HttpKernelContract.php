@@ -21,11 +21,19 @@ interface HttpKernelContract extends AbstractKernelContract
     public function handle(RequestInterface $request): ResponseInterface;
 
     /**
-     *
+     * Called on application terminate
      *
      * @param  RequestInterface $request
      * @param  ResponseInterface $response
      * @return mixed
      */
     public function terminate(RequestInterface $request, ResponseInterface $response);
+
+    /**
+     * Emits (echo) response to output
+     *
+     * @param ResponseInterface $response
+     * @return void
+     */
+    public function emit(ResponseInterface $response);
 }
