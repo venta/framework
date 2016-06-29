@@ -68,6 +68,14 @@ abstract class Application extends Container implements ApplicationContract
     /**
      * {@inheritdoc}
      */
+    public function isCli(): bool
+    {
+        return php_sapi_name() === 'cli';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     abstract public function configure();
 
     /**
@@ -90,10 +98,7 @@ abstract class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Emits response to client
-     * Sends status code, headers, echoes body
-     *
-     * @param ResponseInterface $response
+     * {@inheritdoc}
      */
     public function emit(ResponseInterface $response)
     {

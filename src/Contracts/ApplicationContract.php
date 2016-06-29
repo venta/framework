@@ -20,6 +20,13 @@ interface ApplicationContract
     public function version(): string;
 
     /**
+     * Defines, if application is running in CLI
+     *
+     * @return bool
+     */
+    public function isCli(): bool;
+
+    /**
      * First function, called in application constructor
      * Is used in order to set up application, before running it.
      */
@@ -32,6 +39,14 @@ interface ApplicationContract
      * @return ResponseInterface
      */
     public function run(RequestInterface $request): ResponseInterface;
+
+    /**
+     * Emits response to client
+     * Sends status code, headers, echoes body
+     *
+     * @param ResponseInterface $response
+     */
+    public function emit(ResponseInterface $response);
 
     /**
      * Function, called in order to terminate application.
