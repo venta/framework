@@ -50,7 +50,7 @@ class HttpKernel implements HttpKernelContract
 
         /** @var \Venta\Routing\Router $router */
         $router = $this->application->make('router');
-        return $router->dispatch($request->getMethod(), $request->getUri()->getPath());
+        return $router->dispatch($request);
     }
 
     /**
