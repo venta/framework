@@ -4,13 +4,14 @@ namespace Venta\Framework\Contracts;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Venta\Container\Contract\ContainerContract;
 
 /**
  * Interface ApplicationContract
  *
  * @package Venta\Framework\Contracts
  */
-interface ApplicationContract
+interface ApplicationContract extends ContainerContract
 {
     /**
      * Returns application version string
