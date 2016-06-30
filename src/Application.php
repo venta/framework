@@ -52,6 +52,13 @@ abstract class Application extends Container implements ApplicationContract
     protected $extensionsFile;
 
     /**
+     * self::bootExtensionProviders called flag
+     *
+     * @var bool
+     */
+    protected $booted = false;
+
+    /**
      * Construct function
      *
      * @param string $root
@@ -124,6 +131,15 @@ abstract class Application extends Container implements ApplicationContract
     }
 
     /**
+     * Whether self::bootExtensionProviders was called
+     * @return bool
+     */
+    public function isBooted()
+    {
+        return $this->booted;
+    }
+
+    /**
      * {@inheritdoc}
      */
     abstract public function configure();
@@ -155,8 +171,11 @@ abstract class Application extends Container implements ApplicationContract
      */
     public function bootExtensionProviders()
     {
-        $this->loadExtensionProviders();
-        $this->callExtensionProvidersMethod('bindings', $this);
+        if (!$this->isBooted()) {
+            $this->loadExtensionProviders();
+            $this->callExtensionProvidersMethod('bindings', $this);
+            $this->booted = true;
+        }
     }
 
     /**
