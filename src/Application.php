@@ -2,6 +2,7 @@
 
 namespace Venta\Framework;
 
+use Dotenv\Dotenv;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Venta\Container\Container;
@@ -15,6 +16,14 @@ use Venta\Routing\Response;
  */
 abstract class Application extends Container implements ApplicationContract
 {
+    /**
+     * Constants, defining env application know about
+     */
+    const ENV_LOCAL = 'local';
+    const ENV_STAGE = 'stage';
+    const ENV_LIVE = 'live';
+    const ENV_TEST = 'test';
+
     /**
      * Array of defined extension providers
      *
@@ -54,6 +63,8 @@ abstract class Application extends Container implements ApplicationContract
         $this->extensionsFile = $extensionsFile;
         $this->root = $root;
 
+        (new Dotenv($root))->load();
+
         $this->configure();
     }
 
@@ -71,6 +82,46 @@ abstract class Application extends Container implements ApplicationContract
     public function isCli(): bool
     {
         return php_sapi_name() === 'cli';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function environment(): string
+    {
+        return getenv('APP_ENV') ? getenv('APP_ENV') : static::ENV_LOCAL;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLiveEnvironment(): bool
+    {
+        return $this->environment() === static::ENV_LIVE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isLocalEnvironment(): bool
+    {
+        return $this->environment() === static::ENV_LOCAL;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isStageEnvironment(): bool
+    {
+        return $this->environment() === static::ENV_STAGE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isTestEnvironment(): bool
+    {
+        return $this->environment() === static::ENV_TEST;
     }
 
     /**

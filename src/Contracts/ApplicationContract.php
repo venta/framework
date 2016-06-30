@@ -27,6 +27,41 @@ interface ApplicationContract
     public function isCli(): bool;
 
     /**
+     * Returns environment name application is running in
+     *
+     * @return string
+     */
+    public function environment(): string;
+
+    /**
+     * Defines, if application is in local environment
+     *
+     * @return bool
+     */
+    public function isLocalEnvironment(): bool;
+
+    /**
+     * Defines, if application is in stage environment
+     *
+     * @return bool
+     */
+    public function isStageEnvironment(): bool;
+
+    /**
+     * Defines, if application is in live environment
+     *
+     * @return bool
+     */
+    public function isLiveEnvironment(): bool;
+
+    /**
+     * Defines, if application is in local environment
+     *
+     * @return bool
+     */
+    public function isTestEnvironment(): bool;
+
+    /**
      * First function, called in application constructor
      * Is used in order to set up application, before running it.
      */
