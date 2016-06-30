@@ -7,7 +7,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Venta\Container\Container;
 use Venta\Framework\Contracts\ApplicationContract;
-use Venta\Routing\Response;
 
 /**
  * Class Application
