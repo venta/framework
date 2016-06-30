@@ -33,22 +33,6 @@ interface ApplicationContract
     public function configure();
 
     /**
-     * Function, called in order to run application.
-     *
-     * @param  RequestInterface $request
-     * @return ResponseInterface
-     */
-    public function run(RequestInterface $request): ResponseInterface;
-
-    /**
-     * Emits response to client
-     * Sends status code, headers, echoes body
-     *
-     * @param ResponseInterface $response
-     */
-    public function emit(ResponseInterface $response);
-
-    /**
      * Function, called in order to terminate application.
      *
      * @param RequestInterface  $request

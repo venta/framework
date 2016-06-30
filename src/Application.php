@@ -81,35 +81,6 @@ abstract class Application extends Container implements ApplicationContract
     /**
      * {@inheritdoc}
      */
-    public function run(RequestInterface $request): ResponseInterface
-    {
-        $this->singleton(RequestInterface::class, $request);
-        $this->singleton(ResponseInterface::class, $response = new Response);
-
-        $this->singleton('response', ResponseInterface::class);
-        $this->singleton('request', RequestInterface::class);
-
-        $this->loadExtensionProviders();
-        $this->callExtensionProvidersMethod('bindings', $this);
-
-        /** @var \Venta\Routing\Router $router */
-        $router = $this->make('router');
-        return $router->dispatch($request->getMethod(), $request->getUri()->getPath());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function emit(ResponseInterface $response)
-    {
-        /** @var \Zend\Diactoros\Response\EmitterInterface $emitter */
-        $emitter = $this->make(\Zend\Diactoros\Response\EmitterInterface::class);
-        $emitter->emit($response);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function terminate(RequestInterface $request, ResponseInterface $response)
     {
         $this->callExtensionProvidersMethod('terminate', $this, $request, $response);
@@ -125,6 +96,17 @@ abstract class Application extends Container implements ApplicationContract
         if (!isset($this->extensions[$provider])) {
             $this->extensions[$provider] = new $provider;
         }
+    }
+
+    /**
+     * Loads extension providers and adds bindings
+     *
+     * @return  void
+     */
+    public function bootExtensionProviders()
+    {
+        $this->loadExtensionProviders();
+        $this->callExtensionProvidersMethod('bindings', $this);
     }
 
     /**
