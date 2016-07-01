@@ -32,14 +32,19 @@ class HttpKernel implements HttpKernelContract
         $this->application = $application;
     }
 
+    // todo Can HttpKernel create Request by itself ?
+
     /**
      * {@inheritdoc}
      */
     public function handle(RequestInterface $request): ResponseInterface
     {
+        // todo Should we check if it was (re-)binded before ?
         // binding request
         $this->application->singleton(RequestInterface::class, $request);
         $this->application->singleton('request', RequestInterface::class);
+
+        // todo Should we check if it was (re-)binded before ?
         // binding response
         $this->application->singleton(ResponseInterface::class, $response = new Response());
         $this->application->singleton('response', ResponseInterface::class);
@@ -50,6 +55,15 @@ class HttpKernel implements HttpKernelContract
 
         /** @var \Venta\Routing\Router $router */
         $router = $this->application->make('router');
+        /*
+         * Todo: Would be lovely if we could do this:
+         *
+         * $result = $router->dispatch($request);
+         * $this->application->bind(Response, $result);
+         * return $result;
+         *
+         * To save latest response right before emitting and application->terminate call.
+         */
         return $router->dispatch($request);
     }
 

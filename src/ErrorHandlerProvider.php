@@ -15,27 +15,6 @@ class ErrorHandlerProvider
     public function bindings($app)
     {
         $this->app = $app;
-        /** @var \Psr\Http\Message\RequestInterface $request */
-        $request = $app->make('request');
-        $accept = count($request->getHeader('accept')) > 0 ? $request->getHeader('accept')[0] : '';
-        /** @todo Add environment check here */
-        $app->singleton(
-            \Whoops\Handler\HandlerInterface::class,
-            preg_match('/^(application|text)\.*json.*$/', $accept) ?
-                \Whoops\Handler\JsonResponseHandler::class : \Whoops\Handler\PrettyPageHandler::class
-        );
-    }
-
-    /**
-     * @param Application $app
-     */
-    public function bootstrap($app)
-    {
-        /** @var \Whoops\RunInterface $run */
-        $run = $app->make(\Whoops\RunInterface::class);
-        /** @var \Whoops\Handler\HandlerInterface $handler */
-        $handler = $app->make(\Whoops\Handler\HandlerInterface::class);
-        $run->pushHandler($handler);
     }
 
     /**
@@ -53,6 +32,9 @@ class ErrorHandlerProvider
                 $run->allowQuit(false);
                 $run->sendHttpCode(false);
                 $run->writeToOutput(false);
+
+                // todo Check if we can create our own NEW response or should use binded one
+
                 /** @var ResponseInterface $response */
                 $response = $this->app->make('response');
                 $response->getBody()->write($run->handleException($e));
