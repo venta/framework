@@ -3,6 +3,7 @@
 namespace Venta\Framework;
 
 use \Psr\Http\Message\{RequestInterface, ResponseInterface};
+use Psr\Log\LogLevel;
 
 class ErrorHandlerProvider
 {
@@ -29,6 +30,13 @@ class ErrorHandlerProvider
             catch (\Throwable $e) {
                 /** @var \Whoops\RunInterface $run */
                 $run = $this->app->make(\Whoops\RunInterface::class);
+                /** @var \Psr\Log\LoggerInterface $logger */
+                $logger = $this->app->make(\Psr\Log\LoggerInterface::class);
+                $logger->log(
+                    $e instanceof \Error ? LogLevel::CRITICAL : LogLevel::ERROR,
+                    $e->getMessage(),
+                    ['exception' => $e]
+                );
                 $run->allowQuit(false);
                 $run->sendHttpCode(false);
                 $run->writeToOutput(false);
