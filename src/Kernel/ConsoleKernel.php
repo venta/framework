@@ -36,6 +36,10 @@ class ConsoleKernel implements ConsoleKernelContract
     public function handle(InputInterface $input = null, OutputInterface $output = null): int
     {
         $console = new Application('Venta Console Application', $this->application->version());
+        $commandsCollector = function () use ($console) { $this->callExtensionProvidersMethod('commands', $console); };
+        $commandsCollector = $commandsCollector->bindTo($this->application, $this->application);
+
+        $commandsCollector();
 
         return $console->run($input, $output);
     }
