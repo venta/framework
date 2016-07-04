@@ -4,11 +4,12 @@ namespace Venta\Framework\Kernel;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Venta\Framework\Application;
 use Venta\Framework\Contracts\ApplicationContract;
 use Venta\Framework\Contracts\Kernel\Http\EmitterContract;
 use Venta\Framework\Contracts\Kernel\HttpKernelContract;
-use Venta\Framework\Http\Response;
+use Venta\Framework\Http\Emitter;
 
 /**
  * Class HttpKernel
@@ -32,39 +33,40 @@ class HttpKernel implements HttpKernelContract
         $this->application = $application;
     }
 
-    // todo Can HttpKernel create Request by itself ?
-
     /**
      * {@inheritdoc}
      */
     public function handle(RequestInterface $request): ResponseInterface
     {
-        // todo Should we check if it was (re-)binded before ?
-        // binding request
-        $this->application->singleton(RequestInterface::class, $request);
-        $this->application->singleton('request', RequestInterface::class);
+        // binding request instance
+        if (!$this->application->has('request')) {
+            $this->application->singleton('request', $request);
+        }
+        if (!$this->application->has(ServerRequestInterface::class) && $request instanceof ServerRequestInterface) {
+            $this->application->singleton(ServerRequestInterface::class, $request);
+        }
 
-        // todo Should we check if it was (re-)binded before ?
-        // binding response
-        $this->application->singleton(ResponseInterface::class, $response = new Response());
-        $this->application->singleton('response', ResponseInterface::class);
         // binding response emitter
-        $this->application->singleton(\Venta\Framework\Contracts\Kernel\Http\EmitterContract::class, \Zend\Diactoros\Response\SapiEmitter::class);
+        if (!$this->application->has(EmitterContract::class)) {
+            $this->application->singleton(EmitterContract::class, Emitter::class);
+        }
 
+        // calling ->bindings() on extension providers
         $this->application->bootExtensionProviders();
 
         /** @var \Venta\Routing\Router $router */
         $router = $this->application->make('router');
-        /*
-         * Todo: Would be lovely if we could do this:
-         *
-         * $result = $router->dispatch($request);
-         * $this->application->bind(Response, $result);
-         * return $result;
-         *
-         * To save latest response right before emitting and application->terminate call.
-         */
-        return $router->dispatch($request);
+        $result = $router->dispatch($request);
+
+        // bind the latest response instance, it may be used in terminate part
+        if (!$this->application->has(ResponseInterface::class)) {
+            $this->application->singleton(ResponseInterface::class, $result);
+        }
+        if (!$this->application->has('response')) {
+            $this->application->singleton('response', $result);
+        }
+
+        return $result;
     }
 
     /**
