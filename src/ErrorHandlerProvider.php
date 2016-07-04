@@ -2,8 +2,11 @@
 
 namespace Venta\Framework;
 
-use \Psr\Http\Message\{RequestInterface, ResponseInterface};
+use Psr\Http\Message\{
+    RequestInterface, ResponseInterface
+};
 use Psr\Log\LogLevel;
+use Venta\Framework\Http\Factory\ResponseFactory;
 
 class ErrorHandlerProvider
 {
@@ -40,13 +43,11 @@ class ErrorHandlerProvider
                 $run->allowQuit(false);
                 $run->sendHttpCode(false);
                 $run->writeToOutput(false);
-
-                // todo Check if we can create our own NEW response or should use binded one
-
-                /** @var ResponseInterface $response */
-                $response = $this->app->make('response');
-                $response->getBody()->write($run->handleException($e));
-                return $response->withStatus($e->getCode() >= 400 ? $e->getCode() : 500);
+                /** @var ResponseFactory $responseFactory */
+                $responseFactory = $this->app->make(ResponseFactory::class);
+                return $responseFactory->make()
+                    ->append($run->handleException($e))
+                    ->withStatus($e->getCode() >= 400 ? $e->getCode() : 500);
             }
         });
     }
