@@ -4,7 +4,9 @@ namespace Venta\Framework\Contracts;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Venta\Container\Contract\{ContainerContract, CallerContract};
+use Venta\Container\Contract\{
+    CallerContract, ContainerContract
+};
 
 /**
  * Interface ApplicationContract
@@ -67,6 +69,13 @@ interface ApplicationContract extends ContainerContract, CallerContract
      * Is used in order to set up application, before running it.
      */
     public function configure();
+
+    /**
+     * Loads extension providers and adds bindings
+     *
+     * @return  void
+     */
+    public function bootExtensionProviders();
 
     /**
      * Function, called in order to terminate application.

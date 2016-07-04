@@ -165,9 +165,7 @@ abstract class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Loads extension providers and adds bindings
-     *
-     * @return  void
+     * {@inheritdoc}
      */
     public function bootExtensionProviders()
     {

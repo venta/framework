@@ -2,7 +2,7 @@
 
 namespace Venta\Framework\Kernel;
 
-use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Framework\Contracts\ApplicationContract;
@@ -35,12 +35,14 @@ class ConsoleKernel implements ConsoleKernelContract
      */
     public function handle(InputInterface $input = null, OutputInterface $output = null): int
     {
-        $console = new Application('Venta Console Application', $this->application->version());
-        $commandsCollector = function () use ($console) { $this->callExtensionProvidersMethod('commands', $console); };
-        $commandsCollector = $commandsCollector->bindTo($this->application, $this->application);
-
-        $commandsCollector();
-
+        // creating new Symfony Console Application
+        $console = new ConsoleApplication('Venta Console Application', $this->application->version());
+        // loading extension providers and calling ->bindings()
+        $this->application->bootExtensionProviders();
+        // collecting commands from extension providers
+        // todo Make a workaround for collectors
+        (function () use ($console) { $this->callExtensionProvidersMethod('commands', $console); })->bindTo($this->application, $this->application)();
+        // running console application
         return $console->run($input, $output);
     }
 }
