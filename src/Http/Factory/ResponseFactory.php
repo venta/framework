@@ -46,6 +46,28 @@ class ResponseFactory
         return new $this->responseClass($stream ?: 'php://memory', $status, $headers);
     }
 
+    /**
+     * Returns new Response Instance w/o any arguments
+     *
+     * @return ResponseInterface|Response
+     */
+    public function new(): ResponseInterface
+    {
+        return new $this->responseClass;
+    }
+
+    /**
+     * Helper function for redirect response
+     *
+     * @param string $url
+     * @param int    $status
+     * @return ResponseInterface
+     */
+    public function redirect(string $url, int $status = 302): ResponseInterface
+    {
+        return $this->make(null, $status, ['location' => $url]);
+    }
+
     // todo Add helper methods, e.g. RedirectResponse, JsonResponse, etc.
 
 }
