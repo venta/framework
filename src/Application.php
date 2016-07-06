@@ -3,8 +3,6 @@
 namespace Venta\Framework;
 
 use Dotenv\Dotenv;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Venta\Container\Container;
 use Venta\Framework\Contracts\ApplicationContract;
 
@@ -147,9 +145,9 @@ abstract class Application extends Container implements ApplicationContract
     /**
      * {@inheritdoc}
      */
-    public function terminate(RequestInterface $request, ResponseInterface $response)
+    public function terminate()
     {
-        $this->callExtensionProvidersMethod('terminate', $this, $request, $response);
+        $this->callExtensionProvidersMethod('terminate', $this);
     }
 
     /**

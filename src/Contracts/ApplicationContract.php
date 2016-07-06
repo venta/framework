@@ -2,8 +2,6 @@
 
 namespace Venta\Framework\Contracts;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Venta\Container\Contract\{
     CallerContract, ContainerContract
 };
@@ -80,8 +78,6 @@ interface ApplicationContract extends ContainerContract, CallerContract
     /**
      * Function, called in order to terminate application.
      *
-     * @param RequestInterface  $request
-     * @param ResponseInterface $response
      */
-    public function terminate(RequestInterface $request, ResponseInterface $response);
+    public function terminate();
 }

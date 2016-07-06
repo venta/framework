@@ -37,6 +37,7 @@ class ConsoleKernel implements ConsoleKernelContract
     {
         // creating new Symfony Console Application
         $console = new ConsoleApplication('Venta Console Application', $this->application->version());
+        $this->application->bind('console', $console);
         // loading extension providers and calling ->bindings()
         $this->application->bootExtensionProviders();
         // collecting commands from extension providers
@@ -45,4 +46,13 @@ class ConsoleKernel implements ConsoleKernelContract
         // running console application
         return $console->run($input, $output);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function terminate()
+    {
+        $this->application->terminate();
+    }
+
 }

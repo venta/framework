@@ -17,4 +17,11 @@ interface AbstractKernelContract
      * @param ApplicationContract $application
      */
     public function __construct(ApplicationContract $application);
+
+    /**
+     * Called on application termination
+     *
+     * @return void
+     */
+    public function terminate();
 }

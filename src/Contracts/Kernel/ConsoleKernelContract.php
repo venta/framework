@@ -22,12 +22,4 @@ interface ConsoleKernelContract extends AbstractKernelContract
      */
     public function handle(InputInterface $input = null, OutputInterface $output = null): int;
 
-    /**
-     * Called in order to terminate application
-     *
-     * @param  InputInterface  $input
-     * @param  OutputInterface $output
-     * @param  int             $status
-     */
-//    public function terminate(InputInterface $input, OutputInterface $output, int $status);
 }

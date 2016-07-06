@@ -21,13 +21,4 @@ interface HttpKernelContract extends AbstractKernelContract, EmitterContract
      */
     public function handle(RequestInterface $request): ResponseInterface;
 
-    /**
-     * Called on application terminate
-     *
-     * @param  RequestInterface $request
-     * @param  ResponseInterface $response
-     * @return mixed
-     */
-    public function terminate(RequestInterface $request, ResponseInterface $response);
-
 }
