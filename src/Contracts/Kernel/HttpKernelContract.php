@@ -4,13 +4,14 @@ namespace Venta\Framework\Contracts\Kernel;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Venta\Http\Contract\EmitterContract;
 
 /**
  * Interface KernelContract
  *
  * @package Venta\Framework
  */
-interface HttpKernelContract extends AbstractKernelContract
+interface HttpKernelContract extends AbstractKernelContract, EmitterContract
 {
     /**
      * Main handle function for application
@@ -29,11 +30,4 @@ interface HttpKernelContract extends AbstractKernelContract
      */
     public function terminate(RequestInterface $request, ResponseInterface $response);
 
-    /**
-     * Emits (echo) response to output
-     *
-     * @param ResponseInterface $response
-     * @return void
-     */
-    public function emit(ResponseInterface $response);
 }
