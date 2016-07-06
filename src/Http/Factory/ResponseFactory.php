@@ -2,9 +2,9 @@
 
 namespace Venta\Framework\Http\Factory;
 
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use Venta\Framework\Http\Response;
+use Venta\Http\Contract\ResponseContract;
+use Venta\Http\Response;
 
 /**
  * Class ResponseFactory
@@ -22,15 +22,15 @@ class ResponseFactory
 
     /**
      * ResponseFactory constructor.
-     *
-     * @param string $responseInterfaceImplementingClassname
+
+     * @param string $responseContractImplementingClassname
      */
-    public function __construct(string $responseInterfaceImplementingClassname = Response::class)
+    public function __construct(string $responseContractImplementingClassname = Response::class)
     {
-        if (!is_subclass_of($responseInterfaceImplementingClassname, ResponseInterface::class, true)) {
-            throw new \InvalidArgumentException('Provided classname must implement Psr\Http\Message\ResponseInterface');
+        if (!is_subclass_of($responseContractImplementingClassname, ResponseContract::class, true)) {
+            throw new \InvalidArgumentException('Provided classname must implement Venta\Http\Contract\ResponseContract');
         }
-        $this->responseClass = $responseInterfaceImplementingClassname;
+        $this->responseClass = $responseContractImplementingClassname;
     }
 
     /**
@@ -39,9 +39,9 @@ class ResponseFactory
      * @param StreamInterface|null $stream
      * @param int                  $status
      * @param array                $headers
-     * @return ResponseInterface|Response
+     * @return ResponseContract
      */
-    public function make(StreamInterface $stream = null, int $status = 200, array $headers = []): ResponseInterface
+    public function make(StreamInterface $stream = null, int $status = 200, array $headers = []): ResponseContract
     {
         return new $this->responseClass($stream ?: 'php://memory', $status, $headers);
     }
@@ -49,9 +49,9 @@ class ResponseFactory
     /**
      * Returns new Response Instance w/o any arguments
      *
-     * @return ResponseInterface|Response
+     * @return ResponseContract
      */
-    public function new(): ResponseInterface
+    public function new(): ResponseContract
     {
         return new $this->responseClass;
     }
@@ -61,9 +61,9 @@ class ResponseFactory
      *
      * @param string $url
      * @param int    $status
-     * @return ResponseInterface
+     * @return ResponseContract
      */
-    public function redirect(string $url, int $status = 302): ResponseInterface
+    public function redirect(string $url, int $status = 302): ResponseContract
     {
         return $this->make(null, $status, ['location' => $url]);
     }

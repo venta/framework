@@ -7,9 +7,10 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Venta\Framework\Application;
 use Venta\Framework\Contracts\ApplicationContract;
-use Venta\Framework\Contracts\Kernel\Http\EmitterContract;
 use Venta\Framework\Contracts\Kernel\HttpKernelContract;
-use Venta\Framework\Http\Emitter;
+use Venta\Http\Contract\EmitterContract;
+use Venta\Http\Contract\RequestContract;
+use Venta\Http\Emitter;
 
 /**
  * Class HttpKernel
@@ -44,6 +45,9 @@ class HttpKernel implements HttpKernelContract
         }
         if (!$this->application->has(ServerRequestInterface::class) && $request instanceof ServerRequestInterface) {
             $this->application->singleton(ServerRequestInterface::class, $request);
+        }
+        if (!$this->application->has(RequestContract::class) && $request instanceof RequestContract) {
+            $this->application->singleton(RequestContract::class, $request);
         }
 
         // binding response emitter
