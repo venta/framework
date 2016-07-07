@@ -2,9 +2,9 @@
 
 namespace Venta\Framework\ErrorHandler;
 
-use Venta\Framework\Http\Factory\ResponseFactory;
 use Venta\Http\Contract\RequestContract;
 use Venta\Http\Contract\ResponseContract;
+use Venta\Http\Factory\ResponseFactory;
 use Venta\Routing\Contract\MiddlewareContract;
 use Whoops\RunInterface;
 

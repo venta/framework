@@ -2,9 +2,9 @@
 
 namespace Venta\Framework\Contracts\Kernel;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Venta\Http\Contract\EmitterContract;
+use Venta\Http\Contract\{
+    EmitterContract, RequestContract, ResponseContract
+};
 
 /**
  * Interface KernelContract
@@ -16,9 +16,9 @@ interface HttpKernelContract extends AbstractKernelContract, EmitterContract
     /**
      * Main handle function for application
      *
-     * @param  RequestInterface $request
-     * @return ResponseInterface
+     * @param  RequestContract $request
+     * @return ResponseContract
      */
-    public function handle(RequestInterface $request): ResponseInterface;
+    public function handle(RequestContract $request): ResponseContract;
 
 }

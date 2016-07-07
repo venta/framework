@@ -10,6 +10,7 @@ use Venta\Framework\Contracts\ApplicationContract;
 use Venta\Framework\Contracts\Kernel\HttpKernelContract;
 use Venta\Http\Contract\EmitterContract;
 use Venta\Http\Contract\RequestContract;
+use Venta\Http\Contract\ResponseContract;
 use Venta\Http\Emitter;
 
 /**
@@ -37,17 +38,17 @@ class HttpKernel implements HttpKernelContract
     /**
      * {@inheritdoc}
      */
-    public function handle(RequestInterface $request): ResponseInterface
+    public function handle(RequestContract $request): ResponseContract
     {
         // binding request instance
         if (!$this->application->has('request')) {
             $this->application->singleton('request', $request);
         }
+        if (!$this->application->has(RequestInterface::class) && $request instanceof RequestInterface) {
+            $this->application->singleton(RequestInterface::class, $request);
+        }
         if (!$this->application->has(ServerRequestInterface::class) && $request instanceof ServerRequestInterface) {
             $this->application->singleton(ServerRequestInterface::class, $request);
-        }
-        if (!$this->application->has(RequestContract::class) && $request instanceof RequestContract) {
-            $this->application->singleton(RequestContract::class, $request);
         }
 
         // binding response emitter
