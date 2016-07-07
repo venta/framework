@@ -170,6 +170,7 @@ abstract class Application extends Container implements ApplicationContract
         if (!$this->isBooted()) {
             $this->loadExtensionProviders();
             $this->callExtensionProvidersMethod('bindings', $this);
+            $this->callExtensionProvidersMethod('errors', $this->get('error_handler'));
             $this->booted = true;
         }
     }
