@@ -11,6 +11,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/ventaframework/container.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ventaframework/http.git"
         }
     ],
     "autoload": {
@@ -24,7 +28,7 @@
     },
     "require": {
         "ventaframework/container": "dev-master",
-        "psr/http-message": "^1.0",
+        "ventaframework/http": "dev-master",
         "symfony/console": "^3.1",
         "filp/whoops": "^2.1",
         "vlucas/phpdotenv": "^2.3",
