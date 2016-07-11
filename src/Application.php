@@ -170,6 +170,7 @@ abstract class Application extends Container implements ApplicationContract
         if (!$this->isBooted()) {
             $this->loadExtensionProviders();
             $this->callExtensionProvidersMethod('bindings', $this);
+            // todo Make this deferred, we don't need error handlers until we got error
             $this->callExtensionProvidersMethod('errors', $this->get('error_handler'));
             $this->booted = true;
         }
@@ -184,6 +185,7 @@ abstract class Application extends Container implements ApplicationContract
     protected function callExtensionProvidersMethod(string $method, ...$arguments)
     {
         foreach ($this->extensions as $provider) {
+            // todo Check for concrete interface implementation
             if (is_callable([$provider, $method])) {
                 $provider->$method(...$arguments);
             }
