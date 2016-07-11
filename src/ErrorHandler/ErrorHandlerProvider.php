@@ -3,6 +3,9 @@
 namespace Venta\Framework\ErrorHandler;
 
 use Venta\Framework\Contracts\ApplicationContract;
+use Venta\Framework\Contracts\ExtensionProvider\{
+    BindingsContract, ErrorsContract, MiddlewaresContract
+};
 use Venta\Routing\MiddlewareCollector;
 use Whoops\RunInterface;
 
@@ -11,7 +14,7 @@ use Whoops\RunInterface;
  *
  * @package Venta\Framework\ErrorHandler
  */
-class ErrorHandlerProvider
+class ErrorHandlerProvider implements BindingsContract, ErrorsContract, MiddlewaresContract
 {
 
     /**
