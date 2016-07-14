@@ -7,24 +7,6 @@
             "email": "kz@scandiweb.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/abava/container.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/abava/http.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/abava/routing.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/abava/console.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Venta\\": "src/"
