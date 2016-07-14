@@ -1,17 +1,17 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Kernel;
+namespace Venta\Kernel;
 
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Framework\Contracts\ApplicationContract;
-use Venta\Framework\Contracts\Kernel\ConsoleKernelContract;
+use Venta\Contracts\ApplicationContract;
+use Venta\Contracts\Kernel\ConsoleKernelContract;
 
 /**
  * Class ConsoleKernel
  *
- * @package Venta\Framework
+ * @package Venta
  */
 class ConsoleKernel implements ConsoleKernelContract
 {

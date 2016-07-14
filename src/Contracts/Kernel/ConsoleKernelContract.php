@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Contracts\Kernel;
+namespace Venta\Contracts\Kernel;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Interface ConsoleKernelContract
  *
- * @package Venta\Framework
+ * @package Venta
  */
 interface ConsoleKernelContract extends AbstractKernelContract
 {

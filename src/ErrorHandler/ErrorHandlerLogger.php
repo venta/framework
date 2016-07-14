@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\ErrorHandler;
+namespace Venta\ErrorHandler;
 
 use Psr\Log\{
     LoggerInterface, LogLevel
@@ -9,7 +9,7 @@ use Whoops\Handler\Handler;
 
 /**
  * Class ErrorHandlerLogger
- * @package Venta\Framework\ErrorHandler
+ * @package Venta\ErrorHandler
  */
 class ErrorHandlerLogger extends Handler
 {

@@ -17,7 +17,7 @@ namespace {
             $run->shouldReceive('handleException')->with($e)->andReturn($e->getMessage());
             $responseFactory = Mockery::mock(\Abava\Http\Factory\ResponseFactory::class);
             $responseFactory->shouldReceive('make')->andReturn(new \Abava\Http\Response());
-            $middleware = new \Venta\Framework\ErrorHandler\ErrorHandlerMiddleware($run, $responseFactory);
+            $middleware = new \Venta\ErrorHandler\ErrorHandlerMiddleware($run, $responseFactory);
             $request    = Mockery::mock(\Abava\Http\Contract\RequestContract::class);
             $result     = $middleware->handle($request, function () use ($e) { throw $e; });
             $this->assertEquals($e->getMessage(), $result->getBody()->__toString());

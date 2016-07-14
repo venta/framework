@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\ErrorHandler;
+namespace Venta\ErrorHandler;
 
 use Abava\Http\Contract\RequestContract;
 use Abava\Http\Contract\ResponseContract;
@@ -11,7 +11,7 @@ use Whoops\RunInterface;
 /**
  * Class ErrorHandlerMiddleware
  *
- * @package Venta\Framework\ErrorHandler
+ * @package Venta\ErrorHandler
  */
 class ErrorHandlerMiddleware implements MiddlewareContract
 {

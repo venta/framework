@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Contracts\Kernel;
+namespace Venta\Contracts\Kernel;
 
-use Venta\Framework\Contracts\ApplicationContract;
+use Venta\Contracts\ApplicationContract;
 
 /**
  * Interface AbstractKernelContract
  *
- * @package Venta\Framework
+ * @package Venta
  */
 interface AbstractKernelContract
 {

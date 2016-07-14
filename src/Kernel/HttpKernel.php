@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Kernel;
+namespace Venta\Kernel;
 
 use Abava\Http\Contract\EmitterContract;
 use Abava\Http\Contract\RequestContract;
@@ -9,14 +9,14 @@ use Abava\Http\Emitter;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Venta\Framework\Application;
-use Venta\Framework\Contracts\ApplicationContract;
-use Venta\Framework\Contracts\Kernel\HttpKernelContract;
+use Venta\Application;
+use Venta\Contracts\ApplicationContract;
+use Venta\Contracts\Kernel\HttpKernelContract;
 
 /**
  * Class HttpKernel
  *
- * @package Venta\Framework
+ * @package Venta
  */
 class HttpKernel implements HttpKernelContract
 {

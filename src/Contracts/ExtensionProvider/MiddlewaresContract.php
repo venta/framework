@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Contracts\ExtensionProvider;
+namespace Venta\Contracts\ExtensionProvider;
 
 use Abava\Routing\MiddlewareCollector;
 
 /**
  * Interface MiddlewaresContract
  *
- * @package Venta\Framework\Contracts\ExtensionProvider
+ * @package Venta\Contracts\ExtensionProvider
  */
 interface MiddlewaresContract
 {

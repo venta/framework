@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\ErrorHandler;
+namespace Venta\ErrorHandler;
 
 use Abava\Routing\MiddlewareCollector;
-use Venta\Framework\Contracts\ApplicationContract;
-use Venta\Framework\Contracts\ExtensionProvider\{
+use Venta\Contracts\ApplicationContract;
+use Venta\Contracts\ExtensionProvider\{
     BindingsContract, ErrorsContract, MiddlewaresContract
 };
 use Whoops\RunInterface;
@@ -12,7 +12,7 @@ use Whoops\RunInterface;
 /**
  * Class ErrorHandlerProvider
  *
- * @package Venta\Framework\ErrorHandler
+ * @package Venta\ErrorHandler
  */
 class ErrorHandlerProvider implements BindingsContract, ErrorsContract, MiddlewaresContract
 {

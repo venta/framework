@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Contracts;
+namespace Venta\Contracts;
 
 use Abava\Container\Contract\{
     CallerContract, ContainerContract
@@ -9,7 +9,7 @@ use Abava\Container\Contract\{
 /**
  * Interface ApplicationContract
  *
- * @package Venta\Framework\Contracts
+ * @package Venta\Contracts
  */
 interface ApplicationContract extends ContainerContract, CallerContract
 {

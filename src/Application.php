@@ -1,15 +1,15 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework;
+namespace Venta;
 
 use Abava\Container\Container;
 use Dotenv\Dotenv;
-use Venta\Framework\Contracts\ApplicationContract;
+use Venta\Contracts\ApplicationContract;
 
 /**
  * Class Application
  *
- * @package Venta\Framework
+ * @package Venta
  */
 abstract class Application extends Container implements ApplicationContract
 {

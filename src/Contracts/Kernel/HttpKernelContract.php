@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Contracts\Kernel;
+namespace Venta\Contracts\Kernel;
 
 use Abava\Http\Contract\{
     EmitterContract, RequestContract, ResponseContract
@@ -9,7 +9,7 @@ use Abava\Http\Contract\{
 /**
  * Interface KernelContract
  *
- * @package Venta\Framework
+ * @package Venta
  */
 interface HttpKernelContract extends AbstractKernelContract, EmitterContract
 {

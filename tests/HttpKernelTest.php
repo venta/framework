@@ -9,7 +9,7 @@ class HttpKernelTest extends PHPUnit_Framework_TestCase
         $response = new \Abava\Http\Response();
         $router = $this->getMockBuilder(Router::class)->getMock();
         $router->expects($this->once())->method('dispatch')->with($request)->willReturn($response);
-        $app = $this->getMockBuilder(\Venta\Framework\Contracts\ApplicationContract::class)->getMock();
+        $app = $this->getMockBuilder(\Venta\Contracts\ApplicationContract::class)->getMock();
         $app->method('has')->withConsecutive(
             ['request'],
             [\Psr\Http\Message\RequestInterface::class],
@@ -28,7 +28,7 @@ class HttpKernelTest extends PHPUnit_Framework_TestCase
         );
         $app->expects($this->once())->method('bootExtensionProviders');
         $app->expects($this->once())->method('make')->with('router')->willReturn($router);
-        $kernel = new \Venta\Framework\Kernel\HttpKernel($app);
+        $kernel = new \Venta\Kernel\HttpKernel($app);
         $result = $kernel->handle($request);
         $this->assertSame($response, $result);
     }
@@ -38,17 +38,17 @@ class HttpKernelTest extends PHPUnit_Framework_TestCase
         $response = new \Abava\Http\Response();
         $emitter = $this->getMockBuilder(\Abava\Http\Contract\EmitterContract::class)->getMock();
         $emitter->method('emit')->with($response);
-        $app = $this->getMockBuilder(\Venta\Framework\Contracts\ApplicationContract::class)->getMock();
+        $app = $this->getMockBuilder(\Venta\Contracts\ApplicationContract::class)->getMock();
         $app->method('make')->with(\Abava\Http\Contract\EmitterContract::class)->willReturn($emitter);
-        $kernel = new \Venta\Framework\Kernel\HttpKernel($app);
+        $kernel = new \Venta\Kernel\HttpKernel($app);
         $kernel->emit($response);
     }
 
     public function testTerminate()
     {
-        $app = $this->getMockBuilder(\Venta\Framework\Contracts\ApplicationContract::class)->getMock();
+        $app = $this->getMockBuilder(\Venta\Contracts\ApplicationContract::class)->getMock();
         $app->method('terminate');
-        $kernel = new \Venta\Framework\Kernel\HttpKernel($app);
+        $kernel = new \Venta\Kernel\HttpKernel($app);
         $kernel->terminate();
     }
 

@@ -6,13 +6,13 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     /**
      * Application instance
      *
-     * @var \Venta\Framework\Application
+     * @var \Venta\Application
      */
     protected $application;
 
     public function setUp()
     {
-        $this->application = new class(__DIR__, 'extensions.php') extends \Venta\Framework\Application{
+        $this->application = new class(__DIR__, 'extensions.php') extends \Venta\Application{
             protected $version = 'test';
             public function configure() {}
 
@@ -35,7 +35,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
 
     public function testEnvironment()
     {
-        $this->assertSame(\Venta\Framework\Application::ENV_TEST, $this->application->environment());
+        $this->assertSame(\Venta\Application::ENV_TEST, $this->application->environment());
         $this->assertTrue($this->application->isTestEnvironment());
         $this->assertFalse($this->application->isLiveEnvironment());
         $this->assertFalse($this->application->isLocalEnvironment());

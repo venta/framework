@@ -27,7 +27,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Venta\\Framework\\": "src/"
+            "Venta\\": "src/"
         }
     },
     "minimum-stability": "dev",
