@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Venta\Routing\Contract { interface MiddlewareContract{} }
+namespace Abava\Routing\Contract { interface MiddlewareContract{} }
 
 namespace {
 
@@ -15,10 +15,10 @@ namespace {
             $run->shouldReceive('sendHttpCode')->with(false);
             $run->shouldReceive('writeToOutput')->with(false);
             $run->shouldReceive('handleException')->with($e)->andReturn($e->getMessage());
-            $responseFactory = Mockery::mock(\Venta\Http\Factory\ResponseFactory::class);
-            $responseFactory->shouldReceive('make')->andReturn(new \Venta\Http\Response());
+            $responseFactory = Mockery::mock(\Abava\Http\Factory\ResponseFactory::class);
+            $responseFactory->shouldReceive('make')->andReturn(new \Abava\Http\Response());
             $middleware = new \Venta\Framework\ErrorHandler\ErrorHandlerMiddleware($run, $responseFactory);
-            $request    = Mockery::mock(\Venta\Http\Contract\RequestContract::class);
+            $request    = Mockery::mock(\Abava\Http\Contract\RequestContract::class);
             $result     = $middleware->handle($request, function () use ($e) { throw $e; });
             $this->assertEquals($e->getMessage(), $result->getBody()->__toString());
             $this->assertEquals(500, $result->getStatusCode());

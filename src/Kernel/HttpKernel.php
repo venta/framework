@@ -2,16 +2,16 @@
 
 namespace Venta\Framework\Kernel;
 
+use Abava\Http\Contract\EmitterContract;
+use Abava\Http\Contract\RequestContract;
+use Abava\Http\Contract\ResponseContract;
+use Abava\Http\Emitter;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Venta\Framework\Application;
 use Venta\Framework\Contracts\ApplicationContract;
 use Venta\Framework\Contracts\Kernel\HttpKernelContract;
-use Venta\Http\Contract\EmitterContract;
-use Venta\Http\Contract\RequestContract;
-use Venta\Http\Contract\ResponseContract;
-use Venta\Http\Emitter;
 
 /**
  * Class HttpKernel
@@ -59,7 +59,7 @@ class HttpKernel implements HttpKernelContract
         // calling ->bindings() on extension providers
         $this->application->bootExtensionProviders();
 
-        /** @var \Venta\Routing\Router $router */
+        /** @var \Abava\Routing\Router $router */
         $router = $this->application->make('router');
         $result = $router->dispatch($request);
 

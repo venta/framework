@@ -10,19 +10,19 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/ventaframework/container.git"
+            "url": "https://github.com/abava/container.git"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/ventaframework/http.git"
+            "url": "https://github.com/abava/http.git"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/ventaframework/routing.git"
+            "url": "https://github.com/abava/routing.git"
         },
         {
             "type": "vcs",
-            "url": "https://github.com/ventaframework/console.git"
+            "url": "https://github.com/abava/console.git"
         }
     ],
     "autoload": {
@@ -36,10 +36,10 @@
         "mockery/mockery": "^0.9.5"
     },
     "require": {
-        "ventaframework/container": "dev-master",
-        "ventaframework/http": "dev-master",
-        "ventaframework/routing": "dev-master",
-        "ventaframework/console": "dev-master",
+        "abava/container": "dev-master",
+        "abava/http": "dev-master",
+        "abava/routing": "dev-master",
+        "abava/console": "dev-master",
         "symfony/console": "^3.1",
         "filp/whoops": "^2.1",
         "vlucas/phpdotenv": "^2.3",

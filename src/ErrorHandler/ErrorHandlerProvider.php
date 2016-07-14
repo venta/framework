@@ -2,11 +2,11 @@
 
 namespace Venta\Framework\ErrorHandler;
 
+use Abava\Routing\MiddlewareCollector;
 use Venta\Framework\Contracts\ApplicationContract;
 use Venta\Framework\Contracts\ExtensionProvider\{
     BindingsContract, ErrorsContract, MiddlewaresContract
 };
-use Venta\Routing\MiddlewareCollector;
 use Whoops\RunInterface;
 
 /**

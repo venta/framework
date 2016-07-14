@@ -2,7 +2,7 @@
 
 namespace Venta\Framework\Contracts\ExtensionProvider;
 
-use Venta\Routing\MiddlewareCollector;
+use Abava\Routing\MiddlewareCollector;
 
 /**
  * Interface MiddlewaresContract

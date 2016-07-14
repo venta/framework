@@ -2,10 +2,10 @@
 
 namespace Venta\Framework\ErrorHandler;
 
-use Venta\Http\Contract\RequestContract;
-use Venta\Http\Contract\ResponseContract;
-use Venta\Http\Factory\ResponseFactory;
-use Venta\Routing\Contract\MiddlewareContract;
+use Abava\Http\Contract\RequestContract;
+use Abava\Http\Contract\ResponseContract;
+use Abava\Http\Factory\ResponseFactory;
+use Abava\Routing\Contract\MiddlewareContract;
 use Whoops\RunInterface;
 
 /**

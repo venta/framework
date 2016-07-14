@@ -2,8 +2,8 @@
 
 namespace Venta\Framework;
 
+use Abava\Container\Container;
 use Dotenv\Dotenv;
-use Venta\Container\Container;
 use Venta\Framework\Contracts\ApplicationContract;
 
 /**

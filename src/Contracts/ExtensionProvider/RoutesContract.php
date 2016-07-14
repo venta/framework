@@ -2,7 +2,7 @@
 
 namespace Venta\Framework\Contracts\ExtensionProvider;
 
-use Venta\Routing\RoutesCollector;
+use Abava\Routing\RoutesCollector;
 
 /**
  * Interface RoutesContract

@@ -2,7 +2,7 @@
 
 namespace Venta\Framework\Contracts\Kernel;
 
-use Venta\Http\Contract\{
+use Abava\Http\Contract\{
     EmitterContract, RequestContract, ResponseContract
 };
 

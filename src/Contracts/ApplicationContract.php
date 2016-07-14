@@ -2,7 +2,7 @@
 
 namespace Venta\Framework\Contracts;
 
-use Venta\Container\Contract\{
+use Abava\Container\Contract\{
     CallerContract, ContainerContract
 };
 
