@@ -7,24 +7,6 @@
             "email": "kz@scandiweb.com"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ventaframework/container.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ventaframework/http.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ventaframework/routing.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ventaframework/console.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Venta\\Framework\\": "src/"
@@ -36,13 +18,15 @@
         "mockery/mockery": "^0.9.5"
     },
     "require": {
-        "ventaframework/container": "dev-master",
-        "ventaframework/http": "dev-master",
-        "ventaframework/routing": "dev-master",
-        "ventaframework/console": "dev-master",
         "symfony/console": "^3.1",
         "filp/whoops": "^2.1",
         "vlucas/phpdotenv": "^2.3",
         "monolog/monolog": "^1.19"
+    },
+    "replace": {
+        "abava/container": "self.version",
+        "abava/http": "self.version",
+        "abava/routing": "self.version",
+        "abava/console": "self.version"
     }
 }
