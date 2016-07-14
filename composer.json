@@ -15,6 +15,14 @@
         {
             "type": "vcs",
             "url": "https://github.com/ventaframework/http.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ventaframework/routing.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ventaframework/console.git"
         }
     ],
     "autoload": {
@@ -30,6 +38,8 @@
     "require": {
         "ventaframework/container": "dev-master",
         "ventaframework/http": "dev-master",
+        "ventaframework/routing": "dev-master",
+        "ventaframework/console": "dev-master",
         "symfony/console": "^3.1",
         "filp/whoops": "^2.1",
         "vlucas/phpdotenv": "^2.3",
