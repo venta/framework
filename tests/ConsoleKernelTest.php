@@ -27,7 +27,8 @@ class ConsoleKernelTest extends PHPUnit_Framework_TestCase
     {
         $app = $this->getMockBuilder(\Venta\Contracts\ApplicationContract::class)->getMock();
         $app->method('terminate');
-        $kernel = new \Venta\Kernel\ConsoleKernel($app);
+        $kernel = new \Venta\Kernel\ConsoleKernel('test', '1.0');
+        $kernel->setApplication($app);
         $kernel->terminate();
     }
 

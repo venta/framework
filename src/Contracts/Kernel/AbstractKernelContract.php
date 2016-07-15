@@ -2,8 +2,6 @@
 
 namespace Venta\Contracts\Kernel;
 
-use Venta\Contracts\ApplicationContract;
-
 /**
  * Interface AbstractKernelContract
  *
@@ -11,13 +9,6 @@ use Venta\Contracts\ApplicationContract;
  */
 interface AbstractKernelContract
 {
-    /**
-     * Construct function
-     *
-     * @param ApplicationContract $application
-     */
-    public function __construct(ApplicationContract $application);
-
     /**
      * Called on application termination
      *

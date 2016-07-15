@@ -13,7 +13,7 @@ use Venta\Contracts\Kernel\ConsoleKernelContract;
  *
  * @package Venta
  */
-class ConsoleKernel implements ConsoleKernelContract
+class ConsoleKernel extends ConsoleApplication implements ConsoleKernelContract
 {
     /**
      * Application instance holder
@@ -25,7 +25,7 @@ class ConsoleKernel implements ConsoleKernelContract
     /**
      * {@inheritdoc}
      */
-    public function __construct(ApplicationContract $application)
+    public function setApplication(ApplicationContract $application)
     {
         $this->application = $application;
     }
@@ -33,18 +33,18 @@ class ConsoleKernel implements ConsoleKernelContract
     /**
      * {@inheritdoc}
      */
-    public function handle(InputInterface $input = null, OutputInterface $output = null): int
+    public function handle(InputInterface $input, OutputInterface $output): int
     {
-        // creating new Symfony Console Application
-        $console = new ConsoleApplication('Venta Console Application', $this->application->version());
-        $this->application->bind('console', $console);
+        $this->application->bind('console', $this);
         // loading extension providers and calling ->bindings()
         $this->application->bootExtensionProviders();
         // collecting commands from extension providers
         // todo Make a workaround for collectors
-        (function () use ($console) { $this->callExtensionProvidersMethod('commands', $console); })->bindTo($this->application, $this->application)();
+        (function () { $this->callExtensionProvidersMethod('commands', $this->get('console')); })->bindTo($this->application, $this->application)();
         // running console application
-        return $console->run($input, $output);
+        $status = $this->run($input, $output);
+        $this->application->bind('status', $status);
+        return $status;
     }
 
     /**
@@ -53,6 +53,16 @@ class ConsoleKernel implements ConsoleKernelContract
     public function terminate()
     {
         $this->application->terminate();
+    }
+
+    /**
+     * Making run method final
+     *
+     * {@inheritdoc}
+     */
+    final public function run(InputInterface $input = null, OutputInterface $output = null)
+    {
+        return parent::run($input, $output);
     }
 
 }
