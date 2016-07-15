@@ -2,9 +2,9 @@
 
 namespace Venta\Kernel;
 
-use Abava\Http\Contract\EmitterContract;
-use Abava\Http\Contract\RequestContract;
-use Abava\Http\Contract\ResponseContract;
+use Abava\Http\Contract\{
+    Emitter as EmitterContract
+};
 use Abava\Http\Emitter;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -37,7 +37,7 @@ class HttpKernel implements HttpKernelContact
     /**
      * {@inheritdoc}
      */
-    public function handle(RequestContract $request): ResponseContract
+    public function handle(RequestInterface $request): ResponseInterface
     {
         // binding request instance
         if (!$this->application->has('request')) {

@@ -3,7 +3,10 @@
 namespace Venta;
 
 use Abava\Container\Container;
+use Abava\Http\Factory\RequestFactory;
+use Abava\Http\Factory\ResponseFactory;
 use Dotenv\Dotenv;
+use Psr\Http\Message\ServerRequestInterface;
 use Venta\Contracts\Application as ApplicationContact;
 
 /**
@@ -130,6 +133,7 @@ abstract class Application extends Container implements ApplicationContact
 
     /**
      * Whether self::bootExtensionProviders was called
+     *
      * @return bool
      */
     public function isBooted()
@@ -180,7 +184,7 @@ abstract class Application extends Container implements ApplicationContact
      * Calls passed in method on all extension providers
      *
      * @param string $method
-     * @param array  $arguments
+     * @param array $arguments
      */
     protected function callExtensionProvidersMethod(string $method, ...$arguments)
     {
@@ -208,4 +212,35 @@ abstract class Application extends Container implements ApplicationContact
             }
         }
     }
+
+    /**
+     * Create a request from the supplied superglobal values.
+     *
+     * @return ServerRequestInterface
+     */
+    protected function createServerRequest(): ServerRequestInterface
+    {
+        return $this->createServerRequestFactory()->createServerRequestFromGlobals();
+    }
+
+    /**
+     * todo: specify return as PSR-16 server request factory interface
+     *
+     * @return RequestFactory
+     */
+    protected function createServerRequestFactory()
+    {
+        return new RequestFactory;
+    }
+
+    /**
+     * todo: specify return as PSR-16 server request factory interface
+     *
+     * @return ResponseFactory
+     */
+    protected function createResponseFactory()
+    {
+        return new ResponseFactory;
+    }
+
 }

@@ -3,22 +3,24 @@
 namespace Venta\Contracts\Kernel;
 
 use Abava\Http\Contract\{
-    EmitterContract, RequestContract, ResponseContract
+    Emitter, Request, Response
 };
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Interface KernelContract
  *
  * @package Venta
  */
-interface HttpKernel extends AbstractKernel, EmitterContract
+interface HttpKernel extends AbstractKernel, Emitter
 {
     /**
      * Main handle function for application
      *
-     * @param  RequestContract $request
-     * @return ResponseContract
+     * @param Request|RequestInterface $request
+     * @return Response|ResponseInterface
      */
-    public function handle(RequestContract $request): ResponseContract;
+    public function handle(RequestInterface $request): ResponseInterface;
 
 }

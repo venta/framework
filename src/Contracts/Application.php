@@ -3,7 +3,7 @@
 namespace Venta\Contracts;
 
 use Abava\Container\Contract\{
-    CallerContract, ContainerContract
+    Caller, Container
 };
 
 /**
@@ -11,7 +11,7 @@ use Abava\Container\Contract\{
  *
  * @package Venta\Contracts
  */
-interface Application extends ContainerContract, CallerContract
+interface Application extends Container, Caller
 {
     /**
      * Returns application version string

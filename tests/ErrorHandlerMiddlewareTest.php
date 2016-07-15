@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-namespace Abava\Routing\Contract { interface MiddlewareContract{} }
-
 namespace {
 
     class ErrorHandlerMiddlewareTest extends PHPUnit_Framework_TestCase
@@ -18,7 +16,7 @@ namespace {
             $responseFactory = Mockery::mock(\Abava\Http\Factory\ResponseFactory::class);
             $responseFactory->shouldReceive('make')->andReturn(new \Abava\Http\Response());
             $middleware = new \Venta\ErrorHandler\ErrorHandlerMiddleware($run, $responseFactory);
-            $request    = Mockery::mock(\Abava\Http\Contract\RequestContract::class);
+            $request    = Mockery::mock(\Abava\Http\Contract\Request::class);
             $result     = $middleware->handle($request, function () use ($e) { throw $e; });
             $this->assertEquals($e->getMessage(), $result->getBody()->__toString());
             $this->assertEquals(500, $result->getStatusCode());

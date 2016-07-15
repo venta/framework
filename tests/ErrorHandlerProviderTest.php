@@ -13,7 +13,7 @@ class ErrorHandlerProviderTest extends PHPUnit_Framework_TestCase
         $run->shouldReceive('pushHandler')->with($handler);
         $app->shouldReceive('make')->with(\Venta\ErrorHandler\ErrorHandlerLogger::class)->andReturn($handler);
         $provider->errors($run);
-        $middleware = Mockery::mock(\Abava\Routing\Contract\MiddlewareContract::class);
+        $middleware = Mockery::mock(\Abava\Routing\Contract\Middleware::class);
         $app->shouldReceive('make')->with(\Venta\ErrorHandler\ErrorHandlerMiddleware::class)->andReturn($middleware);
         $collector = Mockery::mock(\Abava\Routing\MiddlewareCollector::class);
         $collector->shouldReceive('addMiddleware')->with('error_handler', $middleware);
