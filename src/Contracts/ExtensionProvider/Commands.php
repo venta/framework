@@ -5,11 +5,11 @@ namespace Venta\Contracts\ExtensionProvider;
 use Symfony\Component\Console\Application as ConsoleApplication;
 
 /**
- * Interface CommandsContract
+ * Interface Commands
  *
  * @package Venta\Contracts\ExtensionProvider
  */
-interface CommandsContract
+interface Commands
 {
 
     /**

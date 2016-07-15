@@ -4,14 +4,14 @@ namespace Venta;
 
 use Abava\Container\Container;
 use Dotenv\Dotenv;
-use Venta\Contracts\ApplicationContract;
+use Venta\Contracts\Application as ApplicationContact;
 
 /**
  * Class Application
  *
  * @package Venta
  */
-abstract class Application extends Container implements ApplicationContract
+abstract class Application extends Container implements ApplicationContact
 {
     /**
      * Constants, defining env application know about

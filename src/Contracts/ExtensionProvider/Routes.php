@@ -5,11 +5,11 @@ namespace Venta\Contracts\ExtensionProvider;
 use Abava\Routing\RoutesCollector;
 
 /**
- * Interface RoutesContract
+ * Interface Routes
  *
  * @package Venta\Contracts\ExtensionProvider
  */
-interface RoutesContract
+interface Routes
 {
 
     /**

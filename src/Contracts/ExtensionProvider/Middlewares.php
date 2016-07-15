@@ -5,11 +5,11 @@ namespace Venta\Contracts\ExtensionProvider;
 use Abava\Routing\MiddlewareCollector;
 
 /**
- * Interface MiddlewaresContract
+ * Interface Middlewares
  *
  * @package Venta\Contracts\ExtensionProvider
  */
-interface MiddlewaresContract
+interface Middlewares
 {
 
     /**

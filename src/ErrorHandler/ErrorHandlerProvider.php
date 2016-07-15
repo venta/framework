@@ -3,9 +3,9 @@
 namespace Venta\ErrorHandler;
 
 use Abava\Routing\MiddlewareCollector;
-use Venta\Contracts\ApplicationContract;
+use Venta\Contracts\Application;
 use Venta\Contracts\ExtensionProvider\{
-    BindingsContract, ErrorsContract, MiddlewaresContract
+    Bindings, Errors, Middlewares
 };
 use Whoops\RunInterface;
 
@@ -14,23 +14,23 @@ use Whoops\RunInterface;
  *
  * @package Venta\ErrorHandler
  */
-class ErrorHandlerProvider implements BindingsContract, ErrorsContract, MiddlewaresContract
+class ErrorHandlerProvider implements Bindings, Errors, Middlewares
 {
 
     /**
      * Application instance
      *
-     * @var ApplicationContract
+     * @var Application
      */
     protected $app;
 
     /**
      * Saving Application instance for later use
      *
-     * @param ApplicationContract $app
+     * @param Application $app
      * @return void
      */
-    public function bindings(ApplicationContract $app)
+    public function bindings(Application $app)
     {
         $this->app = $app;
     }

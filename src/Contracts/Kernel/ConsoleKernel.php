@@ -4,14 +4,14 @@ namespace Venta\Contracts\Kernel;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Contracts\ApplicationContract;
+use Venta\Contracts\Application;
 
 /**
- * Interface ConsoleKernelContract
+ * Interface ConsoleKernel
  *
  * @package Venta
  */
-interface ConsoleKernelContract extends AbstractKernelContract
+interface ConsoleKernel extends AbstractKernel
 {
     /**
      * Main application handle function
@@ -26,9 +26,9 @@ interface ConsoleKernelContract extends AbstractKernelContract
     /**
      * Set Application instance
      *
-     * @param ApplicationContract $application
+     * @param Application $application
      * @return void
      */
-    public function setApplication(ApplicationContract $application);
+    public function setApplication(Application $application);
 
 }

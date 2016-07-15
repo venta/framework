@@ -5,7 +5,7 @@ class ErrorHandlerProviderTest extends PHPUnit_Framework_TestCase
 
     public function testRegisteringHandlers()
     {
-        $app = Mockery::mock(\Venta\Contracts\ApplicationContract::class);
+        $app = Mockery::mock(\Venta\Contracts\Application::class);
         $provider = new \Venta\ErrorHandler\ErrorHandlerProvider();
         $provider->bindings($app);
         $handler = Mockery::mock(\Whoops\Handler\HandlerInterface::class);

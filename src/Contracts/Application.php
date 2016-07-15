@@ -7,11 +7,11 @@ use Abava\Container\Contract\{
 };
 
 /**
- * Interface ApplicationContract
+ * Interface Application
  *
  * @package Venta\Contracts
  */
-interface ApplicationContract extends ContainerContract, CallerContract
+interface Application extends ContainerContract, CallerContract
 {
     /**
      * Returns application version string

@@ -11,7 +11,7 @@ use Abava\Http\Contract\{
  *
  * @package Venta
  */
-interface HttpKernelContract extends AbstractKernelContract, EmitterContract
+interface HttpKernel extends AbstractKernel, EmitterContract
 {
     /**
      * Main handle function for application

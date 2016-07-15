@@ -8,7 +8,7 @@ class ConsoleKernelTest extends PHPUnit_Framework_TestCase
         // todo Unskip this test when appropriate callExtensionProvidersMethod will be available
         $this->markTestSkipped('callExtensionProvidersMethod fallback required');
 
-        $app = $this->getMockBuilder(\Venta\Contracts\ApplicationContract::class)->getMock();
+        $app = $this->getMockBuilder(\Venta\Contracts\Application::class)->getMock();
         $app->method('version')->willReturn('1.0');
         $app->method('bind');
         $app->method('bootExtensionProviders');
@@ -25,7 +25,7 @@ class ConsoleKernelTest extends PHPUnit_Framework_TestCase
 
     public function testTerminate()
     {
-        $app = $this->getMockBuilder(\Venta\Contracts\ApplicationContract::class)->getMock();
+        $app = $this->getMockBuilder(\Venta\Contracts\Application::class)->getMock();
         $app->method('terminate');
         $kernel = new \Venta\Kernel\ConsoleKernel('test', '1.0');
         $kernel->setApplication($app);

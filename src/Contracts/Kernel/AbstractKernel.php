@@ -3,11 +3,11 @@
 namespace Venta\Contracts\Kernel;
 
 /**
- * Interface AbstractKernelContract
+ * Interface AbstractKernel
  *
  * @package Venta
  */
-interface AbstractKernelContract
+interface AbstractKernel
 {
     /**
      * Called on application termination

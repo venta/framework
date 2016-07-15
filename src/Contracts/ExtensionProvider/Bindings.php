@@ -2,23 +2,23 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Venta\Contracts\ApplicationContract;
+use Venta\Contracts\Application;
 
 /**
- * Class BindingsContract
+ * Interface Bindings
  *
  * @package Venta\Contracts\ExtensionProvider
  */
-interface BindingsContract
+interface Bindings
 {
 
     /**
      * Set bindings to provided application
      * or/and save application instance for later use
      *
-     * @param ApplicationContract $application
+     * @param Application $application
      * @return void
      */
-    public function bindings(ApplicationContract $application);
+    public function bindings(Application $application);
 
 }

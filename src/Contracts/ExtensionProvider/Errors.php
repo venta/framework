@@ -5,11 +5,11 @@ namespace Venta\Contracts\ExtensionProvider;
 use Whoops\RunInterface;
 
 /**
- * Interface ErrorsContract
+ * Interface Errors
  *
  * @package Venta\Contracts\ExtensionProvider
  */
-interface ErrorsContract
+interface Errors
 {
 
     /**

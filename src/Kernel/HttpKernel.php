@@ -9,28 +9,27 @@ use Abava\Http\Emitter;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Venta\Application;
-use Venta\Contracts\ApplicationContract;
-use Venta\Contracts\Kernel\HttpKernelContract;
+use Venta\Contracts\Application;
+use Venta\Contracts\Kernel\HttpKernel as HttpKernelContact;
 
 /**
  * Class HttpKernel
  *
  * @package Venta
  */
-class HttpKernel implements HttpKernelContract
+class HttpKernel implements HttpKernelContact
 {
     /**
      * Application instance holder
      *
-     * @var ApplicationContract|Application
+     * @var Application
      */
     protected $application;
 
     /**
      * {@inheritdoc}
      */
-    public function __construct(ApplicationContract $application)
+    public function __construct(Application $application)
     {
         $this->application = $application;
     }

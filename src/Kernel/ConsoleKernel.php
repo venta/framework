@@ -5,27 +5,27 @@ namespace Venta\Kernel;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Contracts\ApplicationContract;
-use Venta\Contracts\Kernel\ConsoleKernelContract;
+use Venta\Contracts\Application;
+use Venta\Contracts\Kernel\ConsoleKernel as ConsoleKernelContact;
 
 /**
  * Class ConsoleKernel
  *
  * @package Venta
  */
-class ConsoleKernel extends ConsoleApplication implements ConsoleKernelContract
+class ConsoleKernel extends ConsoleApplication implements ConsoleKernelContact
 {
     /**
      * Application instance holder
      *
-     * @var ApplicationContract
+     * @var Application
      */
     protected $application;
 
     /**
      * {@inheritdoc}
      */
-    public function setApplication(ApplicationContract $application)
+    public function setApplication(Application $application)
     {
         $this->application = $application;
     }

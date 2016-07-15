@@ -2,23 +2,23 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Venta\Contracts\ApplicationContract;
+use Venta\Contracts\Application;
 
 /**
- * Interface TerminateContract
+ * Interface Terminate
  *
  * @package Venta\Contracts\ExtensionProvider
  */
-interface TerminateContract
+interface Terminate
 {
 
     /**
      * Called after handling (dispatching) Http Request
      * or Console Input
      *
-     * @param ApplicationContract $application
+     * @param Application $application
      * @return void
      */
-    public function terminate(ApplicationContract $application);
+    public function terminate(Application $application);
 
 }
