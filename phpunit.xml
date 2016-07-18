@@ -9,8 +9,9 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Venta Framework package tests">
-            <directory>./tests/</directory>
+        <testsuite name="Venta Framework tests">
+            <directory>./src/Venta/tests/</directory>
+            <directory>./src/Abava/*/tests/</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -19,6 +20,6 @@
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-html" target="./tests/coverage" charset="UTF-8" yui="true" highlight="true" />
+        <log type="coverage-html" target="./coverage" charset="UTF-8" yui="true" highlight="true" />
     </logging>
 </phpunit>
