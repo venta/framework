@@ -1,0 +1,27 @@
+{
+    "name": "abava/http",
+    "description": "The Abava Container package",
+    "authors": [
+        {
+            "name": "Konstantins Zukovs",
+            "email": "kz@scandiweb.com"
+        },
+        {
+            "name": "Alexey Rehov",
+            "email": "aleksejs@scandiweb.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Abava\\Http\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    },
+    "require": {
+        "psr/http-message": "^1.0",
+        "zendframework/zend-diactoros": "^1.3"
+    }
+}
