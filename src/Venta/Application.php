@@ -5,9 +5,13 @@ namespace Venta;
 use Abava\Container\Container;
 use Abava\Http\Factory\RequestFactory;
 use Abava\Http\Factory\ResponseFactory;
+use Abava\Routing\Contract\Collector as RouteCollector;
+use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 use Dotenv\Dotenv;
 use Psr\Http\Message\ServerRequestInterface;
 use Venta\Contracts\Application as ApplicationContact;
+use Venta\Contracts\ExtensionProvider\Middlewares as MiddlewareProvider;
+use Venta\Contracts\ExtensionProvider\Routes as RouteProvider;
 
 /**
  * Class Application
@@ -241,6 +245,30 @@ abstract class Application extends Container implements ApplicationContact
     protected function createResponseFactory()
     {
         return new ResponseFactory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function routes(RouteCollector $collector)
+    {
+        foreach ($this->extensions as $provider) {
+            if ($provider instanceof RouteProvider) {
+                $collector->group('/', [$provider, 'routes']);
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function middlewares(MiddlewareCollector $collector)
+    {
+        foreach ($this->extensions as $provider) {
+            if ($provider instanceof MiddlewareProvider) {
+                $provider->middlewares($collector);
+            }
+        }
     }
 
 }

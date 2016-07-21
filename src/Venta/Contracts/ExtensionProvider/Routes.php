@@ -2,7 +2,7 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Abava\Routing\RoutesCollector;
+use Abava\Routing\Contract\Group;
 
 /**
  * Interface Routes
@@ -15,9 +15,9 @@ interface Routes
     /**
      * Add extension routes using routes collector
      *
-     * @param RoutesCollector $routesCollector
+     * @param Group $collector
      * @return void
      */
-    public function routes(RoutesCollector $routesCollector);
+    public function routes(Group $collector);
 
 }

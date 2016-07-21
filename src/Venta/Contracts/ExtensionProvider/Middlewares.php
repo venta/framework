@@ -2,7 +2,7 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Abava\Routing\MiddlewareCollector;
+use Abava\Routing\Contract\Middleware\Collector;
 
 /**
  * Interface Middlewares
@@ -15,9 +15,9 @@ interface Middlewares
     /**
      * Add extension middlewares using middleware collector
      *
-     * @param MiddlewareCollector $middlewareCollector
+     * @param Collector $collector
      * @return void
      */
-    public function middlewares(MiddlewareCollector $middlewareCollector);
+    public function middlewares(Collector $collector);
 
 }

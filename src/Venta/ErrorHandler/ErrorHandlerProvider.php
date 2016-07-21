@@ -2,7 +2,7 @@
 
 namespace Venta\ErrorHandler;
 
-use Abava\Routing\MiddlewareCollector;
+use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 use Venta\Contracts\Application;
 use Venta\Contracts\ExtensionProvider\{
     Bindings, Errors, Middlewares
@@ -54,7 +54,7 @@ class ErrorHandlerProvider implements Bindings, Errors, Middlewares
      */
     public function middlewares(MiddlewareCollector $middlewareCollector)
     {
-        $middlewareCollector->addMiddleware('error_handler', $this->app->make(ErrorHandlerMiddleware::class));
+        $middlewareCollector->pushMiddleware('error_handler', ErrorHandlerMiddleware::class);
     }
 
 }

@@ -5,6 +5,8 @@ namespace Venta\Contracts;
 use Abava\Container\Contract\{
     Caller, Container
 };
+use Abava\Routing\Contract\Collector as RouteCollector;
+use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 
 /**
  * Interface Application
@@ -80,4 +82,16 @@ interface Application extends Container, Caller
      *
      */
     public function terminate();
+
+    /**
+     * @param RouteCollector $collector
+     * @return void
+     */
+    public function routes(RouteCollector $collector);
+
+    /**
+     * @param MiddlewareCollector $collector
+     * @return void
+     */
+    public function middlewares(MiddlewareCollector $collector);
 }
