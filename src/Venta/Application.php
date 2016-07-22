@@ -275,6 +275,11 @@ abstract class Application extends Container implements ApplicationContact
             $this->bind(\Abava\Routing\Contract\Collector::class, \Abava\Routing\Collector::class);
         }
 
+        // binding url generator
+        if (!$this->has(\Abava\Routing\Contract\UrlGenerator::class)) {
+            $this->bind(\Abava\Routing\Contract\UrlGenerator::class, \Abava\Routing\Collector::class);
+        }
+
         // binding middleware collector
         if (!$this->has(\Abava\Routing\Contract\Middleware\Collector::class)) {
             $this->singleton(
