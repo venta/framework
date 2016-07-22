@@ -94,4 +94,11 @@ interface Application extends Container, Caller
      * @return void
      */
     public function middlewares(MiddlewareCollector $collector);
+
+    /**
+     * @param \Symfony\Component\Console\Application $console
+     * @return void
+     */
+    public function commands(\Symfony\Component\Console\Application $console);
+
 }

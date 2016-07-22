@@ -10,6 +10,7 @@ use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 use Dotenv\Dotenv;
 use Psr\Http\Message\ServerRequestInterface;
 use Venta\Contracts\Application as ApplicationContact;
+use Venta\Contracts\ExtensionProvider\Commands as CommandsProvider;
 use Venta\Contracts\ExtensionProvider\Middlewares as MiddlewareProvider;
 use Venta\Contracts\ExtensionProvider\Routes as RouteProvider;
 
@@ -248,6 +249,60 @@ abstract class Application extends Container implements ApplicationContact
     }
 
     /**
+     * Bind default implementations to contracts
+     *
+     * @return void
+     */
+    protected function bindRouting()
+    {
+        // binding response emitter
+        if (!$this->has(\Abava\Http\Contract\Emitter::class)) {
+            $this->singleton(\Abava\Http\Contract\Emitter::class, \Abava\Http\Emitter::class);
+        }
+
+        // binding route path parser
+        if (!$this->has(\FastRoute\RouteParser::class)) {
+            $this->bind(\FastRoute\RouteParser::class, \Abava\Routing\Parser::class);
+        }
+
+        // binding route parameter parser
+        if (!$this->has(\FastRoute\DataGenerator::class)) {
+            $this->bind(\FastRoute\DataGenerator::class, \FastRoute\DataGenerator\GroupCountBased::class);
+        }
+
+        // binding route collector
+        if (!$this->has(\Abava\Routing\Contract\Collector::class)) {
+            $this->bind(\Abava\Routing\Contract\Collector::class, \Abava\Routing\Collector::class);
+        }
+
+        // binding middleware collector
+        if (!$this->has(\Abava\Routing\Contract\Middleware\Collector::class)) {
+            $this->singleton(
+                \Abava\Routing\Contract\Middleware\Collector::class,
+                \Abava\Routing\Middleware\Collector::class
+            );
+        }
+
+        // binding middleware pipeline
+        if (!$this->has(\Abava\Routing\Contract\Middleware\Pipeline::class)) {
+            $this->bind(
+                \Abava\Routing\Contract\Middleware\Pipeline::class,
+                \Abava\Routing\Middleware\Pipeline::class
+            );
+        }
+
+        // binging route matcher
+        if (!$this->has(\Abava\Routing\Contract\Matcher::class)) {
+            $this->bind(\Abava\Routing\Contract\Matcher::class, \Abava\Routing\Matcher::class);
+        }
+
+        // binding dispatch strategy
+        if (!$this->has(\Abava\Routing\Contract\Strategy::class)) {
+            $this->bind(\Abava\Routing\Contract\Strategy::class, \Abava\Routing\Strategy\Generic::class);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function routes(RouteCollector $collector)
@@ -267,6 +322,18 @@ abstract class Application extends Container implements ApplicationContact
         foreach ($this->extensions as $provider) {
             if ($provider instanceof MiddlewareProvider) {
                 $provider->middlewares($collector);
+            }
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function commands(\Symfony\Component\Console\Application $console)
+    {
+        foreach ($this->extensions as $provider) {
+            if ($provider instanceof CommandsProvider) {
+                $provider->commands($console);
             }
         }
     }

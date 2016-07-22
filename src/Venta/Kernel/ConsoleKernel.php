@@ -35,12 +35,17 @@ class ConsoleKernel extends ConsoleApplication implements ConsoleKernelContact
      */
     public function handle(InputInterface $input, OutputInterface $output): int
     {
-        $this->application->bind('console', $this);
+        // Register instances
+        $this->application->singleton('console', $this);
+        $this->application->singleton('input', $input);
+        $this->application->singleton('output', $output);
+
         // loading extension providers and calling ->bindings()
         $this->application->bootExtensionProviders();
+
         // collecting commands from extension providers
-        // todo Make a workaround for collectors
-        (function () { $this->callExtensionProvidersMethod('commands', $this->get('console')); })->bindTo($this->application, $this->application)();
+        $this->application->commands($this);
+
         // running console application
         $status = $this->run($input, $output);
         $this->application->bind('status', $status);
@@ -64,5 +69,19 @@ class ConsoleKernel extends ConsoleApplication implements ConsoleKernelContact
     {
         return parent::run($input, $output);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function renderException(\Exception $e, OutputInterface $output)
+    {
+        if ($this->application->has('error_handler')) {
+            /** @var \Whoops\RunInterface $run */
+            $run = $this->application->get('error_handler');
+            $run->handleException($e);
+        }
+        parent::renderException($e, $output);
+    }
+
 
 }

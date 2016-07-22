@@ -2,12 +2,9 @@
 
 namespace Venta\Kernel;
 
-use Abava\Container\Contract\Caller;
-use Abava\Container\Contract\Container;
 use Abava\Http\Contract\{
     Emitter as EmitterContract
 };
-use Abava\Http\Emitter;
 use Abava\Routing\Route;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -55,27 +52,32 @@ class HttpKernel implements HttpKernelContact
 
         // calling ->bindings() on extension providers
         $this->application->bootExtensionProviders();
-        $this->defineBindings();
 
         /** @var \Abava\Routing\Contract\Collector $collector */
         $collector = $this->application->make(\Abava\Routing\Contract\Collector::class);
+        // Collecting routes from extension providers
         $this->application->routes($collector);
         /** @var \Abava\Routing\Contract\Middleware\Collector $middlewareCollector */
         $middlewareCollector = $this->application->make(\Abava\Routing\Contract\Middleware\Collector::class);
+        // Collecting global middlewares from extension providers
         $this->application->middlewares($middlewareCollector);
         /** @var \Abava\Routing\Contract\Matcher $matcher */
         $matcher = $this->application->make(\Abava\Routing\Contract\Matcher::class);
-        $route = $matcher->match($request, $collector); // <-- uses Dispatcher to find matching route
+        // Find route matching request
+        $route = $matcher->match($request, $collector); // <-- uses FastRoute/Dispatcher to find matching route
         $this->application->singleton('route', $route);
         $this->application->singleton(Route::class, $route);
+        // Add route middlewares to the end of global middleware list
         foreach ($route->getMiddlewares() as $name => $m) {
             $middlewareCollector->pushMiddleware($name, $m);
         }
         /** @var \Abava\Routing\Contract\Strategy $strategy */
         $strategy = $this->application->make(\Abava\Routing\Contract\Strategy::class);
+        // Wrap controller action call as Closure
         $last = function() use ($strategy, $route) { return $strategy->dispatch($route); };
         /** @var \Abava\Routing\Contract\Middleware\Pipeline $middleware */
         $middleware = $this->application->make(\Abava\Routing\Contract\Middleware\Pipeline::class);
+        // Let middleware pipeline handle request, return response and call controller action
         $response = $middleware->handle($request, $last); // <-- here is where all the action begins!
 
         // bind the latest response instance, it may be used in terminate part
@@ -106,70 +108,6 @@ class HttpKernel implements HttpKernelContact
     public function terminate()
     {
         $this->application->terminate();
-    }
-
-    /**
-     * Bind default implementations to contracts
-     *
-     * @return void
-     */
-    protected function defineBindings()
-    {
-        // binding container
-        if (!$this->application->has(Container::class)) {
-            $this->application->singleton(Container::class, $this->application);
-        }
-
-        // binding caller
-        if (!$this->application->has(Caller::class)) {
-            $this->application->singleton(Caller::class, $this->application);
-        }
-
-        // binding response emitter
-        if (!$this->application->has(EmitterContract::class)) {
-            $this->application->singleton(EmitterContract::class, Emitter::class);
-        }
-
-        // binding route path parser
-        if (!$this->application->has(\FastRoute\RouteParser::class)) {
-            $this->application->bind(\FastRoute\RouteParser::class, \Abava\Routing\Parser::class);
-        }
-
-        // binding route parameter parser
-        if (!$this->application->has(\FastRoute\DataGenerator::class)) {
-            $this->application->bind(\FastRoute\DataGenerator::class, \FastRoute\DataGenerator\GroupCountBased::class);
-        }
-
-        // binding route collector
-        if (!$this->application->has(\Abava\Routing\Contract\Collector::class)) {
-            $this->application->bind(\Abava\Routing\Contract\Collector::class, \Abava\Routing\Collector::class);
-        }
-
-        // binding middleware collector
-        if (!$this->application->has(\Abava\Routing\Contract\Middleware\Collector::class)) {
-            $this->application->singleton(
-                \Abava\Routing\Contract\Middleware\Collector::class,
-                \Abava\Routing\Middleware\Collector::class
-            );
-        }
-
-        // binding middleware pipeline
-        if (!$this->application->has(\Abava\Routing\Contract\Middleware\Pipeline::class)) {
-            $this->application->bind(
-                \Abava\Routing\Contract\Middleware\Pipeline::class,
-                \Abava\Routing\Middleware\Pipeline::class
-            );
-        }
-
-        // binging route matcher
-        if (!$this->application->has(\Abava\Routing\Contract\Matcher::class)) {
-            $this->application->bind(\Abava\Routing\Contract\Matcher::class, \Abava\Routing\Matcher::class);
-        }
-
-        // binding dispatch strategy
-        if (!$this->application->has(\Abava\Routing\Contract\Strategy::class)) {
-            $this->application->bind(\Abava\Routing\Contract\Strategy::class, \Abava\Routing\Strategy\Generic::class);
-        }
     }
 
 }
