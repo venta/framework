@@ -38,7 +38,9 @@ class ConsoleKernel extends ConsoleApplication implements ConsoleKernelContact
         // Register instances
         $this->application->singleton('console', $this);
         $this->application->singleton('input', $input);
+        $this->application->singleton(InputInterface::class, $input);
         $this->application->singleton('output', $output);
+        $this->application->singleton(OutputInterface::class, $output);
 
         // loading extension providers and calling ->bindings()
         $this->application->bootExtensionProviders();

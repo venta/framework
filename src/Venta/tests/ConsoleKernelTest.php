@@ -22,7 +22,9 @@ class ConsoleKernelTest extends PHPUnit_Framework_TestCase
         $app = Mockery::mock(\Venta\Contracts\Application::class);
         $app->shouldReceive('singleton')->with('console', $kernel);
         $app->shouldReceive('singleton')->with('input', $input);
+        $app->shouldReceive('singleton')->with(\Symfony\Component\Console\Input\InputInterface::class, $input);
         $app->shouldReceive('singleton')->with('output', $output);
+        $app->shouldReceive('singleton')->with(\Symfony\Component\Console\Output\OutputInterface::class, $output);
 
         $app->shouldReceive('bootExtensionProviders');
         $app->shouldReceive('commands')->with($kernel);
@@ -63,7 +65,10 @@ class ConsoleKernelTest extends PHPUnit_Framework_TestCase
         $app = Mockery::mock(\Venta\Contracts\Application::class);
         $app->shouldReceive('singleton')->with('console', $kernel);
         $app->shouldReceive('singleton')->with('input', $input);
+        $app->shouldReceive('singleton')->with(\Symfony\Component\Console\Input\InputInterface::class, $input);
         $app->shouldReceive('singleton')->with('output', $output);
+        $app->shouldReceive('singleton')->with(\Symfony\Component\Console\Output\OutputInterface::class, $output);
+
 
         $app->shouldReceive('bootExtensionProviders');
         $app->shouldReceive('commands')->with($kernel);

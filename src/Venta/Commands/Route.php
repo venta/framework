@@ -55,7 +55,7 @@ class Route extends Command
         // Collect routes from extension providers
         $this->app->routes($collector);
 
-        $table = new Table($output);
+        $table = $this->app->make(Table::class);
         $table->setHeaders(['Methods', 'Path', 'Action', 'Name', 'Host', 'Scheme', 'Middlewares']);
         foreach ($collector->getRoutes() as $route) {
             $table->addRow([
@@ -65,7 +65,7 @@ class Route extends Command
                 $route->getName(),
                 $route->getHost(),
                 $route->getScheme(),
-                join(',', $route->getMiddlewares()),
+                join(',', array_keys($route->getMiddlewares())),
             ]);
         }
         $table->render();
