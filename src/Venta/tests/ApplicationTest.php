@@ -1,5 +1,7 @@
 <?php declare(strict_types = 1);
 
+use Venta\Contracts\Application as ApplicationContract;
+
 class ApplicationTest extends PHPUnit_Framework_TestCase
 {
 
@@ -14,7 +16,17 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     {
         $this->application = new class(__DIR__, 'extensions.php') extends \Venta\Application{
             protected $version = 'test';
-            public function configure() {}
+            public function configure()
+            {
+                $this->singleton(ApplicationContract::class, $this);
+                $this->singleton('app', ApplicationContract::class);
+                $this->singleton(\Abava\Container\Contract\Container::class, $this);
+                $this->singleton(\Abava\Container\Contract\Caller::class, $this);
+
+                $this->singleton(\Abava\Http\Contract\Request::class, $this->createServerRequest());
+                $this->singleton(\Abava\Http\Factory\ResponseFactory::class, $this->createResponseFactory());
+                $this->bindRouting();
+            }
 
             public function callLoadExtensionProviders()
             {
@@ -83,4 +95,56 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $this->application->addExtensionProviderInstance('Mock', $mock);
         $this->application->terminate();
     }
+
+    public function testBootstrap()
+    {
+        $this->assertTrue($this->application->has(ApplicationContract::class));
+        $this->assertTrue($this->application->has('app'));
+        $this->assertTrue($this->application->has(\Abava\Container\Contract\Container::class));
+        $this->assertTrue($this->application->has(\Abava\Container\Contract\Caller::class));
+        $this->assertTrue($this->application->has(\Abava\Http\Contract\Request::class));
+        $this->assertTrue($this->application->has(\Abava\Http\Factory\ResponseFactory::class));
+        $this->assertTrue($this->application->has(\Abava\Http\Contract\Emitter::class));
+        $this->assertTrue($this->application->has(\FastRoute\RouteParser::class));
+        $this->assertTrue($this->application->has(\FastRoute\DataGenerator::class));
+        $this->assertTrue($this->application->has(\Abava\Routing\Contract\Collector::class));
+        $this->assertTrue($this->application->has(\Abava\Routing\Contract\UrlGenerator::class));
+        $this->assertTrue($this->application->has(\Abava\Routing\Contract\Middleware\Collector::class));
+        $this->assertTrue($this->application->has(\Abava\Routing\Contract\Middleware\Pipeline::class));
+        $this->assertTrue($this->application->has(\Abava\Routing\Contract\Matcher::class));
+        $this->assertTrue($this->application->has(\Abava\Routing\Contract\Strategy::class));
+    }
+
+    public function testRoutes()
+    {
+        $collector = Mockery::mock(\Abava\Routing\Contract\Collector::class);
+        $provider = Mockery::mock(\Venta\Contracts\ExtensionProvider\Routes::class);
+        $collector->shouldReceive('group')->with('/', [$provider, 'routes'])->once();
+        $this->application->addExtensionProviderInstance('route_provider', $provider);
+        $this->application->routes($collector);
+    }
+
+    public function testMiddlewares()
+    {
+        $collector = Mockery::mock(\Abava\Routing\Contract\Middleware\Collector::class);
+        $provider = Mockery::mock(\Venta\Contracts\ExtensionProvider\Middlewares::class);
+        $provider->shouldReceive('middlewares')->with($collector)->once();
+        $this->application->addExtensionProviderInstance('middleware_provider', $provider);
+        $this->application->middlewares($collector);
+    }
+
+    public function testCommands()
+    {
+        $console = Mockery::mock(\Symfony\Component\Console\Application::class);
+        $provider = Mockery::mock(\Venta\Contracts\ExtensionProvider\Commands::class);
+        $provider->shouldReceive('commands')->with($console)->once();
+        $this->application->addExtensionProviderInstance('command_provider', $provider);
+        $this->application->commands($console);
+    }
+
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
 }
