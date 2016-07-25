@@ -6,7 +6,7 @@ class HttpKernelTest extends PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $app = Mockery::mock(\Venta\Contracts\Application::class);
-        $request = Mockery::mock(\Psr\Http\Message\RequestInterface::class);
+        $request = Mockery::mock(\Psr\Http\Message\ServerRequestInterface::class);
         $response = Mockery::mock(\Psr\Http\Message\ResponseInterface::class);
 
         // Mock bindings to app container
