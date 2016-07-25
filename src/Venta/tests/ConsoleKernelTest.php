@@ -3,23 +3,37 @@
 class ConsoleKernelTest extends PHPUnit_Framework_TestCase
 {
 
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
     public function testHandle()
     {
-        // todo Unskip this test when appropriate callExtensionProvidersMethod will be available
-        $this->markTestSkipped('callExtensionProvidersMethod fallback required');
+        // Making partial mock for ConsoleKernel class, only doRun method will be mocked
+        /** @var \Venta\Kernel\ConsoleKernel|\Mockery\MockInterface $kernel */
+        $kernel = Mockery::mock('\Venta\Kernel\ConsoleKernel[doRun]');
 
-        $app = $this->getMockBuilder(\Venta\Contracts\Application::class)->getMock();
-        $app->method('version')->willReturn('1.0');
-        $app->method('bind');
-        $app->method('bootExtensionProviders');
+        // Creating test input/output
+        $input = new \Symfony\Component\Console\Input\ArrayInput([]);
+        $output = new \Symfony\Component\Console\Output\NullOutput();
 
-        $proxy->app = $app;
+        // Mocking application
+        $app = Mockery::mock(\Venta\Contracts\Application::class);
+        $app->shouldReceive('singleton')->with('console', $kernel);
+        $app->shouldReceive('singleton')->with('input', $input);
+        $app->shouldReceive('singleton')->with('output', $output);
 
-        $kernel = new \Venta\Kernel\ConsoleKernel($proxy);
-        $result = $kernel->handle(
-            new \Symfony\Component\Console\Input\ArrayInput([]),
-            new \Symfony\Component\Console\Output\NullOutput
-        );
+        $app->shouldReceive('bootExtensionProviders');
+        $app->shouldReceive('commands')->with($kernel);
+
+        $app->shouldReceive('bind')->with('status', 0);
+
+        $kernel->setApplication($app);
+        $kernel->setAutoExit(false);
+        $kernel->shouldReceive('doRun')->with($input, $output)->andReturn(0);
+        $result = $kernel->handle($input, $output);
+
         $this->assertSame(0, $result);
     }
 

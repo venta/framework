@@ -3,21 +3,26 @@
 class ErrorHandlerProviderTest extends PHPUnit_Framework_TestCase
 {
 
-    public function testRegisteringHandlers()
+    public function testPushingMiddleware()
     {
         $app = Mockery::mock(\Venta\Contracts\Application::class);
         $provider = new \Venta\ErrorHandler\ErrorHandlerProvider();
         $provider->bindings($app);
-        $handler = Mockery::mock(\Whoops\Handler\HandlerInterface::class);
-        $run = Mockery::mock(\Whoops\RunInterface::class);
-        $run->shouldReceive('pushHandler')->with($handler);
-        $app->shouldReceive('make')->with(\Venta\ErrorHandler\ErrorHandlerLogger::class)->andReturn($handler);
-        $provider->errors($run);
-        $middleware = Mockery::mock(\Abava\Routing\Contract\Middleware::class);
-        $app->shouldReceive('make')->with(\Venta\ErrorHandler\ErrorHandlerMiddleware::class)->andReturn($middleware);
-        $collector = Mockery::mock(\Abava\Routing\MiddlewareCollector::class);
-        $collector->shouldReceive('addMiddleware')->with('error_handler', $middleware);
+        $collector = Mockery::mock(\Abava\Routing\Contract\Middleware\Collector::class);
+        $collector->shouldReceive('pushMiddleware')->with('error_handler', \Venta\ErrorHandler\ErrorHandlerMiddleware::class);
         $provider->middlewares($collector);
+    }
+
+    public function testPushingErrorHandler()
+    {
+        $errorHandlerLogger = Mockery::mock(\Whoops\Handler\HandlerInterface::class);
+        $app = Mockery::mock(\Venta\Contracts\Application::class);
+        $app->shouldReceive('make')->with(\Venta\ErrorHandler\ErrorHandlerLogger::class)->andReturn($errorHandlerLogger);
+        $provider = new \Venta\ErrorHandler\ErrorHandlerProvider();
+        $provider->bindings($app);
+        $run = Mockery::mock(\Whoops\RunInterface::class);
+        $run->shouldReceive('pushHandler')->with($errorHandlerLogger);
+        $provider->errors($run);
     }
 
     public function tearDown()
