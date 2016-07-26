@@ -296,6 +296,14 @@ abstract class Application extends Container implements ApplicationContact
             );
         }
 
+        // binding dispatcher (via dispatcher factory)
+        if (!$this->has(\Abava\Routing\Contract\Dispatcher\Factory::class)) {
+            $this->bind(
+                \Abava\Routing\Contract\Dispatcher\Factory::class,
+                \Abava\Routing\Dispatcher\Factory\GroupCountBasedFactory::class
+            );
+        }
+
         // binging route matcher
         if (!$this->has(\Abava\Routing\Contract\Matcher::class)) {
             $this->bind(\Abava\Routing\Contract\Matcher::class, \Abava\Routing\Matcher::class);
