@@ -112,6 +112,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->application->has(\Abava\Routing\Contract\Middleware\Collector::class));
         $this->assertTrue($this->application->has(\Abava\Routing\Contract\Middleware\Pipeline::class));
         $this->assertTrue($this->application->has(\Abava\Routing\Contract\Matcher::class));
+        $this->assertTrue($this->application->has(\Abava\Routing\Contract\Dispatcher\Factory::class));
         $this->assertTrue($this->application->has(\Abava\Routing\Contract\Strategy::class));
     }
 
