@@ -1,0 +1,31 @@
+{
+    "name": "venta/cache",
+    "description": "Venta Framework Caching package",
+    "authors": [
+        {
+            "name": "Konstantins Zukovs",
+            "email": "kz@scandiweb.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ventacommerce/contracts.git"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Venta\\Cache\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "5.2"
+    },
+    "require": {
+        "venta/contracts": "dev-master",
+        "psr/cache": "^1.0",
+        "php-ds/php-ds": "dev-master",
+        "doctrine/cache": "^1.6"
+    }
+}
