@@ -6,8 +6,18 @@
  */
 class ResponseTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @test
+     */
+    public function implementsResponseContract()
+    {
+        $this->assertInstanceOf(\Abava\Http\Contract\Response::class, new \Abava\Http\Response);
+    }
 
-    public function testAppendStringToBody()
+    /**
+     * @test
+     */
+    public function canAppendStringToBody()
     {
         $response = new \Abava\Http\Response();
         $this->assertEmpty($response->getBody()->__toString());

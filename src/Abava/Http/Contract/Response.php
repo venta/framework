@@ -12,7 +12,6 @@ use Psr\Http\Message\StreamInterface;
  */
 interface Response extends ResponseInterface
 {
-
     /**
      * Writes provided string to response body stream
      *

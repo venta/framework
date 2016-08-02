@@ -13,7 +13,6 @@ use Psr\Http\Message\UriInterface;
  */
 interface Request extends ServerRequestInterface
 {
-
     /**
      * {@inheritdoc}
      * @return Request

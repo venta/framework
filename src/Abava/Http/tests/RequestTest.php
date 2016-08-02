@@ -5,11 +5,12 @@
  */
 class RequestTest extends PHPUnit_Framework_TestCase
 {
-
-    public function testCreateNewRequestInstance()
+    /**
+     * @test
+     */
+    public function implementsRequestContract()
     {
-        $request = new \Abava\Http\Request();
-        $this->assertInstanceOf(\Abava\Http\Contract\Request::class, $request);
+        $this->assertInstanceOf(\Abava\Http\Contract\Request::class, new \Abava\Http\Request);
     }
 
 }

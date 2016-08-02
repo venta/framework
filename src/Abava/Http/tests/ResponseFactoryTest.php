@@ -2,7 +2,6 @@
 
 class ResponseFactoryTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Abava\Http\Factory\ResponseFactory
      */
@@ -13,28 +12,30 @@ class ResponseFactoryTest extends PHPUnit_Framework_TestCase
         $this->factory = new \Abava\Http\Factory\ResponseFactory();
     }
 
-    public function testCreateResponse()
+    /**
+     * @test
+     */
+    public function implementsResponseFactoryContract()
     {
-        $stream = new \Zend\Diactoros\Stream('php://memory');
-        $response = $this->factory->createResponse(500, ['X-Header'=>'value'], $stream);
-        $this->assertInstanceOf(\Abava\Http\Response::class, $response);
-        $this->assertSame($stream, $response->getBody());
-        $this->assertSame(500, $response->getStatusCode());
-        $this->assertSame([0 => 'value'], $response->getHeader('X-Header'));
+        $this->assertInstanceOf(\Abava\Http\Contract\ResponseFactory::class, $this->factory);
     }
 
-    public function testNew()
+    /**
+     * @test
+     */
+    public function canCreateResponse()
     {
-        $response = $this->factory->new();
+        $response = $this->factory->createResponse();
         $this->assertInstanceOf(\Abava\Http\Response::class, $response);
+        $this->assertSame($response->getStatusCode(), 200);
     }
 
-    public function testRedirect()
+    /**
+     * @test
+     */
+    public function canCreateResponseWithStatus()
     {
-        $response = $this->factory->redirect('url', 301);
-        $this->assertInstanceOf(\Abava\Http\Response::class, $response);
-        $this->assertSame($response->getStatusCode(), 301);
-        $this->assertSame('url', $response->getHeaderLine('Location'));
+        $response = $this->factory->createResponse(500);
+        $this->assertSame($response->getStatusCode(), 500);
     }
-
 }
