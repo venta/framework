@@ -1,6 +1,8 @@
 <?php
 
-class ResponseFactoryTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class ResponseFactoryTest extends TestCase
 {
     /**
      * @var \Abava\Http\Factory\ResponseFactory

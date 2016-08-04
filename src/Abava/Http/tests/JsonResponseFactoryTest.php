@@ -1,9 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class JsonResponseFactoryTest
  */
-class JsonResponseFactoryTest extends PHPUnit_Framework_TestCase
+class JsonResponseFactoryTest extends TestCase
 {
     /**
      * @var \Abava\Http\Factory\JsonResponseFactory

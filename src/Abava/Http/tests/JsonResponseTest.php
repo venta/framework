@@ -1,7 +1,8 @@
-<?php declare(strict_types = 1);
+<?php
 
+use PHPUnit\Framework\TestCase;
 
-class JsonResponseTest extends PHPUnit_Framework_TestCase
+class JsonResponseTest extends TestCase
 {
     /**
      * @test

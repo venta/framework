@@ -1,10 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
 
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ResponseTest
  */
-class ResponseTest extends PHPUnit_Framework_TestCase
+class ResponseTest extends TestCase
 {
     /**
      * @test

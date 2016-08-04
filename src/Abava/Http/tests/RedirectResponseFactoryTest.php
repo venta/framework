@@ -1,9 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class RedirectResponseFactoryTest
  */
-class RedirectResponseFactoryTest extends PHPUnit_Framework_TestCase
+class RedirectResponseFactoryTest extends TestCase
 {
     /**
      * @var \Abava\Http\Factory\RedirectResponseFactory

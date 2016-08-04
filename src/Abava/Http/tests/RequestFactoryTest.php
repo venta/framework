@@ -1,10 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
 
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class RequestFactoryTest
  */
-class RequestFactoryTest extends PHPUnit_Framework_TestCase
+class RequestFactoryTest extends TestCase
 {
     /**
      * @var \Abava\Http\Factory\RequestFactory

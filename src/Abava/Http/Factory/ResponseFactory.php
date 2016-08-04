@@ -23,4 +23,6 @@ class ResponseFactory implements ResponseFactoryContract
     {
         return (new Response)->withStatus($code);
     }
+
+
 }

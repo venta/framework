@@ -1,10 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
 
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class RedirectResponseTest
  */
-class RedirectResponseTest extends PHPUnit_Framework_TestCase
+class RedirectResponseTest extends TestCase
 {
     /**
      * @test

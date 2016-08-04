@@ -1,9 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class EmitterTest
  */
-class EmitterTest extends PHPUnit_Framework_TestCase
+class EmitterTest extends TestCase
 {
     /**
      * @test

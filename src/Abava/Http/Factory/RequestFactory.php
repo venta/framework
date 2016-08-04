@@ -48,9 +48,9 @@ class RequestFactory extends ServerRequestFactory implements RequestFactoryContr
      * Create new \Abava\Http\Request form \Zend\Diactoros\ServerRequest
      * 
      * @param ServerRequest $request
-     * @return Request
+     * @return RequestContract
      */
-    protected function createFromBase(ServerRequest $request): Request
+    protected function createFromBase(ServerRequest $request): RequestContract
     {
         return new Request(
             $request->getServerParams(),
