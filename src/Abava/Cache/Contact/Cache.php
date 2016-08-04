@@ -32,7 +32,7 @@ interface Cache
     /**
      * Check if key exists in cache
      *
-     * @param  string  $key
+     * @param  string $key
      * @return bool
      */
     public function has(string $key): bool;
@@ -54,6 +54,6 @@ interface Cache
      * @param $expires
      * @return bool
      */
-    public function put(string $key, $value, $expires):bool;
+    public function put(string $key, $value, $expires): bool;
 
 }

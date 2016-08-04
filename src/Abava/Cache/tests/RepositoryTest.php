@@ -1,9 +1,14 @@
 <?php
 
-class RepositoryTest extends PHPUnit_Framework_TestCase
-{
+use PHPUnit\Framework\TestCase;
 
-    public function testGetSetHasDelete()
+class RepositoryTest extends TestCase
+{
+    /**
+     * @todo: test each scenario individually
+     * @test
+     */
+    public function canGetSetHasDelete()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
         $cache = new \Abava\Cache\Repository($pool);
@@ -31,61 +36,79 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($cache->has('key'));
     }
 
-    public function testPutWithIntExpire()
+    /**
+     * @test
+     */
+    public function canPutWithIntExpire()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
         $cache = new \Abava\Cache\Repository($pool);
 
-        $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem){
+        $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem) {
             $this->assertSame('key', $cacheItem->getKey());
-            $this->assertEquals(time()+10, $cacheItem->getExpirationDate()->getTimestamp());
+            $this->assertEquals(time() + 10, $cacheItem->getExpirationDate()->getTimestamp());
+
             return true;
         }))->andReturn(true);
 
         $this->assertTrue($cache->put('key', 'value', 10));
     }
 
-    public function testPutWithIntervalExpire()
+    /**
+     * @test
+     */
+    public function canPutWithIntervalExpire()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
         $cache = new \Abava\Cache\Repository($pool);
 
         $interval = new DateInterval('P1M');
 
-        $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem) use ($interval) {
+        $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem) use (
+            $interval
+        ) {
             $this->assertSame('key', $cacheItem->getKey());
             $this->assertEquals(
                 (new \DateTime())->add($interval)->getTimestamp(),
                 $cacheItem->getExpirationDate()->getTimestamp()
             );
+
             return true;
         }))->andReturn(true);
 
         $this->assertTrue($cache->put('key', 'value', $interval));
     }
 
-    public function testPutWithDateTimeExpire()
+    /**
+     * @test
+     */
+    public function canPutWithDateTimeExpire()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
         $cache = new \Abava\Cache\Repository($pool);
 
-        $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem){
+        $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem) {
             $this->assertSame('key', $cacheItem->getKey());
             $this->assertEquals('2030-01-01 00:00:00', $cacheItem->getExpirationDate()->format('Y-m-d H:i:s'));
+
             return true;
         }))->andReturn(true);
 
         $this->assertTrue($cache->put('key', 'value', new DateTime('2030-01-01 00:00:00')));
     }
 
-    public function testPutWithoutExpire()
+    /**
+     * @test
+     */
+    public function canPutWithoutExpire()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
         $cache = new \Abava\Cache\Repository($pool);
 
-        $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem){
+        $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem) {
             $this->assertSame('key', $cacheItem->getKey());
             $this->assertNull($cacheItem->getExpirationDate());
+
             return true;
         }))->andReturn(true);
 
