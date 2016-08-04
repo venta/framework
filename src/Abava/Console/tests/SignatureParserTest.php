@@ -3,8 +3,9 @@
 namespace Abava\Console\Tests;
 
 use Abava\Console\Command\SignatureParser;
+use PHPUnit\Framework\TestCase;
 
-class SignatureParserTest extends \PHPUnit_Framework_TestCase
+class SignatureParserTest extends TestCase
 {
     /**
      * Types array to compare with
@@ -18,7 +19,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         'optional_array' => 6
     ];
 
-    public function testCanParseSimpleName()
+    /**
+     * @test
+     */
+    public function canParseSimpleName()
     {
         $signature = new SignatureParser();
         $parsed = $signature->parse('venta');
@@ -28,7 +32,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('venta', $parsed['name']);
     }
 
-    public function testCanParseComplexName()
+    /**
+     * @test
+     */
+    public function canParseComplexName()
     {
         $signature = new SignatureParser();
         $parsed = $signature->parse('venta:test');
@@ -36,7 +43,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('venta:test', $parsed['name']);
     }
 
-    public function testCanParseSimpleArgument()
+    /**
+     * @test
+     */
+    public function canParseSimpleArgument()
     {
         $signature = new SignatureParser();
         $parsed = $signature->parse('venta:test {argument}');
@@ -56,7 +66,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($argument['description']);
     }
 
-    public function testCanParseOptionalArgument()
+    /**
+     * @test
+     */
+    public function canParseOptionalArgument()
     {
         $parsed = (new SignatureParser())->parse('venta:test {argument=}');
         $argument = $parsed['arguments'][0];
@@ -68,7 +81,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($argument['description']);
     }
 
-    public function testCanParseOptionalArrayArgument()
+    /**
+     * @test
+     */
+    public function canParseOptionalArrayArgument()
     {
         $parsed = (new SignatureParser())->parse('venta:test {argument[]=}');
         $argument = $parsed['arguments'][0];
@@ -80,7 +96,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($argument['description']);
     }
 
-    public function testCanParseOptionalArgumentWithDefault()
+    /**
+     * @test
+     */
+    public function canParseOptionalArgumentWithDefault()
     {
         $parsed = (new SignatureParser())->parse('venta:test {argument=default value}');
         $argument = $parsed['arguments'][0];
@@ -92,7 +111,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($argument['description']);
     }
 
-    public function testCanParseOptionalArrayArgumentWithDefault()
+    /**
+     * @test
+     */
+    public function canParseOptionalArrayArgumentWithDefault()
     {
         $parsed = (new SignatureParser())->parse('venta:test {argument[]=default value,second default}');
         $argument = $parsed['arguments'][0];
@@ -107,7 +129,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('second default', $argument['default'][1]);
     }
 
-    public function testCanParseOptionalArrayArgumentWithDefaultAndDescription()
+    /**
+     * @test
+     */
+    public function canParseOptionalArrayArgumentWithDefaultAndDescription()
     {
         $parsed = (new SignatureParser())->parse('venta:test {argument[]=default value,second default:Command description goes here}');
         $argument = $parsed['arguments'][0];
@@ -122,7 +147,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('second default', $argument['default'][1]);
     }
 
-    public function testCanParseOptions()
+    /**
+     * @test
+     */
+    public function canParseOptions()
     {
         $parsed = (new SignatureParser())->parse('venta:test {--option[]=default value,second default:Option description goes here}');
         $option = $parsed['options'][0];
@@ -137,7 +165,10 @@ class SignatureParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('second default', $option['default'][1]);
     }
 
-    public function testCanParseArrayArgument()
+    /**
+     * @test
+     */
+    public function canParseArrayArgument()
     {
         $parsed = (new SignatureParser())->parse('venta:test {argument[]}');
         $argument = $parsed['arguments'][0];

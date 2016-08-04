@@ -1,14 +1,17 @@
 <?php namespace Abava\Console;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CommandTest extends \PHPUnit_Framework_TestCase
+class CommandTest extends TestCase
 {
-
-    public function testHandle()
+    /**
+     * @test
+     */
+    public function canHandle()
     {
         $command = new class() extends \Abava\Console\Command {
 
@@ -26,7 +29,10 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('abc', $output->fetch());
     }
 
-    public function testArgumentAndOptionDefiningInSignature()
+    /**
+     * @test
+     */
+    public function canArgumentAndOptionBeDefinedInSignature()
     {
         $command = new class() extends \Abava\Console\Command {
 
@@ -46,7 +52,10 @@ class CommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame("argumentoption", $output->fetch());
     }
 
-    public function testOptionsAndAgruments()
+    /**
+     * @test
+     */
+    public function canAcceptOptionsAndAgruments()
     {
         $command = new class() extends \Abava\Console\Command {
 
