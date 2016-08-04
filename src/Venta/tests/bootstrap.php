@@ -1,7 +1,6 @@
 <?php
 
 require __DIR__ . '/../../../vendor/autoload.php';
-require __DIR__ . '/../../Abava/Container/tests/StubClasses.php';
 
 $run = new \Whoops\Run();
 $run->pushHandler(new \Whoops\Handler\PlainTextHandler())->register();
