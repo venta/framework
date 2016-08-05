@@ -19,6 +19,12 @@ interface Response extends ResponseInterface
      * @return Response
      */
     public function append(string $body): Response;
+    
+    /**
+     * Get body content as plain text
+     * @return string
+     */
+    public function getContent();
 
     /**
      * {@inheritdoc}
