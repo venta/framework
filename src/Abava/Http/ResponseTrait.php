@@ -32,6 +32,6 @@ trait ResponseTrait
      */
     public function getContent()
     {
-        return $this->getBody()->__toString();
+        return (string)$this->getBody();
     }
 }
