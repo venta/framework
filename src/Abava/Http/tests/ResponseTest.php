@@ -42,5 +42,30 @@ class ResponseTest extends TestCase
         $this->assertSame($response->getContent(), $response->getBody()->__toString());
         $this->assertSame($response->getContent(), $string);
     }
+    
+    /**
+     * @test
+     */
+    public function canSetCookie()
+    {
+        $response = new \Abava\Http\Response();
+        $this->assertEmpty($response->getHeader('Set-Cookie'));
+        $cookie = new \Abava\Http\Cookie('name', 'value');
+        $response = $response->setCookies($cookie);
+        $this->assertCount(1, $response->getHeader('Set-Cookie'));
+    }
+    
+    /**
+     * @test
+     */
+    public function canSetMultipleCookies()
+    {
+        $response = new \Abava\Http\Response();
+        $this->assertEmpty($response->getHeader('Set-Cookie'));
+        $cookie = new \Abava\Http\Cookie('name', 'value');
+        $cookie2 = new \Abava\Http\Cookie('name2', 'value2');
+        $response = $response->setCookies([$cookie, $cookie2]);
+        $this->assertCount(2, $response->getHeader('Set-Cookie'));
+    }
 
 }
