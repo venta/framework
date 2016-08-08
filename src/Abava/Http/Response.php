@@ -3,6 +3,7 @@
 namespace Abava\Http;
 
 use Abava\Http\Contract\Response as ResponseContract;
+use Abava\Http\Contract\Cookie as CookieContract;
 use Zend\Diactoros\Response as BaseResponse;
 
 /**
@@ -13,35 +14,34 @@ use Zend\Diactoros\Response as BaseResponse;
 class Response extends BaseResponse implements ResponseContract
 {
     use ResponseTrait;
-    
-    /**
-     * @param $cookies Cookie|Cookie[]
-     * @return Response;
-     */
-    public function setCookies($cookies)
+
+    public function addCookie(CookieContract $cookie): ResponseContract
     {
-        if ($cookies instanceof \Abava\Http\Contract\Cookie) {
-            
-            return $this->addCookie($cookies);
-        } elseif (is_array($cookies)) {
-            $response = $this;
-            
-            foreach ($cookies as $cookie) {
-                /**
-                 * @var $cookie Cookie
-                 */
-                if ($cookie instanceof \Abava\Http\Contract\Cookie) {
-                    $response = $response->addCookie($cookie);
-                } else {
-                    throw new \InvalidArgumentException('Array must contain Cookie objects');
-                }
-            }
-            
-            return $response;
-        }
+        return $this->addCookieToHeader($cookie);
     }
-    
-    protected function addCookie(Cookie $cookie)
+
+    /**
+     * @param $cookies Cookie[]
+     * @return ResponseContract;
+     * @throws \InvalidArgumentException
+     */
+    public function addCookies($cookies): ResponseContract
+    {
+        if (!is_array($cookies) && !$cookies instanceof \Traversable) {
+            throw new \InvalidArgumentException('Array elements must implement Cookie contract');
+        }
+
+        /** @var $response Response * $this is immutable */
+        $response = clone $this;
+        /** @var $cookie Cookie */
+        foreach ($cookies as $cookie) {
+            $response = $response->addCookieToHeader($cookie);
+        }
+
+        return $response;
+    }
+
+    protected function addCookieToHeader(Cookie $cookie)
     {
         return $this->withAddedHeader('Set-Cookie', $cookie->asPlainText());
     }
