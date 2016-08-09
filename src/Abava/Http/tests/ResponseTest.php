@@ -29,7 +29,7 @@ class ResponseTest extends TestCase
         $this->assertContains('abc', $response->getBody()->__toString());
         $this->assertContains('abc', $result->getBody()->__toString());
     }
-    
+
     /**
      * @test
      */
@@ -43,4 +43,50 @@ class ResponseTest extends TestCase
         $this->assertSame($response->getContent(), $string);
     }
 
+    /**
+     * @test
+     */
+    public function canSetSingleCookie()
+    {
+        $response = new \Abava\Http\Response();
+        $this->assertEmpty($response->getHeader('Set-Cookie'));
+        $cookie = new \Abava\Http\Cookie('name', 'value');
+        $response = $response->addCookie($cookie);
+        $this->assertCount(1, $response->getHeader('Set-Cookie'));
+    }
+
+    /**
+     * @test
+     */
+    public function canSetMultipleCookies()
+    {
+        $response = new \Abava\Http\Response();
+        $this->assertEmpty($response->getHeader('Set-Cookie'));
+        $cookie = new \Abava\Http\Cookie('name', 'value');
+        $cookie2 = new \Abava\Http\Cookie('name2', 'value2');
+        $response = $response->addCookies([$cookie, $cookie2]);
+        $this->assertCount(2, $response->getHeader('Set-Cookie'));
+    }
+
+    /**
+     * @test
+     */
+    public function canSetMultipleCookiesFromObj()
+    {
+        $response = new \Abava\Http\Response();
+        $arrayIterator = new class() extends \ArrayIterator
+        {
+        };
+        $response->addCookies($arrayIterator);
+    }
+
+    /**
+     * @test
+     */
+    public function failMultipleCookiesAdding()
+    {
+        $response = new \Abava\Http\Response();
+        $this->expectException("InvalidArgumentException");
+        $response = $response->addCookies('cookie');
+    }
 }
