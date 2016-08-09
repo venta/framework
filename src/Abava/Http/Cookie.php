@@ -161,36 +161,57 @@ class Cookie implements Contract\Cookie
         return (new \DateTime('now'))->add(new \DateInterval($string))->getTimestamp();
     }
 
+    /**
+     * @return int timestamp
+     */
     public static function outdated()
     {
         return (new \DateTime('now'))->sub(new \DateInterval('P12M'))->getTimestamp();
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @return string|null
+     */
     public function getValue()
     {
         return $this->value;
     }
 
+    /**
+     * @return string
+     */
     public function getDomain()
     {
         return $this->domain;
     }
 
+    /**
+     * @return int|string timestamp
+     */
     public function getExpireTime()
     {
         return $this->expire;
     }
 
+    /**
+     * @return bool
+     */
     public function isSecure()
     {
         return $this->secure;
     }
 
+    /**
+     * @return bool
+     */
     public function isHttpOnly()
     {
         return $this->httpOnly;
