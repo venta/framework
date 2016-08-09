@@ -17,5 +17,5 @@ interface RedirectResponseFactory
      * @param array $headers
      * @return Response
      */
-    public function createResponse($uri, $status = 302, array $headers = []): Response;
+    public function createRedirectResponse($uri, $status = 302, array $headers = []): Response;
 }

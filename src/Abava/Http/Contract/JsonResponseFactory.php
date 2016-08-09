@@ -20,7 +20,7 @@ interface JsonResponseFactory
      * @param int $encodingOptions JSON encoding options to use.
      * @return Response
      */
-    public function createResponse(
+    public function createJsonResponse(
         $data,
         $status = 200,
         array $headers = [],

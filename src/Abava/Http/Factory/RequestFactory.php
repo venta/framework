@@ -5,8 +5,8 @@ namespace Abava\Http\Factory;
 use Abava\Http\Contract\Request as RequestContract;
 use Abava\Http\Contract\RequestFactory as RequestFactoryContract;
 use Abava\Http\Request;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
-use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
 
 /**
@@ -45,12 +45,12 @@ class RequestFactory extends ServerRequestFactory implements RequestFactoryContr
     }
 
     /**
-     * Create new \Abava\Http\Request form \Zend\Diactoros\ServerRequest
-     * 
-     * @param ServerRequest $request
+     * Create new \Abava\Http\Request form Psr\Http\Message\ServerRequestInterface
+     *
+     * @param ServerRequestInterface $request
      * @return RequestContract
      */
-    protected function createFromBase(ServerRequest $request): RequestContract
+    protected function createFromBase(ServerRequestInterface $request): RequestContract
     {
         return new Request(
             $request->getServerParams(),

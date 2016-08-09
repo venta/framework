@@ -9,6 +9,10 @@
         {
             "name": "Alexey Rehov",
             "email": "aleksejs@scandiweb.com"
+        },
+        {
+            "name": "Vsevolods Mihailovs",
+            "email": "vsevolods@scandiweb.com"
         }
     ],
     "autoload": {
