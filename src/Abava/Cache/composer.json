@@ -14,7 +14,10 @@
     "autoload": {
         "psr-4": {
             "Abava\\Cache\\": ""
-        }
+        },
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
     },
     "minimum-stability": "dev",
     "require-dev": {
@@ -23,9 +26,9 @@
     },
     "require": {
         "psr/cache": "^1.0",
-        "cache/adapter-common":     "^0.3",
+        "cache/adapter-common": "^0.3",
         "cache/hierarchical-cache": "^0.2",
-        "cache/taggable-cache":     "^0.4",
+        "cache/taggable-cache": "^0.4",
         "cache/namespaced-cache": "^0.1",
         "cache/array-adapter": "^0.4"
     },

@@ -9,13 +9,17 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Venta eCommerce Framework Routing package tests">
-            <directory>./tests/</directory>
+        <testsuite name="The Abava Cache package tests">
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">./src/</directory>
+            <directory>./</directory>
+            <exclude>
+                <directory>./tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
         </whitelist>
     </filter>
     <logging>

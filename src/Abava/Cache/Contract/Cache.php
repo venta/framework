@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace Abava\Cache\Contact;
+namespace Abava\Cache\Contract;
 
 /**
  * Interface Cache
  * Provides a facade for simplified usage
  * of PSR-6 cache pools and cache items
  *
- * @package Abava\Cache\Contact
+ * @package Abava\Cache\Contract
  */
 interface Cache
 {

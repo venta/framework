@@ -2,7 +2,7 @@
 
 namespace Abava\Cache;
 
-use Abava\Cache\Contact\Cache;
+use Abava\Cache\Contract\Cache;
 use Cache\Adapter\Common\CacheItem;
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -11,7 +11,7 @@ use Psr\Cache\CacheItemPoolInterface;
  *
  * @package Abava\Cache
  */
-class Repository implements Cache
+final class Repository implements Cache
 {
 
     /**
@@ -19,6 +19,11 @@ class Repository implements Cache
      */
     protected $pool;
 
+    /**
+     * Repository constructor.
+     *
+     * @param CacheItemPoolInterface $pool
+     */
     public function __construct(CacheItemPoolInterface $pool)
     {
         $this->pool = $pool;
@@ -59,7 +64,7 @@ class Repository implements Cache
     /**
      * @inheritDoc
      */
-    public function put(string $key, $value, $expires):bool
+    public function put(string $key, $value, $expires): bool
     {
         $item = new CacheItem($key);
         $item->set($value);
@@ -68,8 +73,8 @@ class Repository implements Cache
         } elseif ($expires instanceof \DateTimeInterface) {
             $item->expiresAt($expires);
         }
+
         return $this->pool->save($item);
     }
-
 
 }
