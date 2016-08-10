@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Abava\Console\Contract;
 
@@ -29,8 +29,8 @@ interface Command
     /**
      * Main command function, which is executed on command run
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @return null|int
      */
     public function handle(InputInterface $input, OutputInterface $output);

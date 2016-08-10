@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Abava\Console\Command;
 
@@ -17,7 +17,7 @@ class SignatureParser implements SignatureParserContract
      *
      * @var string
      */
-    protected $_signature;
+    protected $signature;
 
     /**
      * RegExp to match arguments
@@ -25,14 +25,14 @@ class SignatureParser implements SignatureParserContract
      *
      * @var string
      */
-    protected $_argumentsMatcher = '/^(?:\-\-)?([a-z]+)?(\[\])?(=)?(.*?)?$/';
+    protected $argumentsMatcher = '/^(?:\-\-)?([a-z]+)?(\[\])?(=)?(.*?)?$/';
 
     /**
      * Parameters matcher string
      *
      * @var string
      */
-    protected $_parametersMatcher = '/{(.*?)}/';
+    protected $parametersMatcher = '/{(.*?)}/';
 
     /**
      * @throws \Exception
@@ -40,10 +40,10 @@ class SignatureParser implements SignatureParserContract
      */
     public function parse(string $signature): array
     {
-        $signature = explode(' ', $this->_signature = $signature);
+        $signature = explode(' ', $this->signature = $signature);
 
-        return array_merge($this->_parseParameters(), [
-            'name' => array_shift($signature)
+        return array_merge($this->parseParameters(), [
+            'name' => array_shift($signature),
         ]);
     }
 
@@ -53,20 +53,20 @@ class SignatureParser implements SignatureParserContract
      *
      * @return array
      */
-    protected function _parseParameters()
+    protected function parseParameters(): array
     {
         $arguments = [];
         $options = [];
-        $signatureArguments = $this->_getParameters();
+        $signatureArguments = $this->getParameters();
 
         foreach ($signatureArguments as $value) {
             $item = [];
             $matches = [];
             $exploded = explode(':', $value);
 
-            if (count($exploded) > 0 && preg_match($this->_argumentsMatcher, $exploded[0], $matches)) {
+            if (count($exploded) > 0 && preg_match($this->argumentsMatcher, $exploded[0], $matches)) {
                 $item['name'] = $matches[1];
-                $item['type'] = $this->_defineType($matches[2] === '[]', $matches[3] === '=');
+                $item['type'] = $this->defineType($matches[2] === '[]', $matches[3] === '=');
                 $item['default'] = $matches[4] !== '' ? $matches[4] : null;
                 $item['description'] = count($exploded) === 2 ? $exploded[1] : null;
 
@@ -84,7 +84,7 @@ class SignatureParser implements SignatureParserContract
 
         return [
             'arguments' => $arguments,
-            'options' => $options
+            'options' => $options,
         ];
     }
 
@@ -93,10 +93,10 @@ class SignatureParser implements SignatureParserContract
      *
      * @return array
      */
-    protected function _getParameters()
+    protected function getParameters(): array
     {
         $matches = [];
-        preg_match_all($this->_parametersMatcher, $this->_signature, $matches);
+        preg_match_all($this->parametersMatcher, $this->signature, $matches);
 
         return $matches[1];
     }
@@ -104,11 +104,11 @@ class SignatureParser implements SignatureParserContract
     /**
      * Defines type of an argument or option based on options
      *
-     * @param  bool $array
-     * @param  bool $optional
+     * @param bool $array
+     * @param bool $optional
      * @return int
      */
-    protected function _defineType($array = false, $optional = false)
+    protected function defineType($array = false, $optional = false): int
     {
         $type = ($optional) ? InputArgument::OPTIONAL : InputArgument::REQUIRED;
 

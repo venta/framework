@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="tests/bootstrap.php"
+         bootstrap="vendor/bootstrap.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -9,13 +9,17 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
-        <testsuite name="Abava Console package tests">
-            <directory>./tests/</directory>
+        <testsuite name="The Abava Console package tests">
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">./src/</directory>
+            <directory>./</directory>
+            <exclude>
+                <directory>./tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
         </whitelist>
     </filter>
     <logging>

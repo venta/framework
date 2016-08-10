@@ -27,7 +27,10 @@
     "autoload": {
         "psr-4": {
             "Abava\\Console\\": "/"
-        }
+        },
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
     },
     "minimum-stability": "stable",
     "require-dev": {
