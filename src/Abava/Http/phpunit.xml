@@ -10,14 +10,16 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="The Abava Http package tests">
-            <directory>./tests/</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist>
-            <directory suffix=".php">./src/</directory>
-        </whitelist>
-    </filter>
+    <whitelist>
+        <directory>./</directory>
+        <exclude>
+            <directory>./tests</directory>
+            <directory>./vendor</directory>
+        </exclude>
+    </whitelist>
     <logging>
         <log type="coverage-html" target="./tests/coverage" charset="UTF-8" yui="true" highlight="true" />
     </logging>

@@ -1,6 +1,6 @@
 {
     "name": "abava/http",
-    "description": "The Abava Container package",
+    "description": "The Abava Http package",
     "authors": [
         {
             "name": "Konstantins Zukovs",
@@ -18,7 +18,10 @@
     "autoload": {
         "psr-4": {
             "Abava\\Http\\": "/"
-        }
+        },
+        "exclude-from-classmap": [
+            "/tests/"
+        ]
     },
     "minimum-stability": "dev",
     "require-dev": {
