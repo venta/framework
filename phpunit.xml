@@ -10,16 +10,16 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Venta Framework tests">
-            <directory>./src/Venta/tests/</directory>
-            <directory>./src/Abava/*/tests/</directory>
+            <directory>./src/Venta/tests</directory>
+            <directory>./src/Abava/*/tests</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">./src/</directory>
+            <directory suffix=".php">./src</directory>
             <exclude>
-                <directory suffix=".php">./src/Venta/tests/</directory>
-                <directory suffix=".php">./src/Abava/*/tests/</directory>
+                <directory suffix=".php">./src/Venta/tests</directory>
+                <directory suffix=".php">./src/Abava/*/tests</directory>
             </exclude>
         </whitelist>
     </filter>
