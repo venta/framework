@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:abava/container.git
+	branch = master
+	commit = de70e55f3d409d5f0a2a83c0b5ca16044fbd0688
+	parent = 45dde128c510927f47fe1850939bddc68e65fb29
+	cmdver = 0.3.0
