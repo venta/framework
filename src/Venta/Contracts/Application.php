@@ -2,9 +2,7 @@
 
 namespace Venta\Contracts;
 
-use Abava\Container\Contract\{
-    Caller, Container
-};
+use Abava\Container\Contract\{Caller, Container};
 use Abava\Routing\Contract\Collector as RouteCollector;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 
