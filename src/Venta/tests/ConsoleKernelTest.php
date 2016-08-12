@@ -76,6 +76,8 @@ class ConsoleKernelTest extends PHPUnit_Framework_TestCase
         $app->shouldReceive('has')->with('error_handler')->andReturn(true);
         $errorHandler = Mockery::mock(\Whoops\RunInterface::class);
         $errorHandler->shouldReceive('handleException')->with($e);
+        $errorHandler->shouldReceive('allowQuit')->with(false);
+        $errorHandler->shouldReceive('writeToOutput')->with(false);
         $app->shouldReceive('get')->with('error_handler')->andReturn($errorHandler);
 
         $app->shouldReceive('bind')->with('status', 1);
