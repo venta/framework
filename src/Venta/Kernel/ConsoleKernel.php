@@ -80,6 +80,10 @@ class ConsoleKernel extends ConsoleApplication implements ConsoleKernelContact
         if ($this->application->has('error_handler')) {
             /** @var \Whoops\RunInterface $run */
             $run = $this->application->get('error_handler');
+            // from now on ConsoleApplication will render exception
+            $run->allowQuit(false);
+            $run->writeToOutput(false);
+            // Ignore the return string, parent call will render exception
             $run->handleException($e);
         }
         parent::renderException($e, $output);
