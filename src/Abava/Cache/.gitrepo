@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:abava/cache.git
+	branch = master
+	commit = 6bf140d4817f77ddff4686615e8f84a02c15b475
+	parent = f58bc8ddf50fe44b35ce1717df286b841ecb478b
+	cmdver = 0.3.0

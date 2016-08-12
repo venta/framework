@@ -88,9 +88,9 @@ class CookieTest extends TestCase
     public function emptyValueDeletesCookie()
     {
         $cookie = new Cookie('name', '');
-        $cookieString = (string)$cookie;
-        preg_match('/.*expires=(\d+);.*/', $cookieString, $res);
-        $this->assertGreaterThanOrEqual((int)$res[1], (new DateTime())->getTimestamp());
+        $cookie = str_replace(' ', '', $cookie);
+        preg_match('/.*expires=([^\s|\;]+);.*/', (string)$cookie, $res);
+        $this->assertGreaterThanOrEqual(strtotime($res[1]), (new DateTime())->getTimestamp());
     }
 
     /**
@@ -99,9 +99,11 @@ class CookieTest extends TestCase
     public function expirationTimeIsSet()
     {
         $timestamp = (new DateTime())->add(new \DateInterval('P1D'))->getTimestamp();
-        $cookie = new Cookie('name', 'value', $timestamp);
-        preg_match('/.*expires=(\d+);.*/', (string)$cookie, $res);
-        $this->assertEquals($res[1], $timestamp);
+        $formattedExpire = str_replace(' ', '', gmdate('D, d-M-Y H:i:s T', $timestamp));
+        $cookie = (string)(new Cookie('name', 'value', $timestamp));
+        $cookie = str_replace(' ', '', $cookie);
+        preg_match('/.*expires=([^\s|\;]+);.*/', $cookie, $res);
+        $this->assertEquals($res[1], $formattedExpire);
     }
 
     /**
@@ -185,5 +187,25 @@ class CookieTest extends TestCase
     {
         $this->assertGreaterThanOrEqual(Cookie::inDateInterval('P2DT2H'), (new DateTime())->add(new \DateInterval('P2DT2H2S'))->getTimestamp());
         $this->assertLessThanOrEqual(Cookie::inDateInterval('P2DT2H'), (new DateTime())->add(new \DateInterval('P1DT59M58S'))->getTimestamp());
+    }
+
+    /**
+     * @test
+     */
+    public function createFromString()
+    {
+        $cookie = new Cookie('name', 'value', Cookie::inDays(3), '/~path/', "cookie.com", true, true);
+        $recreated = Cookie::createFromString((string)$cookie);
+        $this->assertEquals($cookie, $recreated);
+    }
+
+    /**
+     * @test
+     */
+    public function createFromStringEmptyStringExpiration()
+    {
+        $cookie = new Cookie('name', 'value', '');
+        $recreated = Cookie::createFromString((string)$cookie);
+        $this->assertEquals($cookie, $recreated);
     }
 }

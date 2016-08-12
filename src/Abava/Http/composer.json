@@ -13,6 +13,10 @@
         {
             "name": "Vsevolods Mihailovs",
             "email": "vsevolods@scandiweb.com"
+        },
+        {
+            "name": "Ilja Lapkovskis",
+            "email": "ilja@scandiweb.com"
         }
     ],
     "autoload": {

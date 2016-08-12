@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Abava\Http\Cookie;
 
 /**
  * Class ResponseTest
@@ -88,5 +89,83 @@ class ResponseTest extends TestCase
         $response = new \Abava\Http\Response();
         $this->expectException("InvalidArgumentException");
         $response = $response->addCookies('cookie');
+    }
+
+    /**
+     * @test
+     */
+    public function getCookieFromEmptyContainer()
+    {
+        $response = new \Abava\Http\Response();
+        $cookies = $response->getCookies();
+        $this->assertNull($cookies);
+    }
+
+    /**
+     * @test
+     */
+    public function getPlainTextCookies()
+    {
+        $response = new \Abava\Http\Response();
+        $cookies = [new Cookie('name', 'value'),
+            new Cookie('cookie', 'cookievalue')];
+        $response = $response->addCookies($cookies);
+        $attachedCookies = $response->getCookies();
+        $this->assertCount(count($cookies), $attachedCookies);
+        for ($i = 0; $i < count($cookies); $i++) {
+            $this->assertSame((string)$cookies[$i], $attachedCookies[$i]);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function getCookiesAsObjects()
+    {
+        $response = new \Abava\Http\Response();
+        $cookies = [new Cookie('name', 'value'),
+            new Cookie('cookie', 'cookievalue')];
+        $response = $response->addCookies($cookies);
+        $attachedCookies = $response->getCookies(true);
+        foreach ($attachedCookies as $cookie) {
+            $this->assertInstanceOf(Cookie::class, $cookie);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function getPlainCookieByName()
+    {
+        $response = new \Abava\Http\Response();
+        $cookies = [new Cookie('name', 'value'),
+            new Cookie('cookie', 'cookievalue')];
+        $response = $response->addCookies($cookies);
+        $cookie = $response->getCookie('cookie');
+        $this->assertSame((string)$cookies[1], $cookie);
+    }
+
+    /**
+     * @test
+     */
+    public function getNonExistingCookieByName()
+    {
+        $response = new \Abava\Http\Response();
+        $cookies = [new Cookie('name', 'value'),
+            new Cookie('cookie', 'cookievalue')];
+        $response = $response->addCookies($cookies);
+        $cookie = $response->getCookie('notexisting');
+        $this->assertNull($cookie);
+    }
+
+    /**
+     * @test
+     */
+    public function getSingleCookieWhenNoCookieWasSet()
+    {
+        $response = new \Abava\Http\Response();
+        $this->assertNull($response->getCookies());
+        $cookie = $response->getCookie('notexisting');
+        $this->assertNull($cookie);
     }
 }

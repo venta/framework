@@ -11,9 +11,9 @@ class Cookie implements Contract\Cookie
 {
     protected $name;
     protected $value;
-    protected $domain;
     protected $expire;
     protected $path;
+    protected $domain;
     protected $secure;
     protected $httpOnly;
 
@@ -50,6 +50,7 @@ class Cookie implements Contract\Cookie
             throw new \InvalidArgumentException('The cookie name cannot be empty.');
         }
 
+        $expire = ($expire === "") ? 0 : $expire;
         if ($expire instanceof \DateTimeInterface) {
             $expire = $expire->format('U');
         } elseif (!is_numeric($expire)) {
@@ -77,12 +78,12 @@ class Cookie implements Contract\Cookie
         $str = urlencode($this->getName()) . '=';
 
         if ('' === (string)$this->getValue()) {
-            $str .= 'deleted; expires=' . self::outdated();
+            $str .= 'deleted; expires=' . gmdate('D, d-M-Y H:i:s T', static::outdated());
         } else {
             $str .= urlencode($this->getValue());
 
             if ($this->getExpireTime() !== 0) {
-                $str .= '; expires=' . $this->getExpireTime();
+                $str .= '; expires=' . gmdate('D, d-M-Y H:i:s T', $this->getExpireTime());
             }
         }
 
@@ -215,5 +216,16 @@ class Cookie implements Contract\Cookie
     public function isHttpOnly()
     {
         return $this->httpOnly;
+    }
+
+    public static function createFromString(string $cookie)
+    {
+        $cookie = str_replace(' ', '', $cookie);
+        $pattern = '/^(\w+)=(\w+);(?:expires=([^\s|\;]+);)?(?:path=([^\s|\;]+);)?(?:domain=([^\s|\;]+);)?(?:(secure);)?(httponly)?/';
+        preg_match($pattern, $cookie, $result);
+        array_shift($result);
+        $reflected = new \ReflectionClass(self::class);
+
+        return $reflected->newInstanceArgs($result);
     }
 }
