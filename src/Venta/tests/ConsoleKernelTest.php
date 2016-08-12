@@ -19,7 +19,7 @@ class ConsoleKernelTest extends PHPUnit_Framework_TestCase
         $output = new \Symfony\Component\Console\Output\NullOutput();
 
         // Mocking application
-        $app = Mockery::mock(\Venta\Contracts\Application::class);
+        $app = Mockery::mock(\Venta\Contract\Application::class);
         $app->shouldReceive('singleton')->with('console', $kernel);
         $app->shouldReceive('singleton')->with('input', $input);
         $app->shouldReceive('singleton')->with(\Symfony\Component\Console\Input\InputInterface::class, $input);
@@ -41,7 +41,7 @@ class ConsoleKernelTest extends PHPUnit_Framework_TestCase
 
     public function testTerminate()
     {
-        $app = $this->getMockBuilder(\Venta\Contracts\Application::class)->getMock();
+        $app = $this->getMockBuilder(\Venta\Contract\Application::class)->getMock();
         $app->method('terminate');
         $kernel = new \Venta\Kernel\ConsoleKernel('test', '1.0');
         $kernel->setApplication($app);
@@ -62,7 +62,7 @@ class ConsoleKernelTest extends PHPUnit_Framework_TestCase
         $e = new Exception();
 
         // Mocking application
-        $app = Mockery::mock(\Venta\Contracts\Application::class);
+        $app = Mockery::mock(\Venta\Contract\Application::class);
         $app->shouldReceive('singleton')->with('console', $kernel);
         $app->shouldReceive('singleton')->with('input', $input);
         $app->shouldReceive('singleton')->with(\Symfony\Component\Console\Input\InputInterface::class, $input);

@@ -10,7 +10,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
     public function testHandle()
     {
-        $application = Mockery::mock(\Venta\Contracts\Application::class);
+        $application = Mockery::mock(\Venta\Contract\Application::class);
         $routeCollector = Mockery::mock(\Abava\Routing\Contract\Collector::class);
         $route = (new \Abava\Routing\Route(['GET','POST'], '/qwerty', 'callable'))
             ->withHost('localhost')

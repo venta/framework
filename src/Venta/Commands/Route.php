@@ -6,7 +6,7 @@ use Abava\Console\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Contracts\Application;
+use Venta\Contract\Application;
 
 /**
  * Class Route

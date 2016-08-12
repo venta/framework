@@ -9,10 +9,10 @@ use Abava\Routing\Contract\Collector as RouteCollector;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 use Dotenv\Dotenv;
 use Psr\Http\Message\ServerRequestInterface;
-use Venta\Contracts\Application as ApplicationContact;
-use Venta\Contracts\ExtensionProvider\Commands as CommandsProvider;
-use Venta\Contracts\ExtensionProvider\Middlewares as MiddlewareProvider;
-use Venta\Contracts\ExtensionProvider\Routes as RouteProvider;
+use Venta\Contract\Application as ApplicationContact;
+use Venta\Contract\ExtensionProvider\Commands as CommandsProvider;
+use Venta\Contract\ExtensionProvider\Middlewares as MiddlewareProvider;
+use Venta\Contract\ExtensionProvider\Routes as RouteProvider;
 
 /**
  * Class Application

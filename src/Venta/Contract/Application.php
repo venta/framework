@@ -1,15 +1,17 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Contracts;
+namespace Venta\Contract;
 
-use Abava\Container\Contract\{Caller, Container};
+use Abava\Container\Contract\{
+    Caller, Container
+};
 use Abava\Routing\Contract\Collector as RouteCollector;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 
 /**
  * Interface Application
  *
- * @package Venta\Contracts
+ * @package Venta\Contract
  */
 interface Application extends Container, Caller
 {

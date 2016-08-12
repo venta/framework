@@ -9,8 +9,8 @@ use Abava\Routing\Route;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Venta\Contracts\Application;
-use Venta\Contracts\Kernel\HttpKernel as HttpKernelContact;
+use Venta\Contract\Application;
+use Venta\Contract\Kernel\HttpKernel as HttpKernelContact;
 
 /**
  * Class HttpKernel

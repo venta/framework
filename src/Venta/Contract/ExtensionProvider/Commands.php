@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Contracts\ExtensionProvider;
+namespace Venta\Contract\ExtensionProvider;
 
 use Symfony\Component\Console\Application as ConsoleApplication;
 
 /**
  * Interface Commands
  *
- * @package Venta\Contracts\ExtensionProvider
+ * @package Venta\Contract\ExtensionProvider
  */
 interface Commands
 {

@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Contracts\ExtensionProvider;
+namespace Venta\Contract\ExtensionProvider;
 
-use Venta\Contracts\Application;
+use Venta\Contract\Application;
 
 /**
  * Interface Bindings
  *
- * @package Venta\Contracts\ExtensionProvider
+ * @package Venta\Contract\ExtensionProvider
  */
 interface Bindings
 {

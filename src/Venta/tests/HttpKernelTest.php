@@ -5,7 +5,7 @@ class HttpKernelTest extends PHPUnit_Framework_TestCase
 
     public function testHandle()
     {
-        $app = Mockery::mock(\Venta\Contracts\Application::class);
+        $app = Mockery::mock(\Venta\Contract\Application::class);
         $request = Mockery::mock(\Psr\Http\Message\ServerRequestInterface::class);
         $response = Mockery::mock(\Psr\Http\Message\ResponseInterface::class);
 
@@ -68,7 +68,7 @@ class HttpKernelTest extends PHPUnit_Framework_TestCase
         $response = Mockery::mock(\Psr\Http\Message\ResponseInterface::class);
         $emitter = Mockery::mock(\Abava\Http\Contract\Emitter::class);
         $emitter->shouldReceive('emit')->with($response);
-        $app = Mockery::mock(\Venta\Contracts\Application::class);
+        $app = Mockery::mock(\Venta\Contract\Application::class);
         $app->shouldReceive('make')->with(\Abava\Http\Contract\Emitter::class)->andReturn($emitter);
         $kernel = new \Venta\Kernel\HttpKernel($app);
         $kernel->emit($response);
@@ -76,7 +76,7 @@ class HttpKernelTest extends PHPUnit_Framework_TestCase
 
     public function testTerminate()
     {
-        $app = $this->getMockBuilder(\Venta\Contracts\Application::class)->getMock();
+        $app = $this->getMockBuilder(\Venta\Contract\Application::class)->getMock();
         $app->method('terminate');
         $kernel = new \Venta\Kernel\HttpKernel($app);
         $kernel->terminate();

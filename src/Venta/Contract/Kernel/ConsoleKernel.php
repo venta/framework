@@ -1,10 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Contracts\Kernel;
+namespace Venta\Contract\Kernel;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Contracts\Application;
+use Venta\Contract\Application;
 
 /**
  * Interface ConsoleKernel

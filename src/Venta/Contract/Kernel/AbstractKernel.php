@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Contracts\Kernel;
+namespace Venta\Contract\Kernel;
 
 /**
  * Interface AbstractKernel

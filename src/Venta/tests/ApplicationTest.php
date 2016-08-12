@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-use Venta\Contracts\Application as ApplicationContract;
+use Venta\Contract\Application as ApplicationContract;
 
 class ApplicationTest extends PHPUnit_Framework_TestCase
 {
@@ -119,7 +119,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     public function testRoutes()
     {
         $collector = Mockery::mock(\Abava\Routing\Contract\Collector::class);
-        $provider = Mockery::mock(\Venta\Contracts\ExtensionProvider\Routes::class);
+        $provider = Mockery::mock(\Venta\Contract\ExtensionProvider\Routes::class);
         $collector->shouldReceive('group')->with('/', [$provider, 'routes'])->once();
         $this->application->addExtensionProviderInstance('route_provider', $provider);
         $this->application->routes($collector);
@@ -128,7 +128,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     public function testMiddlewares()
     {
         $collector = Mockery::mock(\Abava\Routing\Contract\Middleware\Collector::class);
-        $provider = Mockery::mock(\Venta\Contracts\ExtensionProvider\Middlewares::class);
+        $provider = Mockery::mock(\Venta\Contract\ExtensionProvider\Middlewares::class);
         $provider->shouldReceive('middlewares')->with($collector)->once();
         $this->application->addExtensionProviderInstance('middleware_provider', $provider);
         $this->application->middlewares($collector);
@@ -137,7 +137,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     public function testCommands()
     {
         $console = Mockery::mock(\Symfony\Component\Console\Application::class);
-        $provider = Mockery::mock(\Venta\Contracts\ExtensionProvider\Commands::class);
+        $provider = Mockery::mock(\Venta\Contract\ExtensionProvider\Commands::class);
         $provider->shouldReceive('commands')->with($console)->once();
         $this->application->addExtensionProviderInstance('command_provider', $provider);
         $this->application->commands($console);

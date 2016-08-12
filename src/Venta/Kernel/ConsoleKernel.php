@@ -5,8 +5,8 @@ namespace Venta\Kernel;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Contracts\Application;
-use Venta\Contracts\Kernel\ConsoleKernel as ConsoleKernelContact;
+use Venta\Contract\Application;
+use Venta\Contract\Kernel\ConsoleKernel as ConsoleKernelContact;
 
 /**
  * Class ConsoleKernel

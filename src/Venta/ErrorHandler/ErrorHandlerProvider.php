@@ -3,8 +3,8 @@
 namespace Venta\ErrorHandler;
 
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
-use Venta\Contracts\Application;
-use Venta\Contracts\ExtensionProvider\{
+use Venta\Contract\Application;
+use Venta\Contract\ExtensionProvider\{
     Bindings, Errors, Middlewares
 };
 use Whoops\RunInterface;
