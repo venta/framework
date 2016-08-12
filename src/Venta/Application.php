@@ -9,6 +9,8 @@ use Abava\Routing\Contract\Collector as RouteCollector;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 use Dotenv\Dotenv;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Venta\Contract\Application as ApplicationContact;
 use Venta\Contract\ExtensionProvider\Commands as CommandsProvider;
 use Venta\Contract\ExtensionProvider\Middlewares as MiddlewareProvider;
@@ -246,6 +248,26 @@ abstract class Application extends Container implements ApplicationContact
     protected function createResponseFactory()
     {
         return new ResponseFactory;
+    }
+
+    /**
+     * Deferred Input instance creation
+     *
+     * @return \Closure
+     */
+    protected function createConsoleInput(): \Closure
+    {
+        return function () { return new ArgvInput(); };
+    }
+
+    /**
+     * Deferred Output instance creation
+     *
+     * @return \Closure
+     */
+    protected function createConsoleOutput(): \Closure
+    {
+        return function() { return new ConsoleOutput(); };
     }
 
     /**
