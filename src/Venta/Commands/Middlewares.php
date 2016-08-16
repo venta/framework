@@ -62,7 +62,7 @@ class Middlewares extends Command
 
         $table = $this->app->make(Table::class);
         $table->setHeaders(['Pos', 'Name', 'Type']);
-        $i=0;
+        $i = 0;
         foreach ($collector as $name => $middleware) {
             $table->addRow([++$i, $name, get_class($middleware)]);
         }
