@@ -13,7 +13,7 @@ use Venta\Contract\Application;
  *
  * @package Venta\Commands
  */
-class Route extends Command
+class Routes extends Command
 {
 
     /**
@@ -21,6 +21,11 @@ class Route extends Command
      */
     protected $app;
 
+    /**
+     * Routes constructor.
+     *
+     * @param Application $application
+     */
     public function __construct(Application $application)
     {
         parent::__construct();
@@ -32,7 +37,7 @@ class Route extends Command
      */
     public function signature(): string
     {
-        return 'routes';
+        return 'route:list';
     }
 
     /**
