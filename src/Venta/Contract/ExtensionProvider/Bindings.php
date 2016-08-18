@@ -2,7 +2,7 @@
 
 namespace Venta\Contract\ExtensionProvider;
 
-use Venta\Contract\Application;
+use Abava\Container\Contract\Container;
 
 /**
  * Interface Bindings
@@ -16,9 +16,9 @@ interface Bindings
      * Set bindings to provided application
      * or/and save application instance for later use
      *
-     * @param Application $application
+     * @param Container $container
      * @return void
      */
-    public function bindings(Application $application);
+    public function bindings(Container $container);
 
 }
