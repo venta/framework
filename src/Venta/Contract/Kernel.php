@@ -11,6 +11,13 @@ use Abava\Container\Contract\Container;
  */
 interface Kernel
 {
+    /**
+     * Constants, defining env kernel know about
+     */
+    const ENV_LOCAL = 'local';
+    const ENV_STAGE = 'stage';
+    const ENV_LIVE = 'live';
+    const ENV_TEST = 'test';
 
     /**
      * Bootstraps:
