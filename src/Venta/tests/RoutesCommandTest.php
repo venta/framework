@@ -1,6 +1,6 @@
 <?php
 
-class RouteTest extends PHPUnit_Framework_TestCase
+class RoutesCommandTest extends PHPUnit_Framework_TestCase
 {
 
     public function tearDown()
@@ -35,11 +35,12 @@ class RouteTest extends PHPUnit_Framework_TestCase
         $table->shouldReceive('render')->withNoArgs();
         $application->shouldReceive('make')->with(\Symfony\Component\Console\Helper\Table::class)->andReturn($table);
 
-        $command = new \Venta\Commands\Route($application);
-        $command->handle(
-            new \Symfony\Component\Console\Input\ArrayInput([]),
-            new \Symfony\Component\Console\Output\NullOutput
-        );
+        $command = new \Venta\Commands\Routes($application);
+        $input = new \Symfony\Component\Console\Input\ArrayInput([]);
+        $output = new \Symfony\Component\Console\Output\BufferedOutput();
+        $command->handle($input, $output);
+
+        $this->assertEmpty($output->fetch());
     }
 
 
