@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:abava/routing.git
 	branch = master
-	commit = 78565081a7aac6d5577697e129f82235985a2865
-	parent = 2db8076924125aa01f23822ce2d36288760bba6b
+	commit = 27dcea51568e26b47221b6ae0f827e31d948e2e8
+	parent = 780a4c7b0dd03fad5fa6502dc0f074cd503921b5
 	cmdver = 0.3.0
