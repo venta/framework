@@ -7,7 +7,9 @@ use Abava\Console\Contract\Collector as CommandCollectorContract;
 use Abava\Container\Contract\Caller;
 use Abava\Container\Contract\Container;
 use Abava\Http\Contract\Emitter as EmitterContract;
+use Abava\Http\Contract\RequestFactory as RequestFactoryContract;
 use Abava\Http\Emitter;
+use Abava\Http\Factory\RequestFactory;
 use Abava\Routing\Collector as RouteCollector;
 use Abava\Routing\Contract\Collector as RoutingCollectorContract;
 use Abava\Routing\Contract\Dispatcher\Factory;
@@ -24,21 +26,42 @@ use Abava\Routing\Parser;
 use Abava\Routing\Strategy\Generic;
 use FastRoute\DataGenerator;
 use FastRoute\RouteParser;
+use Venta\Commands\Middlewares;
+use Venta\Commands\RouteMatch;
+use Venta\Commands\Routes;
 use Venta\Contract\ExtensionProvider\Bindings;
+use Venta\Contract\ExtensionProvider\Commands;
 
 /**
  * Class VentaExtensionProvider
  *
  * @package Venta\Extension
  */
-class VentaExtensionProvider implements Bindings
+class VentaExtensionProvider implements Bindings, Commands
 {
+
+    /**
+     * @var Container
+     */
+    protected $container;
 
     /**
      * @inheritDoc
      */
     public function bindings(Container $container)
     {
+        /*
+         * Save Container instance for later use in other methods
+         */
+        $this->container = $container;
+
+        /**
+         * Bind request factory
+         */
+        if (!$container->has(RequestFactoryContract::class)) {
+            $container->singleton(RequestFactoryContract::class, RequestFactory::class);
+        }
+
         /*
          * Binding response emitter
          */
@@ -122,6 +145,16 @@ class VentaExtensionProvider implements Bindings
         if (!$container->has(Caller::class)) {
             $container->singleton(Caller::class, $container);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function commands(CommandCollectorContract $collector)
+    {
+        $collector->addCommand($this->container->get(Routes::class));
+        $collector->addCommand($this->container->get(RouteMatch::class));
+        $collector->addCommand($this->container->get(Middlewares::class));
     }
 
 }

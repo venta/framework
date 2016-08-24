@@ -3,10 +3,10 @@
 namespace Venta\Commands;
 
 use Abava\Console\Command;
+use Abava\Routing\Contract\Collector;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Contract\Application;
 
 /**
  * Class Route
@@ -17,19 +17,19 @@ class Routes extends Command
 {
 
     /**
-     * @var Application
+     * @var Collector
      */
-    protected $app;
+    protected $collector;
 
     /**
      * Routes constructor.
      *
-     * @param Application $application
+     * @param Collector $collector
      */
-    public function __construct(Application $application)
+    public function __construct(Collector $collector)
     {
         parent::__construct();
-        $this->app = $application;
+        $this->collector = $collector;
     }
 
     /**
@@ -48,32 +48,30 @@ class Routes extends Command
         return 'Lists application routes';
     }
 
-
     /**
      * @inheritDoc
      */
     public function handle(InputInterface $input, OutputInterface $output)
     {
-        /** @var \Abava\Routing\Contract\Collector $collector */
-        $collector = $this->app->make(\Abava\Routing\Contract\Collector::class);
-
-        // Collect routes from extension providers
-        $this->app->routes($collector);
-
-        $table = $this->app->make(Table::class);
-        $table->setHeaders(['Methods', 'Path', 'Action', 'Name', 'Host', 'Scheme', 'Middlewares']);
-        foreach ($collector->getRoutes() as $route) {
-            $table->addRow([
-                join(',', $route->getMethods()),
-                $route->getPath(),
-                is_string($route->getCallable()) ? $route->getCallable() : get_class($route->getCallable()),
-                $route->getName(),
-                $route->getHost(),
-                $route->getScheme(),
-                join(',', array_keys($route->getMiddlewares())),
-            ]);
+        $routes = $this->collector->getRoutes();
+        if (count($routes) == 0) {
+            $this->writeln('<error>Application has no routes.</error>');
+        } else {
+            $table = new Table($output);
+            $table->setHeaders(['Methods', 'Path', 'Action', 'Name', 'Host', 'Scheme', 'Middlewares']);
+            foreach ($routes as $route) {
+                $table->addRow([
+                    join(',', $route->getMethods()),
+                    $route->getPath(),
+                    is_string($route->getCallable()) ? $route->getCallable() : get_class($route->getCallable()),
+                    $route->getName(),
+                    $route->getHost(),
+                    $route->getScheme(),
+                    join(',', array_keys($route->getMiddlewares())),
+                ]);
+            }
+            $table->render();
         }
-        $table->render();
     }
 
 }

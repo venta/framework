@@ -3,10 +3,10 @@
 namespace Venta\Commands;
 
 use Abava\Console\Command;
+use Abava\Routing\Contract\Middleware\Collector;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Contract\Application;
 
 /**
  * Class Middlewares
@@ -17,19 +17,19 @@ class Middlewares extends Command
 {
 
     /**
-     * @var Application
+     * @var Collector
      */
-    protected $app;
+    protected $collector;
 
     /**
      * Middlewares constructor.
      *
-     * @param Application $application
+     * @param Collector $collector
      */
-    public function __construct(Application $application)
+    public function __construct(Collector $collector)
     {
-        $this->app = $application;
         parent::__construct();
+        $this->collector = $collector;
     }
 
     /**
@@ -37,7 +37,7 @@ class Middlewares extends Command
      */
     public function signature(): string
     {
-        return 'middlewares';
+        return 'middleware:list';
     }
 
     /**
@@ -48,22 +48,15 @@ class Middlewares extends Command
         return 'Outputs middleware list';
     }
 
-
     /**
      * @inheritDoc
      */
     public function handle(InputInterface $input, OutputInterface $output)
     {
-        /** @var \Abava\Routing\Contract\Middleware\Collector $collector */
-        $collector = $this->app->make(\Abava\Routing\Contract\Middleware\Collector::class);
-
-        // Collect routes from extension providers
-        $this->app->middlewares($collector);
-
-        $table = $this->app->make(Table::class);
-        $table->setHeaders(['Pos', 'Name', 'Type']);
+        $table = new Table($output);
+        $table->setHeaders(['#', 'Name', 'Type']);
         $i = 0;
-        foreach ($collector as $name => $middleware) {
+        foreach ($this->collector as $name => $middleware) {
             $table->addRow([++$i, $name, get_class($middleware)]);
         }
         $table->render();
