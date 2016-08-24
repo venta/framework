@@ -3,6 +3,7 @@
 namespace Abava\Console\Command;
 
 use Abava\Console\Contract\Command;
+use Abava\Container\Contract\Container;
 
 /**
  * Class Collector
@@ -13,18 +14,33 @@ class Collector implements \Abava\Console\Contract\Collector
 {
 
     /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * Commands holder
      *
      * @var Command[]
      */
     protected $commands = [];
 
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * @inheritDoc
      */
-    public function addCommand(Command $command)
+    public function addCommand(string $commandClassName)
     {
-        $this->commands[] = $command;
+        if (!is_subclass_of($commandClassName, \Abava\Console\Command::class)) {
+            throw new \InvalidArgumentException(
+                sprintf('Provided command "%s" doesn\'t extend Abava\Console\Command class.', $commandClassName)
+            );
+        }
+        $this->commands[] = $commandClassName;
     }
 
     /**
@@ -32,7 +48,9 @@ class Collector implements \Abava\Console\Contract\Collector
      */
     public function getCommands(): array
     {
-        return $this->commands;
+        return array_map(function ($command) {
+            return $this->container->get($command);
+        }, $this->commands);
     }
 
 }

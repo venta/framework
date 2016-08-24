@@ -152,9 +152,9 @@ class VentaExtensionProvider implements Bindings, Commands
      */
     public function commands(CommandCollectorContract $collector)
     {
-        $collector->addCommand($this->container->get(Routes::class));
-        $collector->addCommand($this->container->get(RouteMatch::class));
-        $collector->addCommand($this->container->get(Middlewares::class));
+        $collector->addCommand(Routes::class);
+        $collector->addCommand(RouteMatch::class);
+        $collector->addCommand(Middlewares::class);
     }
 
 }

@@ -13,10 +13,10 @@ interface Collector
     /**
      * Add command to collector
      *
-     * @param Command $command
+     * @param string $commandClassName
      * @return void
      */
-    public function addCommand(Command $command);
+    public function addCommand(string $commandClassName);
 
     /**
      * Get collected commands
