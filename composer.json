@@ -41,7 +41,8 @@
         "psr/http-message": "^1.0",
         "cache/array-adapter": "^0.4",
         "cache/namespaced-cache": "^0.1",
-        "psy/psysh": "@stable"
+        "psy/psysh": "@stable",
+        "php-ds/php-ds": "^1.1"
     },
     "replace": {
         "abava/container": "self.version",
