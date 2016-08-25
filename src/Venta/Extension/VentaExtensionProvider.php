@@ -29,6 +29,7 @@ use FastRoute\RouteParser;
 use Venta\Commands\Middlewares;
 use Venta\Commands\RouteMatch;
 use Venta\Commands\Routes;
+use Venta\Commands\Shell;
 use Venta\Contract\ExtensionProvider\Bindings;
 use Venta\Contract\ExtensionProvider\Commands;
 
@@ -39,6 +40,17 @@ use Venta\Contract\ExtensionProvider\Commands;
  */
 class VentaExtensionProvider implements Bindings, Commands
 {
+    /**
+     * Array of commands to add
+     *
+     * @var array
+     */
+    protected $commands = [
+        Routes::class,
+        RouteMatch::class,
+        Middlewares::class,
+        Shell::class,
+    ];
 
     /**
      * @var Container
@@ -152,9 +164,9 @@ class VentaExtensionProvider implements Bindings, Commands
      */
     public function commands(CommandCollectorContract $collector)
     {
-        $collector->addCommand(Routes::class);
-        $collector->addCommand(RouteMatch::class);
-        $collector->addCommand(Middlewares::class);
+        foreach ($this->commands as $command) {
+            $collector->addCommand($command);
+        }
     }
 
 }
