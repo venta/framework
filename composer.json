@@ -48,6 +48,7 @@
         "abava/container": "self.version",
         "abava/http": "self.version",
         "abava/routing": "self.version",
-        "abava/console": "self.version"
+        "abava/console": "self.version",
+        "abava/event": "self.version"
     }
 }
