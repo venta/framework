@@ -4,8 +4,8 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = git@github.com:abava/routing.git
+	remote = git@github.com:abava/event.git
 	branch = master
-	commit = ae3868e9c1c8fe5577293cb640f013a0da7d90f2
-	parent = 53211cd36bb927abc981aa7986da0d85abb66b0f
+	commit = a4339c659575780be9cc7aa2ede3eb4ea5d8751a
+	parent = 0a3b110b51efcd0711b77b8f44068b134f423fc7
 	cmdver = 0.3.0

@@ -2,7 +2,7 @@
 
 namespace Venta\Contract\ExtensionProvider;
 
-use Symfony\Component\Console\Application as ConsoleApplication;
+use Abava\Console\Contract\Collector;
 
 /**
  * Interface Commands
@@ -15,9 +15,9 @@ interface Commands
     /**
      * Add extension console commands
      *
-     * @param ConsoleApplication $console
+     * @param Collector $collector
      * @return void
      */
-    public function commands(ConsoleApplication $console);
+    public function commands(Collector $collector);
 
 }
