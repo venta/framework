@@ -71,91 +71,84 @@ class VentaExtensionProvider implements Bindings, Commands
          * Bind request factory
          */
         if (!$container->has(RequestFactoryContract::class)) {
-            $container->singleton(RequestFactoryContract::class, RequestFactory::class);
+            $container->share(RequestFactoryContract::class, RequestFactory::class);
         }
 
         /*
          * Binding response emitter
          */
         if (!$container->has(EmitterContract::class)) {
-            $container->singleton(EmitterContract::class, Emitter::class);
+            $container->share(EmitterContract::class, Emitter::class);
         }
 
         /*
          * Binding route path parser
          */
         if (!$container->has(RouteParser::class)) {
-            $container->bind(RouteParser::class, Parser::class);
+            $container->set(RouteParser::class, Parser::class);
         }
 
         /*
          * Binding route parameter parser
          */
         if (!$container->has(DataGenerator::class)) {
-            $container->bind(DataGenerator::class, DataGenerator\GroupCountBased::class);
+            $container->set(DataGenerator::class, DataGenerator\GroupCountBased::class);
         }
 
         /*
          * Binding route collector
          */
         if (!$container->has(RoutingCollectorContract::class)) {
-            $container->singleton(RoutingCollectorContract::class, RouteCollector::class);
+            $container->share(RoutingCollectorContract::class, RouteCollector::class);
         }
 
         /*
          * Binding url generator
          */
         if (!$container->has(UrlGenerator::class)) {
-            $container->bind(UrlGenerator::class, RouteCollector::class);
+            $container->set(UrlGenerator::class, RouteCollector::class);
         }
 
         /*
          * Binding middleware collector
          */
         if (!$container->has(MiddlewareCollectorContract::class)) {
-            $container->singleton(MiddlewareCollectorContract::class, MiddlewareCollector::class);
+            $container->share(MiddlewareCollectorContract::class, MiddlewareCollector::class);
         }
 
         /*
          * Binding middleware pipeline
          */
         if (!$container->has(MiddlewarePipelineContract::class)) {
-            $container->bind(MiddlewarePipelineContract::class, MiddlewarePipeline::class);
+            $container->set(MiddlewarePipelineContract::class, MiddlewarePipeline::class);
         }
 
         /*
          * Binding dispatcher (via dispatcher factory)
          */
         if (!$container->has(Factory::class)) {
-            $container->bind(Factory::class, GroupCountBasedFactory::class);
+            $container->set(Factory::class, GroupCountBasedFactory::class);
         }
 
         /*
          * Binging route matcher
          */
         if (!$container->has(MatcherContract::class)) {
-            $container->bind(MatcherContract::class, Matcher::class);
+            $container->set(MatcherContract::class, Matcher::class);
         }
 
         /*
          * Binding dispatch strategy
          */
         if (!$container->has(Strategy::class)) {
-            $container->bind(Strategy::class, Generic::class);
+            $container->set(Strategy::class, Generic::class);
         }
 
         /**
          * Binding console command collector
          */
         if (!$container->has(CommandCollectorContract::class)) {
-            $container->singleton(CommandCollectorContract::class, CommandCollector::class);
-        }
-
-        /*
-         * Binding caller contract to container instance
-         */
-        if (!$container->has(Caller::class)) {
-            $container->singleton(Caller::class, $container);
+            $container->share(CommandCollectorContract::class, CommandCollector::class);
         }
     }
 

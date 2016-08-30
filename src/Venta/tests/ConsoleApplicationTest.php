@@ -50,8 +50,8 @@ class ConsoleApplicationTest extends TestCase
         // Mocking stub method calls
         $kernel->shouldReceive('boot')->withNoArgs()->andReturn($container)->once();
         $kernel->shouldReceive('getVersion')->withNoArgs()->andReturn('test')->once();
-        $container->shouldReceive('bind')->with(InputInterface::class, $input)->once();
-        $container->shouldReceive('bind')->with(OutputInterface::class, $output)->once();
+        $container->shouldReceive('set')->with(InputInterface::class, $input, ['input'])->once();
+        $container->shouldReceive('set')->with(OutputInterface::class, $output, ['output'])->once();
         $container->shouldReceive('get')->with(Collector::class)->andReturn($collector)->once();
         $container->shouldReceive('get')->with(InputInterface::class)->andReturn($input)->once();
         $container->shouldReceive('get')->with(OutputInterface::class)->andReturn($output)->once();

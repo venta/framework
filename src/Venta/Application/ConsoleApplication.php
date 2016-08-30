@@ -46,7 +46,7 @@ class ConsoleApplication extends Application implements \Venta\Contract\Applicat
         | Rebind input instance, if passed as argument
         */
         if ($input) {
-            $this->container->bind(InputInterface::class, $input);
+            $this->container->set(InputInterface::class, $input);
         }
 
         /*
@@ -57,7 +57,7 @@ class ConsoleApplication extends Application implements \Venta\Contract\Applicat
         | Rebind output instance, if passed as argument
         */
         if ($output) {
-            $this->container->bind(OutputInterface::class, $output);
+            $this->container->set(OutputInterface::class, $output);
         }
 
         /*

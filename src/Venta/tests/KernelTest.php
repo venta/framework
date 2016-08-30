@@ -25,10 +25,10 @@ class KernelTest extends TestCase
     public function canCreateNewInstance()
     {
         $container = Mockery::mock(Container::class);
-        $container->shouldReceive('singleton')->with(Container::class, $container)->once();
-        $container->shouldReceive('singleton')->with(Kernel::class, Mockery::on(function ($arg) {
+        $container->shouldReceive('share')->with(Container::class, $container, ['container'])->once();
+        $container->shouldReceive('share')->with(Kernel::class, Mockery::on(function ($arg) {
             return $arg instanceof Kernel;
-        }))->once();
+        }), ['kernel'])->once();
 
         $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
 
@@ -41,7 +41,7 @@ class KernelTest extends TestCase
     public function canGetVersion()
     {
         $container = Mockery::mock(Container::class);
-        $container->shouldReceive('singleton');
+        $container->shouldReceive('share');
 
         $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
 
@@ -54,7 +54,7 @@ class KernelTest extends TestCase
     public function canGetEnvironment()
     {
         $container = Mockery::mock(Container::class);
-        $container->shouldReceive('singleton');
+        $container->shouldReceive('share');
 
         $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
 
@@ -67,7 +67,7 @@ class KernelTest extends TestCase
     public function canDetectIsCli()
     {
         $container = Mockery::mock(Container::class);
-        $container->shouldReceive('singleton');
+        $container->shouldReceive('share');
 
         $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
 
@@ -81,16 +81,16 @@ class KernelTest extends TestCase
     public function canBoot()
     {
         $container = Mockery::mock(Container::class);
-        $container->shouldReceive('singleton');
+        $container->shouldReceive('share');
 
         $routeCollector = Mockery::mock(Group::class);
         $routeCollector->shouldReceive('group')->with('/', Mockery::type('callable'))->twice();
         $middlewareCollector = Mockery::mock(MiddlewareCollector::class);
         $commandCollector = Mockery::mock(CommandCollector::class);
 
-        $container->shouldReceive('make')->with(RouteCollector::class)->andReturn($routeCollector);
-        $container->shouldReceive('make')->with(MiddlewareCollector::class)->andReturn($middlewareCollector);
-        $container->shouldReceive('make')->with(CommandCollector::class)->andReturn($commandCollector);
+        $container->shouldReceive('get')->with(RouteCollector::class)->andReturn($routeCollector);
+        $container->shouldReceive('get')->with(MiddlewareCollector::class)->andReturn($middlewareCollector);
+        $container->shouldReceive('get')->with(CommandCollector::class)->andReturn($commandCollector);
 
 
         // Mocking Extension Provider with listed interfaces implementation

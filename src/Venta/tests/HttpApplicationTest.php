@@ -53,8 +53,7 @@ class HttpApplicationTest extends TestCase
         $container->shouldReceive('get')->with(ServerRequestInterface::class)->andReturn($request);
         $container->shouldReceive('get')->with(Matcher::class)->andReturn($matcher);
         $container->shouldReceive('get')->with(Collector::class)->andReturn($routeCollector);
-        $container->shouldReceive('singleton')->with('route', $route);
-        $container->shouldReceive('singleton')->with(Route::class, $route);
+        $container->shouldReceive('share')->with(Route::class, $route, ['route']);
         $container->shouldReceive('get')->with(MiddlewareCollector::class)->andReturn($middlewareCollector);
         $container->shouldReceive('get')->with(Strategy::class)->andReturn($strategy);
         $container->shouldReceive('get')->with(Pipeline::class)->andReturn($pipeline);

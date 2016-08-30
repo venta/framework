@@ -78,8 +78,8 @@ class Kernel implements \Venta\Contract\Kernel
        |
        | Binding basic singletons - container and kernel objects
        */
-        $container->singleton(Container::class, $container);
-        $container->singleton(\Venta\Contract\Kernel::class, $this);
+        $container->share(Container::class, $container, ['container']);
+        $container->share(\Venta\Contract\Kernel::class, $this, ['kernel']);
     }
 
     /**
@@ -121,7 +121,7 @@ class Kernel implements \Venta\Contract\Kernel
         |
         | Collect routes from extension providers
         */
-        $this->collectRoutes($this->container->make(RouteCollector::class));
+        $this->collectRoutes($this->container->get(RouteCollector::class));
 
         /*
         |--------------------------------------------------------------------------
@@ -130,7 +130,7 @@ class Kernel implements \Venta\Contract\Kernel
         |
         | Collect middlewares from extension providers
         */
-        $this->collectMiddlewares($this->container->make(MiddlewareCollector::class));
+        $this->collectMiddlewares($this->container->get(MiddlewareCollector::class));
 
         /*
         |--------------------------------------------------------------------------
@@ -139,7 +139,7 @@ class Kernel implements \Venta\Contract\Kernel
         |
         | Collect console commands from extension providers
         */
-        $this->collectCommands($this->container->make(CommandCollector::class));
+        $this->collectCommands($this->container->get(CommandCollector::class));
 
         return $this->container;
     }

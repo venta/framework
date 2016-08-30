@@ -5,6 +5,7 @@ namespace Venta\ErrorHandler;
 use Abava\Container\Contract\Container;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Venta\Contract\ExtensionProvider\{
     Bindings, Errors, Middlewares
@@ -65,13 +66,12 @@ class ErrorHandlerProvider implements Bindings, Errors, Middlewares
         /**
          * Bind error handler
          */
-        $container->bind(RunInterface::class, $whoops);
-        $container->bind('error_handler', RunInterface::class);
+        $container->set(RunInterface::class, $whoops, ['error_handler']);
 
         /*
          * Bind PSR-3 logger
          */
-        $container->singleton(\Monolog\Logger::class, function (Container $c) {
+        $container->share(\Monolog\Logger::class, function (Container $c) {
             $logger = new \Monolog\Logger('venta');
             $handler = new \Monolog\Handler\StreamHandler(__DIR__ . '/../storage/logs/app.log');
             $handler->pushProcessor(function ($record) use ($c) {
@@ -101,8 +101,7 @@ class ErrorHandlerProvider implements Bindings, Errors, Middlewares
             $handler->setFormatter(new \Monolog\Formatter\LineFormatter());
             $logger->pushHandler($handler);
             return $logger;
-        });
-        $container->singleton(\Psr\Log\LoggerInterface::class, \Monolog\Logger::class);
+        }, ['logger', LoggerInterface::class]);
     }
 
     /**

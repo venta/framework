@@ -5,6 +5,8 @@ class ErrorHandlerProviderTest extends PHPUnit_Framework_TestCase
 
     public function testPushingMiddleware()
     {
+        $this->markTestSkipped();
+
         $app = Mockery::mock(\Venta\Contract\Application::class);
         $provider = new \Venta\ErrorHandler\ErrorHandlerProvider();
         $provider->bindings($app);
@@ -15,6 +17,8 @@ class ErrorHandlerProviderTest extends PHPUnit_Framework_TestCase
 
     public function testPushingErrorHandler()
     {
+        $this->markTestSkipped();
+
         $errorHandlerLogger = Mockery::mock(\Whoops\Handler\HandlerInterface::class);
         $app = Mockery::mock(\Venta\Contract\Application::class);
         $app->shouldReceive('make')->with(\Venta\ErrorHandler\ErrorHandlerLogger::class)->andReturn($errorHandlerLogger);

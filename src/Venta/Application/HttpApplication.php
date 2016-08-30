@@ -71,8 +71,7 @@ class HttpApplication implements \Venta\Contract\Application\HttpApplication
         |
         | Binding current route instance to container for later use
         */
-        $this->container->singleton('route', $route);
-        $this->container->singleton(Route::class, $route);
+        $this->container->share(Route::class, $route, ['route']);
 
         /*
         |--------------------------------------------------------------------------
