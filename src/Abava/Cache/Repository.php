@@ -70,7 +70,7 @@ final class Repository implements Cache
         $item->set($value);
         if (is_int($expires) || $expires instanceof \DateInterval) {
             $item->expiresAfter($expires);
-        } elseif ($expires instanceof \DateTimeInterface) {
+        } elseif ($expires instanceof \DateTimeInterface) { // @codeCoverageIgnore
             $item->expiresAt($expires);
         }
 

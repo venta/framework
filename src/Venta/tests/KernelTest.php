@@ -58,7 +58,7 @@ class KernelTest extends TestCase
 
         $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
 
-        $this->assertSame('test', $kernel->environment());
+        $this->assertSame('test', $kernel->getEnvironment());
     }
 
     /**
@@ -112,6 +112,45 @@ class KernelTest extends TestCase
         $kernel->addExtensionProviderInstance('test', $extension);
 
         $this->assertSame($container, $kernel->boot());
+    }
+
+    /**
+     * @test
+     * @expectedException RuntimeException
+     */
+    public function throwsExceptionOnInvalidExtensionFile()
+    {
+        $container = Mockery::mock(Container::class);
+        $container->shouldReceive('share');
+
+        $kernel = new Venta\Kernel($container, __DIR__, '');
+        $kernel->boot();
+    }
+
+    /**
+     * @test
+     * @expectedException RuntimeException
+     */
+    public function throwsExceptionOnNonExistingExtensionFile()
+    {
+        $container = Mockery::mock(Container::class);
+        $container->shouldReceive('share');
+
+        $kernel = new Venta\Kernel($container, __DIR__, 'some_random_file');
+        $kernel->boot();
+    }
+
+    /**
+     * @test
+     * @expectedException RuntimeException
+     */
+    public function throwsExceptionOnInvalidExtensionsArray()
+    {
+        $container = Mockery::mock(Container::class);
+        $container->shouldReceive('share');
+
+        $kernel = new Venta\Kernel($container, __DIR__, 'broken_extensions_file.php');
+        $kernel->boot();
     }
 
     public function tearDown()

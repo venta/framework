@@ -16,7 +16,7 @@ use Venta\Contract\Kernel;
 /**
  * Class HttpApplication
  *
- * @package Venta
+ * @package Venta\Application
  */
 class HttpApplication implements \Venta\Contract\Application\HttpApplication
 {

@@ -12,7 +12,7 @@ use Abava\Container\Contract\Container;
 interface Kernel
 {
     /**
-     * Constants, defining env kernel know about
+     * Constants, defining environment kernel is aware of
      */
     const ENV_LOCAL = 'local';
     const ENV_STAGE = 'stage';
@@ -20,10 +20,7 @@ interface Kernel
     const ENV_TEST = 'test';
 
     /**
-     * Bootstraps:
-     *  - load extension providers
-     *  - register container bindings
-     *  - collect routes, middlewares, commands
+     * Bootstraps kernel and returns container instance
      *
      * @return Container
      */
@@ -41,7 +38,7 @@ interface Kernel
      *
      * @return string
      */
-    public function environment(): string;
+    public function getEnvironment(): string;
 
     /**
      * If running in cli

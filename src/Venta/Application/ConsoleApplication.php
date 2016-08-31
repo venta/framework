@@ -4,9 +4,11 @@ namespace Venta\Application;
 
 use Abava\Console\Contract\Collector;
 use Abava\Container\Contract\Container;
+use Exception;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Venta\Contract\Application\ConsoleApplication as ConsoleApplicationContract;
 use Venta\Contract\Kernel;
 
 /**
@@ -14,7 +16,7 @@ use Venta\Contract\Kernel;
  *
  * @package Venta
  */
-class ConsoleApplication extends Application implements \Venta\Contract\Application\ConsoleApplication
+class ConsoleApplication extends Application implements ConsoleApplicationContract
 {
 
     /**
@@ -85,11 +87,13 @@ class ConsoleApplication extends Application implements \Venta\Contract\Applicat
     }
 
     /**
-     * @param \Exception $e
+     * Passes exception to error handler before rendering to output
+     *
+     * @param Exception $e
      * @param OutputInterface $output
      * @return void
      */
-    public function renderException(\Exception $e, OutputInterface $output)
+    public function renderException(Exception $e, OutputInterface $output)
     {
         if ($this->container->has('error_handler')) {
             /** @var \Whoops\RunInterface $run */

@@ -2,6 +2,7 @@
 
 namespace Abava\Console\Command;
 
+use Abava\Console\Contract\Collector as CollectorContract;
 use Abava\Console\Contract\Command;
 use Abava\Container\Contract\Container;
 
@@ -10,7 +11,7 @@ use Abava\Container\Contract\Container;
  *
  * @package Abava\Console\Command
  */
-class Collector implements \Abava\Console\Contract\Collector
+class Collector implements CollectorContract
 {
 
     /**

@@ -58,7 +58,7 @@ class ErrorHandlerProvider implements Bindings, Errors, Middlewares
         } else {
             // Push pretty page handler only for local environment
             $whoops->pushHandler(
-                $kernel->environment() === 'local' ?
+                $kernel->getEnvironment() === 'local' ?
                     new PrettyPageHandler() :
                     new PlainTextHandler()
             );

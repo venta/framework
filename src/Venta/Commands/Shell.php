@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class Shell
  *
  * @package Venta\Commands
+ * @codeCoverageIgnore
  */
 class Shell extends Command
 {

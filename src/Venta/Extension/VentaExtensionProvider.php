@@ -4,7 +4,6 @@ namespace Venta\Extension;
 
 use Abava\Console\Command\Collector as CommandCollector;
 use Abava\Console\Contract\Collector as CommandCollectorContract;
-use Abava\Container\Contract\Caller;
 use Abava\Container\Contract\Container;
 use Abava\Http\Contract\Emitter as EmitterContract;
 use Abava\Http\Contract\RequestFactory as RequestFactoryContract;
@@ -12,13 +11,13 @@ use Abava\Http\Emitter;
 use Abava\Http\Factory\RequestFactory;
 use Abava\Routing\Collector as RouteCollector;
 use Abava\Routing\Contract\Collector as RoutingCollectorContract;
-use Abava\Routing\Contract\Dispatcher\Factory;
+use Abava\Routing\Contract\Dispatcher\DispatcherFactory;
 use Abava\Routing\Contract\Matcher as MatcherContract;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollectorContract;
 use Abava\Routing\Contract\Middleware\Pipeline as MiddlewarePipelineContract;
 use Abava\Routing\Contract\Strategy;
 use Abava\Routing\Contract\UrlGenerator;
-use Abava\Routing\Dispatcher\Factory\GroupCountBasedFactory;
+use Abava\Routing\Dispatcher\Factory\GroupCountBasedDispatcherFactory;
 use Abava\Routing\Matcher;
 use Abava\Routing\Middleware\Collector as MiddlewareCollector;
 use Abava\Routing\Middleware\Pipeline as MiddlewarePipeline;
@@ -41,6 +40,21 @@ use Venta\Contract\ExtensionProvider\Commands;
 class VentaExtensionProvider implements Bindings, Commands
 {
     /**
+     * Interface - implementation map to set to the container
+     *
+     * @var array
+     */
+    protected $bindings = [
+        RouteParser::class => Parser::class,
+        DataGenerator::class => DataGenerator\GroupCountBased::class,
+        UrlGenerator::class => RouteCollector::class,
+        MiddlewarePipelineContract::class => MiddlewarePipeline::class,
+        DispatcherFactory::class => GroupCountBasedDispatcherFactory::class,
+        MatcherContract::class => Matcher::class,
+        Strategy::class => Generic::class,
+    ];
+
+    /**
      * Array of commands to add
      *
      * @var array
@@ -53,102 +67,29 @@ class VentaExtensionProvider implements Bindings, Commands
     ];
 
     /**
-     * @var Container
+     * Interface - implementation map of shared bindings
+     *
+     * @var array
      */
-    protected $container;
+    protected $singletons = [
+        RequestFactoryContract::class => RequestFactory::class,
+        EmitterContract::class => Emitter::class,
+        RoutingCollectorContract::class => RouteCollector::class,
+        MiddlewareCollectorContract::class => MiddlewareCollector::class,
+        CommandCollectorContract::class => CommandCollector::class,
+    ];
 
     /**
      * @inheritDoc
      */
     public function bindings(Container $container)
     {
-        /*
-         * Save Container instance for later use in other methods
-         */
-        $this->container = $container;
-
-        /**
-         * Bind request factory
-         */
-        if (!$container->has(RequestFactoryContract::class)) {
-            $container->share(RequestFactoryContract::class, RequestFactory::class);
+        foreach ($this->bindings as $id => $entry) {
+            $container->set($id, $entry);
         }
 
-        /*
-         * Binding response emitter
-         */
-        if (!$container->has(EmitterContract::class)) {
-            $container->share(EmitterContract::class, Emitter::class);
-        }
-
-        /*
-         * Binding route path parser
-         */
-        if (!$container->has(RouteParser::class)) {
-            $container->set(RouteParser::class, Parser::class);
-        }
-
-        /*
-         * Binding route parameter parser
-         */
-        if (!$container->has(DataGenerator::class)) {
-            $container->set(DataGenerator::class, DataGenerator\GroupCountBased::class);
-        }
-
-        /*
-         * Binding route collector
-         */
-        if (!$container->has(RoutingCollectorContract::class)) {
-            $container->share(RoutingCollectorContract::class, RouteCollector::class);
-        }
-
-        /*
-         * Binding url generator
-         */
-        if (!$container->has(UrlGenerator::class)) {
-            $container->set(UrlGenerator::class, RouteCollector::class);
-        }
-
-        /*
-         * Binding middleware collector
-         */
-        if (!$container->has(MiddlewareCollectorContract::class)) {
-            $container->share(MiddlewareCollectorContract::class, MiddlewareCollector::class);
-        }
-
-        /*
-         * Binding middleware pipeline
-         */
-        if (!$container->has(MiddlewarePipelineContract::class)) {
-            $container->set(MiddlewarePipelineContract::class, MiddlewarePipeline::class);
-        }
-
-        /*
-         * Binding dispatcher (via dispatcher factory)
-         */
-        if (!$container->has(Factory::class)) {
-            $container->set(Factory::class, GroupCountBasedFactory::class);
-        }
-
-        /*
-         * Binging route matcher
-         */
-        if (!$container->has(MatcherContract::class)) {
-            $container->set(MatcherContract::class, Matcher::class);
-        }
-
-        /*
-         * Binding dispatch strategy
-         */
-        if (!$container->has(Strategy::class)) {
-            $container->set(Strategy::class, Generic::class);
-        }
-
-        /**
-         * Binding console command collector
-         */
-        if (!$container->has(CommandCollectorContract::class)) {
-            $container->share(CommandCollectorContract::class, CommandCollector::class);
+        foreach ($this->singletons as $id => $entry) {
+            $container->share($id, $entry);
         }
     }
 

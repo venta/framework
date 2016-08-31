@@ -7,6 +7,7 @@ use Abava\Container\Contract\Container;
 use Abava\Routing\Contract\Collector as RouteCollector;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 use Dotenv\Dotenv;
+use RuntimeException;
 use Venta\Contract\ExtensionProvider\Bindings as BindingsProvider;
 use Venta\Contract\ExtensionProvider\Commands as CommandsProvider;
 use Venta\Contract\ExtensionProvider\Middlewares as MiddlewaresProvider;
@@ -72,12 +73,8 @@ class Kernel implements \Venta\Contract\Kernel
         $this->extensionsFile = $extensionsFile;
 
         /*
-       |--------------------------------------------------------------------------
-       | Bind singleton instances
-       |--------------------------------------------------------------------------
-       |
-       | Binding basic singletons - container and kernel objects
-       */
+         * Binding basic singletons - container and kernel objects
+         */
         $container->share(Container::class, $container, ['container']);
         $container->share(\Venta\Contract\Kernel::class, $this, ['kernel']);
     }
@@ -88,56 +85,32 @@ class Kernel implements \Venta\Contract\Kernel
     public function boot(): Container
     {
         /*
-        |--------------------------------------------------------------------------
-        | Load Dotenv
-        |--------------------------------------------------------------------------
-        |
-        | Load environment specific configuration from local .env file
+        * Load environment specific configuration from local .env file
         */
         (new Dotenv($this->rootPath))->load();
 
         /*
-        |--------------------------------------------------------------------------
-        | Load Extension providers
-        |--------------------------------------------------------------------------
-        |
-        | Find and load extension providers
+        * Find and load extension providers
         */
         $this->loadExtensionProviders();
 
         /*
-        |--------------------------------------------------------------------------
-        | Collect bindings
-        |--------------------------------------------------------------------------
-        |
-        | Collect container bindings from extension providers
+        * Collect container bindings from extension providers
         */
         $this->collectBindings($this->container);
 
         /*
-        |--------------------------------------------------------------------------
-        | Collect routes
-        |--------------------------------------------------------------------------
-        |
-        | Collect routes from extension providers
+        * Collect routes from extension providers
         */
         $this->collectRoutes($this->container->get(RouteCollector::class));
 
         /*
-        |--------------------------------------------------------------------------
-        | Collect middlewares
-        |--------------------------------------------------------------------------
-        |
-        | Collect middlewares from extension providers
+        * Collect middlewares from extension providers
         */
         $this->collectMiddlewares($this->container->get(MiddlewareCollector::class));
 
         /*
-        |--------------------------------------------------------------------------
-        | Collect commands
-        |--------------------------------------------------------------------------
-        |
-        | Collect console commands from extension providers
+        * Collect console commands from extension providers
         */
         $this->collectCommands($this->container->get(CommandCollector::class));
 
@@ -155,7 +128,7 @@ class Kernel implements \Venta\Contract\Kernel
     /**
      * @inheritDoc
      */
-    public function environment(): string
+    public function getEnvironment(): string
     {
         return getenv('APP_ENV') ? getenv('APP_ENV') : 'local';
     }
@@ -187,13 +160,25 @@ class Kernel implements \Venta\Contract\Kernel
     {
         $path = $this->rootPath . '/' . $this->extensionsFile;
 
-        if (file_exists($path) && is_file($path) && is_readable($path)) {
-            $providers = require $path;
-            $providers = is_array($providers) ? $providers : [];
+        if (!file_exists($path)) {
+            throw new RuntimeException(sprintf('Extensions file "%s" does not exist', $path));
+        }
+        if (!is_file($path)) {
+            throw new RuntimeException(sprintf('Extensions file "%s" is not a regular file', $path));
+        }
+        if (!is_readable($path)) {
+            throw new RuntimeException(sprintf('Extensions file "%s" is not readable', $path));
+        }
 
-            foreach ($providers as $provider) {
-                $this->addExtensionProvider($provider);
-            }
+        // requiring extension providers array
+        $providers = require $path;
+
+        if (!is_array($providers)) {
+            throw new RuntimeException(sprintf('Extensions file "%s" must return array of class names', $path));
+        }
+
+        foreach ($providers as $provider) {
+            $this->addExtensionProvider($provider);
         }
     }
 

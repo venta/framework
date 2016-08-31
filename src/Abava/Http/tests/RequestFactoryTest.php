@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Zend\Diactoros\Uri;
 
 /**
  * Class RequestFactoryTest
@@ -43,5 +44,17 @@ class RequestFactoryTest extends TestCase
         $this->assertInstanceOf(\Abava\Http\Contract\Request::class, $request);
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame('/foo.bar', $request->getUri()->__toString());
+    }
+
+    /**
+     * @test
+     */
+    public function canCreateRequestWithUriInstance()
+    {
+        $uri = new Uri('/foo.bar');
+        $request = $this->factory->createServerRequest('GET', $uri);
+        $this->assertInstanceOf(\Abava\Http\Contract\Request::class, $request);
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame($uri, $request->getUri());
     }
 }
