@@ -15,7 +15,7 @@ class GroupCountBasedFactoryTest extends TestCase
     public function canMake()
     {
         $factory = new GroupCountBasedDispatcherFactory();
-        $dispatcher = $factory->make([[], []]);
+        $dispatcher = $factory->create([[], []]);
         $this->assertInstanceOf(GroupCountBased::class, $dispatcher);
     }
 

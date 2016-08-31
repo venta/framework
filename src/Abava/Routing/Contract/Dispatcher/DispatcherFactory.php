@@ -18,6 +18,6 @@ interface DispatcherFactory
      * @param array $data
      * @return Dispatcher
      */
-    public function make(array $data): Dispatcher;
+    public function create(array $data): Dispatcher;
 
 }

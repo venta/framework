@@ -36,12 +36,13 @@ class Matcher implements MatcherContract
      */
     public function match(RequestInterface $request, RouteCollector $collector): Route
     {
-        $dispatcher = $this->factory->make($collector->getFilteredData($request));
+        $dispatcher = $this->factory->create($collector->getFilteredData($request));
         $match = $dispatcher->dispatch($request->getMethod(), $request->getUri()->getPath());
         switch ($match[0]) {
             case $dispatcher::FOUND:
                 /** @var Route $route */
                 $route = $match[1];
+
                 return $route->withParameters($match[2]);
                 break;
             case $dispatcher::METHOD_NOT_ALLOWED:
