@@ -543,6 +543,7 @@ class Container implements ContainerContract
 
     /**
      * Forbid container cloning.
+     *
      * @codeCoverageIgnore
      */
     private function __clone()
