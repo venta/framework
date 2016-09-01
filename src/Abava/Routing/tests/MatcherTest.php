@@ -24,7 +24,7 @@ class MatcherTest extends TestCase
         $this->collector = Mockery::mock(\Abava\Routing\Contract\Collector::class);
         $this->dispatcher = Mockery::mock(\FastRoute\Dispatcher::class);
         $this->collector->shouldReceive('getFilteredData')->with($this->request)->andReturn(['data'])->once();
-        $this->factory->shouldReceive('make')->with(['data'])->andReturn($this->dispatcher)->once();
+        $this->factory->shouldReceive('create')->with(['data'])->andReturn($this->dispatcher)->once();
         $this->request->shouldReceive('getMethod')->withNoArgs()->andReturn('GET')->once();
         $this->request->shouldReceive('getUri')->withNoArgs()
                       ->andReturn(

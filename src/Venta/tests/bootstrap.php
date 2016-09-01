@@ -2,6 +2,8 @@
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
+require __DIR__ . '/../../Abava/Container/tests/bootstrap.php';
+
 $run = new \Whoops\Run();
 $run->pushHandler(new \Whoops\Handler\PlainTextHandler())->register();
 
