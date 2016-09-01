@@ -1,7 +1,7 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
 use Abava\Http\Cookie;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CookieTest
@@ -19,19 +19,31 @@ class CookieTest extends TestCase
     /**
      * @test
      */
-    public function emptyNameException()
+    public function cookieToString()
     {
-        $this->expectException("InvalidArgumentException");
-        $cookie = new Cookie('', 'value');
+        $cookie = new Cookie('name', 'value');
+        $expectedString = "name=value; path=/; httponly";
+        $this->assertSame((string)$cookie, $expectedString);
     }
 
     /**
      * @test
      */
-    public function invalidNameException()
+    public function createFromString()
     {
-        $this->expectException("InvalidArgumentException");
-        $cookie = new Cookie('n,m   e', 'value');
+        $cookie = new Cookie('name', 'value', Cookie::inDays(3), '/~path/', "cookie.com", true, true);
+        $recreated = Cookie::createFromString((string)$cookie);
+        $this->assertEquals($cookie, $recreated);
+    }
+
+    /**
+     * @test
+     */
+    public function createFromStringEmptyStringExpiration()
+    {
+        $cookie = new Cookie('name', 'value', '');
+        $recreated = Cookie::createFromString((string)$cookie);
+        $this->assertEquals($cookie, $recreated);
     }
 
     /**
@@ -47,39 +59,28 @@ class CookieTest extends TestCase
     /**
      * @test
      */
-    public function stringToTimestamp()
+    public function disableHttpOnly()
     {
-        $datetime = '22.07.2015 14:14:14';
-        $cookie = new Cookie('name', 'value', $datetime);
-        $this->assertEquals(strtotime($datetime), $cookie->getExpireTime());
+        $cookie = new Cookie('name', 'value', Cookie::inMinutes(5), '/', 'domain.com', false, false);
+        $this->assertRegExp('/.*^(httponly)*/', (string)$cookie);
     }
 
     /**
      * @test
      */
-    public function incorrectStringDate()
+    public function domainIsSet()
     {
-        $datetime = '16.16.16 14:14:14';
+        $cookie = new Cookie('name', 'value', Cookie::inMinutes(5), '/', 'domain.com');
+        $this->assertRegExp('/.*domain=domain.com.*/', (string)$cookie);
+    }
+
+    /**
+     * @test
+     */
+    public function emptyNameException()
+    {
         $this->expectException("InvalidArgumentException");
-        new Cookie('name', 'value', $datetime);
-    }
-
-    /**
-     * @test
-     */
-    public function cookieToString()
-    {
-        $cookie = new Cookie('name', 'value');
-        $expectedString = "name=value; path=/; httponly";
-        $this->assertSame((string)$cookie, $expectedString);
-    }
-
-    /**
-     * @test
-     */
-    public function isCorrectlyOutdated()
-    {
-        $this->assertGreaterThanOrEqual(Cookie::outdated(), (new DateTime())->getTimestamp());
+        $cookie = new Cookie('', 'value');
     }
 
     /**
@@ -109,10 +110,94 @@ class CookieTest extends TestCase
     /**
      * @test
      */
-    public function domainIsSet()
+    public function inDateInterval()
     {
-        $cookie = new Cookie('name', 'value', Cookie::inMinutes(5), '/', 'domain.com');
-        $this->assertRegExp('/.*domain=domain.com.*/', (string) $cookie);
+        $this->assertGreaterThanOrEqual(Cookie::inDateInterval('P2DT2H'),
+            (new DateTime())->add(new \DateInterval('P2DT2H2S'))->getTimestamp());
+        $this->assertLessThanOrEqual(Cookie::inDateInterval('P2DT2H'),
+            (new DateTime())->add(new \DateInterval('P1DT59M58S'))->getTimestamp());
+    }
+
+    /**
+     * @test
+     */
+    public function inDays()
+    {
+        $this->assertGreaterThanOrEqual(Cookie::inDays(3),
+            (new DateTime())->add(new \DateInterval('P3DT0H0M2S'))->getTimestamp());
+        $this->assertLessThanOrEqual(Cookie::inDays(3),
+            (new DateTime())->add(new \DateInterval('P2DT23H59M58S'))->getTimestamp());
+    }
+
+    /**
+     * @test
+     */
+    public function inHours()
+    {
+        $this->assertGreaterThanOrEqual(Cookie::inHours(8),
+            (new DateTime())->add(new \DateInterval('PT8H0M2S'))->getTimestamp());
+        $this->assertLessThanOrEqual(Cookie::inHours(8),
+            (new DateTime())->add(new \DateInterval('PT7H59M58S'))->getTimestamp());
+    }
+
+    /**
+     * @test
+     */
+    public function inMinutes()
+    {
+        $this->assertGreaterThanOrEqual(Cookie::inMinutes(5),
+            (new DateTime())->add(new \DateInterval('PT5M2S'))->getTimestamp());
+        $this->assertLessThanOrEqual(Cookie::inMinutes(5),
+            (new DateTime())->add(new \DateInterval('PT4M58S'))->getTimestamp());
+    }
+
+    /**
+     * @test
+     */
+    public function inMonths()
+    {
+        $this->assertGreaterThanOrEqual(Cookie::inMonths(3),
+            (new DateTime())->add(new \DateInterval('P4MT0H0M2S'))->getTimestamp());
+        $this->assertLessThanOrEqual(Cookie::inMonths(3),
+            (new DateTime())->add(new \DateInterval('P2M3W6DT23H59M58S'))->getTimestamp());
+    }
+
+    /**
+     * @test
+     */
+    public function inWeeks()
+    {
+        $this->assertGreaterThanOrEqual(Cookie::inWeeks(3),
+            (new DateTime())->add(new \DateInterval('P3WT0H0M2S'))->getTimestamp());
+        $this->assertLessThanOrEqual(Cookie::inWeeks(3),
+            (new DateTime())->add(new \DateInterval('P2W6DT23H59M58S'))->getTimestamp());
+    }
+
+    /**
+     * @test
+     */
+    public function incorrectStringDate()
+    {
+        $datetime = '16.16.16 14:14:14';
+        $this->expectException("InvalidArgumentException");
+        new Cookie('name', 'value', $datetime);
+    }
+
+    /**
+     * @test
+     */
+    public function invalidNameException()
+    {
+        $this->expectException("InvalidArgumentException");
+        $cookie = new Cookie('n,m   e', 'value');
+    }
+
+    /**
+     * @test
+     */
+    public function isCorrectlyOutdated()
+    {
+        $this->assertGreaterThanOrEqual(Cookie::outdated(), (new DateTime())->getTimestamp());
     }
 
     /**
@@ -121,91 +206,18 @@ class CookieTest extends TestCase
     public function secureFlagEnableDisable()
     {
         $cookie = new Cookie('name', 'value', Cookie::inMinutes(5), '/', 'domain.com', false);
-        $this->assertRegExp('/.*^(secure)*/', (string) $cookie);
+        $this->assertRegExp('/.*^(secure)*/', (string)$cookie);
         $cookie = new Cookie('name', 'value', Cookie::inMinutes(5), '/', 'domain.com', true);
-        $this->assertRegExp('/.*secure*/', (string) $cookie);
+        $this->assertRegExp('/.*secure*/', (string)$cookie);
     }
 
     /**
      * @test
      */
-    public function disableHttpOnly()
+    public function stringToTimestamp()
     {
-        $cookie = new Cookie('name', 'value', Cookie::inMinutes(5), '/', 'domain.com', false, false);
-        $this->assertRegExp('/.*^(httponly)*/', (string) $cookie);
-    }
-
-    /**
-     * @test
-     */
-    public function inMinutes()
-    {
-        $this->assertGreaterThanOrEqual(Cookie::inMinutes(5), (new DateTime())->add(new \DateInterval('PT5M2S'))->getTimestamp());
-        $this->assertLessThanOrEqual(Cookie::inMinutes(5), (new DateTime())->add(new \DateInterval('PT4M58S'))->getTimestamp());
-    }
-
-    /**
-     * @test
-     */
-    public function inHours()
-    {
-        $this->assertGreaterThanOrEqual(Cookie::inHours(8), (new DateTime())->add(new \DateInterval('PT8H0M2S'))->getTimestamp());
-        $this->assertLessThanOrEqual(Cookie::inHours(8), (new DateTime())->add(new \DateInterval('PT7H59M58S'))->getTimestamp());
-    }
-
-    /**
-     * @test
-     */
-    public function inDays()
-    {
-        $this->assertGreaterThanOrEqual(Cookie::inDays(3), (new DateTime())->add(new \DateInterval('P3DT0H0M2S'))->getTimestamp());
-        $this->assertLessThanOrEqual(Cookie::inDays(3), (new DateTime())->add(new \DateInterval('P2DT23H59M58S'))->getTimestamp());
-    }
-
-    /**
-     * @test
-     */
-    public function inWeeks()
-    {
-        $this->assertGreaterThanOrEqual(Cookie::inWeeks(3), (new DateTime())->add(new \DateInterval('P3WT0H0M2S'))->getTimestamp());
-        $this->assertLessThanOrEqual(Cookie::inWeeks(3), (new DateTime())->add(new \DateInterval('P2W6DT23H59M58S'))->getTimestamp());
-    }
-
-    /**
-     * @test
-     */
-    public function inMonths()
-    {
-        $this->assertGreaterThanOrEqual(Cookie::inMonths(3), (new DateTime())->add(new \DateInterval('P4MT0H0M2S'))->getTimestamp());
-        $this->assertLessThanOrEqual(Cookie::inMonths(3), (new DateTime())->add(new \DateInterval('P2M3W6DT23H59M58S'))->getTimestamp());
-    }
-
-    /**
-     * @test
-     */
-    public function inDateInterval()
-    {
-        $this->assertGreaterThanOrEqual(Cookie::inDateInterval('P2DT2H'), (new DateTime())->add(new \DateInterval('P2DT2H2S'))->getTimestamp());
-        $this->assertLessThanOrEqual(Cookie::inDateInterval('P2DT2H'), (new DateTime())->add(new \DateInterval('P1DT59M58S'))->getTimestamp());
-    }
-
-    /**
-     * @test
-     */
-    public function createFromString()
-    {
-        $cookie = new Cookie('name', 'value', Cookie::inDays(3), '/~path/', "cookie.com", true, true);
-        $recreated = Cookie::createFromString((string)$cookie);
-        $this->assertEquals($cookie, $recreated);
-    }
-
-    /**
-     * @test
-     */
-    public function createFromStringEmptyStringExpiration()
-    {
-        $cookie = new Cookie('name', 'value', '');
-        $recreated = Cookie::createFromString((string)$cookie);
-        $this->assertEquals($cookie, $recreated);
+        $datetime = '22.07.2015 14:14:14';
+        $cookie = new Cookie('name', 'value', $datetime);
+        $this->assertEquals(strtotime($datetime), $cookie->getExpireTime());
     }
 }

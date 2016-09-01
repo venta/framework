@@ -13,6 +13,14 @@ interface Cache
 {
 
     /**
+     * Delete key from cache
+     *
+     * @param  string $key
+     * @return bool
+     */
+    public function delete(string $key): bool;
+
+    /**
      * Get value from cache
      *
      * @param string $key
@@ -21,30 +29,12 @@ interface Cache
     public function get(string $key);
 
     /**
-     * Set value to cache
-     *
-     * @param string $key
-     * @param $value
-     * @return bool
-     */
-    public function set(string $key, $value): bool;
-
-    /**
      * Check if key exists in cache
      *
      * @param  string $key
      * @return bool
      */
     public function has(string $key): bool;
-
-
-    /**
-     * Delete key from cache
-     *
-     * @param  string $key
-     * @return bool
-     */
-    public function delete(string $key): bool;
 
     /**
      * Set value to cache for amount of time
@@ -55,5 +45,14 @@ interface Cache
      * @return bool
      */
     public function put(string $key, $value, $expires): bool;
+
+    /**
+     * Set value to cache
+     *
+     * @param string $key
+     * @param $value
+     * @return bool
+     */
+    public function set(string $key, $value): bool;
 
 }

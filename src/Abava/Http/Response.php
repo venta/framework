@@ -2,9 +2,8 @@
 
 namespace Abava\Http;
 
-use Abava\Http\Contract\Response as ResponseContract;
 use Abava\Http\Contract\Cookie as CookieContract;
-use MongoDB\BSON\Regex;
+use Abava\Http\Contract\Response as ResponseContract;
 use Zend\Diactoros\Response as BaseResponse;
 
 /**
@@ -43,33 +42,6 @@ class Response extends BaseResponse implements ResponseContract
         return $response;
     }
 
-    protected function addCookieToHeader(Cookie $cookie)
-    {
-        return $this->withAddedHeader('Set-Cookie', $cookie->asPlainText());
-    }
-
-    /**
-     * Get all cookies set to response
-     *
-     * @param $returnObject bool
-     * @return null|string[]|Cookie[]
-     */
-    public function getCookies(bool $returnObject = false)
-    {
-        if (!$this->getHeader('set-cookie')) {
-            return null;
-        }
-        if (false === $returnObject) {
-            return $this->getHeader('set-cookie');
-        }
-        $cookieObjects = array();
-        foreach ($this->getHeader('set-cookie') as $cookie) {
-            $cookieObjects[] = Cookie::createFromString($cookie);
-        }
-
-        return $cookieObjects;
-    }
-
     /**
      * Get a single cookie by name
      *
@@ -89,5 +61,32 @@ class Response extends BaseResponse implements ResponseContract
         }
 
         return $returnObject ? Cookie::createFromString($cookie) : $cookie;
+    }
+
+    /**
+     * Get all cookies set to response
+     *
+     * @param $returnObject bool
+     * @return null|string[]|Cookie[]
+     */
+    public function getCookies(bool $returnObject = false)
+    {
+        if (!$this->getHeader('set-cookie')) {
+            return null;
+        }
+        if (false === $returnObject) {
+            return $this->getHeader('set-cookie');
+        }
+        $cookieObjects = [];
+        foreach ($this->getHeader('set-cookie') as $cookie) {
+            $cookieObjects[] = Cookie::createFromString($cookie);
+        }
+
+        return $cookieObjects;
+    }
+
+    protected function addCookieToHeader(Cookie $cookie)
+    {
+        return $this->withAddedHeader('Set-Cookie', $cookie->asPlainText());
     }
 }

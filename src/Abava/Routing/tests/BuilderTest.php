@@ -8,60 +8,16 @@ class BuilderTest extends TestCase
     /**
      * @test
      */
-    public function canCreateStatic()
-    {
-        $builder = new \Abava\Routing\Builder(['GET', 'HEAD'], '/url', 'handle');
-        $staticBuilder = \Abava\Routing\Builder::create(['GET', 'HEAD'], '/url', 'handle');
-
-        $route = $builder->build();
-        $staticRoute = $staticBuilder->build();
-
-        $this->assertSame($route->getPath(), $staticRoute->getPath());
-        $this->assertSame($route->getCallable(), $staticRoute->getCallable());
-        $this->assertSame($route->getMethods(), $staticRoute->getMethods());
-    }
-
-    /**
-     * @test
-     */
-    public function canCreateRoute()
-    {
-        $builder = new \Abava\Routing\Builder(['GET', 'HEAD'], '/url', 'handle');
-        $route = $builder->build();
-        $this->assertInstanceOf(\Abava\Routing\Route::class, $route);
-        $this->assertSame('/url', $route->getPath());
-        $this->assertSame('handle', $route->getCallable());
-        $this->assertSame(['GET', 'HEAD'], $route->getMethods());
-    }
-
-    /**
-     * @test
-     */
-    public function canSetHostSchemeMiddlewareName()
-    {
-        $builder = new \Abava\Routing\Builder(['GET', 'HEAD'], '/url', 'handle');
-        $builder->host('localhost')
-                ->scheme('http')
-                ->name('named')
-                ->middleware('middleware', $callback = function () {});
-        $route = $builder->build();
-        $this->assertSame('localhost', $route->getHost());
-        $this->assertSame('http', $route->getScheme());
-        $this->assertSame('named', $route->getName());
-        $this->assertSame(['middleware' => $callback], $route->getMiddlewares());
-    }
-
-    /**
-     * @test
-     */
-    public function canCreateMultipleRoutes()
+    public function canChangeAction()
     {
         $builder = new \Abava\Routing\Builder(['GET'], '/url', 'handle');
-        $route1 = $builder->build();
-        $route2 = $builder->build();
+        $handleRoute = $builder->build();
+        $builder->action('callback');
+        $callbackRoute = $builder->build();
 
-        $this->assertSame($route1->getPath(), $route2->getPath());
-        $this->assertSame($route1->getCallable(), $route2->getCallable());
+        $this->assertSame($handleRoute->getPath(), $callbackRoute->getPath());
+        $this->assertNotSame($handleRoute->getCallable(), $callbackRoute->getCallable());
+        $this->assertSame($handleRoute->getMethods(), $callbackRoute->getMethods());
     }
 
     /**
@@ -77,21 +33,6 @@ class BuilderTest extends TestCase
         $this->assertSame($getRoute->getPath(), $postRoute->getPath());
         $this->assertSame($getRoute->getCallable(), $postRoute->getCallable());
         $this->assertNotSame($getRoute->getMethods(), $postRoute->getMethods());
-    }
-
-    /**
-     * @test
-     */
-    public function canChangeAction()
-    {
-        $builder = new \Abava\Routing\Builder(['GET'], '/url', 'handle');
-        $handleRoute = $builder->build();
-        $builder->action('callback');
-        $callbackRoute = $builder->build();
-
-        $this->assertSame($handleRoute->getPath(), $callbackRoute->getPath());
-        $this->assertNotSame($handleRoute->getCallable(), $callbackRoute->getCallable());
-        $this->assertSame($handleRoute->getMethods(), $callbackRoute->getMethods());
     }
 
     /**
@@ -126,28 +67,76 @@ class BuilderTest extends TestCase
     /**
      * @test
      */
-    public function canStaticGet()
+    public function canCreateMultipleRoutes()
     {
-        $route = \Abava\Routing\Builder::get('/url', 'handle')->build();
+        $builder = new \Abava\Routing\Builder(['GET'], '/url', 'handle');
+        $route1 = $builder->build();
+        $route2 = $builder->build();
+
+        $this->assertSame($route1->getPath(), $route2->getPath());
+        $this->assertSame($route1->getCallable(), $route2->getCallable());
+    }
+
+    /**
+     * @test
+     */
+    public function canCreateRoute()
+    {
+        $builder = new \Abava\Routing\Builder(['GET', 'HEAD'], '/url', 'handle');
+        $route = $builder->build();
+        $this->assertInstanceOf(\Abava\Routing\Route::class, $route);
+        $this->assertSame('/url', $route->getPath());
+        $this->assertSame('handle', $route->getCallable());
+        $this->assertSame(['GET', 'HEAD'], $route->getMethods());
+    }
+
+    /**
+     * @test
+     */
+    public function canCreateStatic()
+    {
+        $builder = new \Abava\Routing\Builder(['GET', 'HEAD'], '/url', 'handle');
+        $staticBuilder = \Abava\Routing\Builder::create(['GET', 'HEAD'], '/url', 'handle');
+
+        $route = $builder->build();
+        $staticRoute = $staticBuilder->build();
+
+        $this->assertSame($route->getPath(), $staticRoute->getPath());
+        $this->assertSame($route->getCallable(), $staticRoute->getCallable());
+        $this->assertSame($route->getMethods(), $staticRoute->getMethods());
+    }
+
+    /**
+     * @test
+     */
+    public function canSetHostSchemeMiddlewareName()
+    {
+        $builder = new \Abava\Routing\Builder(['GET', 'HEAD'], '/url', 'handle');
+        $builder->host('localhost')
+                ->scheme('http')
+                ->name('named')
+                ->middleware('middleware', $callback = function () {
+                });
+        $route = $builder->build();
+        $this->assertSame('localhost', $route->getHost());
+        $this->assertSame('http', $route->getScheme());
+        $this->assertSame('named', $route->getName());
+        $this->assertSame(['middleware' => $callback], $route->getMiddlewares());
+    }
+
+    /**
+     * @test
+     */
+    public function canStaticAny()
+    {
+        $route = \Abava\Routing\Builder::any('/url', 'handle')->build();
+        $this->assertContains('HEAD', $route->getMethods());
         $this->assertContains('GET', $route->getMethods());
-    }
-
-    /**
-     * @test
-     */
-    public function canStaticPost()
-    {
-        $route = \Abava\Routing\Builder::post('/url', 'handle')->build();
         $this->assertContains('POST', $route->getMethods());
-    }
-
-    /**
-     * @test
-     */
-    public function canStaticPut()
-    {
-        $route = \Abava\Routing\Builder::put('/url', 'handle')->build();
         $this->assertContains('PUT', $route->getMethods());
+        $this->assertContains('OPTIONS', $route->getMethods());
+        $this->assertContains('PATCH', $route->getMethods());
+        $this->assertContains('DELETE', $route->getMethods());
     }
 
     /**
@@ -157,6 +146,24 @@ class BuilderTest extends TestCase
     {
         $route = \Abava\Routing\Builder::delete('/url', 'handle')->build();
         $this->assertContains('DELETE', $route->getMethods());
+    }
+
+    /**
+     * @test
+     */
+    public function canStaticGet()
+    {
+        $route = \Abava\Routing\Builder::get('/url', 'handle')->build();
+        $this->assertContains('GET', $route->getMethods());
+    }
+
+    /**
+     * @test
+     */
+    public function canStaticHead()
+    {
+        $route = \Abava\Routing\Builder::head('/url', 'handle')->build();
+        $this->assertContains('HEAD', $route->getMethods());
     }
 
     /**
@@ -180,25 +187,19 @@ class BuilderTest extends TestCase
     /**
      * @test
      */
-    public function canStaticHead()
+    public function canStaticPost()
     {
-        $route = \Abava\Routing\Builder::head('/url', 'handle')->build();
-        $this->assertContains('HEAD', $route->getMethods());
+        $route = \Abava\Routing\Builder::post('/url', 'handle')->build();
+        $this->assertContains('POST', $route->getMethods());
     }
 
     /**
      * @test
      */
-    public function canStaticAny()
+    public function canStaticPut()
     {
-        $route = \Abava\Routing\Builder::any('/url', 'handle')->build();
-        $this->assertContains('HEAD', $route->getMethods());
-        $this->assertContains('GET', $route->getMethods());
-        $this->assertContains('POST', $route->getMethods());
+        $route = \Abava\Routing\Builder::put('/url', 'handle')->build();
         $this->assertContains('PUT', $route->getMethods());
-        $this->assertContains('OPTIONS', $route->getMethods());
-        $this->assertContains('PATCH', $route->getMethods());
-        $this->assertContains('DELETE', $route->getMethods());
     }
 
 }

@@ -18,6 +18,38 @@ class GroupTest extends TestCase
         $this->collector = Mockery::mock(\Abava\Routing\Collector::class);
     }
 
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
+    /**
+     * @test
+     */
+    public function callbackIsCalledOnCollect()
+    {
+        $callbackMock = Mockery::mock(function () {
+        });
+        $group = new \Abava\Routing\Group('/', [$callbackMock, '__invoke'], $this->collector);
+        $callbackMock->shouldReceive('__invoke')
+                     ->with($group)
+                     ->once();
+        $group->collect();
+    }
+
+    /**
+     * @test
+     */
+    public function canAddRoute()
+    {
+        $group = new \Abava\Routing\Group('/', function () {
+        }, $this->collector);
+        $group->addRoute('GET', '/', 'handle');
+        $existingRoutes = $group->getRoutes();
+        $this->assertCount(1, $existingRoutes);
+        $this->assertInstanceOf(\Abava\Routing\Route::class, $existingRoutes[0]);
+    }
+
     /**
      * @test
      */
@@ -33,14 +65,26 @@ class GroupTest extends TestCase
     /**
      * @test
      */
-    public function canAddRoute()
+    public function canProxyToCollectorInstance()
     {
-        $group = new \Abava\Routing\Group('/', function() {
-        }, $this->collector);
-        $group->addRoute('GET', '/', 'handle');
-        $existingRoutes = $group->getRoutes();
-        $this->assertCount(1, $existingRoutes);
-        $this->assertInstanceOf(\Abava\Routing\Route::class, $existingRoutes[0]);
+        $callback = function () {
+        };
+        $group = new \Abava\Routing\Group('/', $callback, $this->collector);
+        $this->collector->shouldReceive('getData')->withNoArgs()->andReturn(['data'])->once();
+        $this->assertSame(['data'], $group->getData());
+        $request = Mockery::mock(\Psr\Http\Message\RequestInterface::class);
+        $this->collector->shouldReceive('getFilteredData')->with($request)->andReturn(['data'])->once();
+        $this->assertSame(['data'], $group->getFilteredData($request));
+        $group->setHost('localhost');
+        $group->setScheme('https');
+        $groupMock = Mockery::mock(\Abava\Routing\Contract\Group::class);
+        $groupMock->shouldReceive('setHost')->with('localhost')->andReturnSelf()->once();
+        $groupMock->shouldReceive('setScheme')->with('https')->andReturnSelf()->once();
+        $this->collector->shouldReceive('group')
+                        ->with('/prefix', $callback)
+                        ->andReturn($groupMock)
+                        ->once();
+        $this->assertSame($groupMock, $group->group('prefix', $callback));
     }
 
     /**
@@ -55,20 +99,6 @@ class GroupTest extends TestCase
         $group->setPrefix('/qwerty');
         $this->collector->shouldReceive('addRoute')->with('POST', '/qwerty/zxcv', 'handle');
         $group->addRoute('POST', '/zxcv', 'handle');
-    }
-
-    /**
-     * @test
-     */
-    public function callbackIsCalledOnCollect()
-    {
-        $callbackMock = Mockery::mock(function () {
-        });
-        $group = new \Abava\Routing\Group('/', [$callbackMock, '__invoke'], $this->collector);
-        $callbackMock->shouldReceive('__invoke')
-            ->with($group)
-            ->once();
-        $group->collect();
     }
 
     /**
@@ -91,38 +121,10 @@ class GroupTest extends TestCase
             $this->assertEquals('https', $route->getScheme());
             $this->assertEquals('localhost', $route->getHost());
             $this->assertContains('prefix', $route->getPath());
+
             return true;
         }))->twice();
         $group->collect();
-    }
-
-    /**
-     * @test
-     */
-    public function canProxyToCollectorInstance()
-    {
-        $callback = function () {};
-        $group = new \Abava\Routing\Group('/', $callback, $this->collector);
-        $this->collector->shouldReceive('getData')->withNoArgs()->andReturn(['data'])->once();
-        $this->assertSame(['data'], $group->getData());
-        $request = Mockery::mock(\Psr\Http\Message\RequestInterface::class);
-        $this->collector->shouldReceive('getFilteredData')->with($request)->andReturn(['data'])->once();
-        $this->assertSame(['data'], $group->getFilteredData($request));
-        $group->setHost('localhost');
-        $group->setScheme('https');
-        $groupMock = Mockery::mock(\Abava\Routing\Contract\Group::class);
-        $groupMock->shouldReceive('setHost')->with('localhost')->andReturnSelf()->once();
-        $groupMock->shouldReceive('setScheme')->with('https')->andReturnSelf()->once();
-        $this->collector->shouldReceive('group')
-            ->with('/prefix', $callback)
-            ->andReturn($groupMock)
-            ->once();
-        $this->assertSame($groupMock, $group->group('prefix', $callback));
-    }
-
-    public function tearDown()
-    {
-        Mockery::close();
     }
 
 }

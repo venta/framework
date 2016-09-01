@@ -6,14 +6,14 @@ class MiddlewareCollectorTest extends TestCase
 {
 
     /**
-     * @var \Abava\Container\Contract\Container|\Mockery\MockInterface
-     */
-    protected $container;
-
-    /**
      * @var \Abava\Routing\Middleware\Collector|\Mockery\MockInterface
      */
     protected $collector;
+
+    /**
+     * @var \Abava\Container\Contract\Container|\Mockery\MockInterface
+     */
+    protected $container;
 
     public function setUp()
     {
@@ -21,164 +21,11 @@ class MiddlewareCollectorTest extends TestCase
         $this->collector = new \Abava\Routing\Middleware\Collector($this->container);
     }
 
-    /**
-     * @test
-     */
-    public function testPushMiddleware()
+    public function tearDown()
     {
-        $this->assertFalse($this->collector->has('middleware'));
-        $this->collector->pushMiddleware('middleware', Mockery::mock(\Abava\Routing\Contract\Middleware::class));
-        $this->assertTrue($this->collector->has('middleware'));
+        Mockery::close();
     }
-    
-    /**
-     * @test
-     */
-    public function throwsExceptionOnMiddlewareWithTheSameNameTwice()
-    {
-        $this->expectException(InvalidArgumentException::class);
 
-        $this->collector->pushMiddleware('middleware', Mockery::mock(\Abava\Routing\Contract\Middleware::class));
-        $this->collector->pushMiddleware('middleware', Mockery::mock(\Abava\Routing\Contract\Middleware::class));
-    }
-    
-    /**
-     * @test
-     */
-    public function throwsExceptionOnPushInvalidMiddleware()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->collector->pushMiddleware('middleware', new stdClass());
-    }
-    
-    /**
-     * @test
-     */
-    public function canPushBefore()
-    {
-        /** @var \Abava\Routing\Middleware\Collector $collector */
-        $collector = new class($this->container) extends \Abava\Routing\Middleware\Collector{
-            public function getOrder() { return $this->order; }
-        };
-        $collector->pushMiddleware('first', function(){});
-        $collector->pushMiddleware('third', function(){});
-        $collector->pushBefore('third', 'second', function(){});
-        $this->assertSame(['first', 'second', 'third'], $collector->getOrder());
-    }
-    
-    /**
-     * @test
-     */
-    public function canPushAfter()
-    {
-        /** @var \Abava\Routing\Middleware\Collector $collector */
-        $collector = new class($this->container) extends \Abava\Routing\Middleware\Collector{
-            public function getOrder() { return $this->order; }
-        };
-        $collector->pushMiddleware('first', function(){});
-        $collector->pushMiddleware('third', function(){});
-        $collector->pushAfter('first', 'second', function(){});
-        $this->assertSame(['first', 'second', 'third'], $collector->getOrder());
-    }
-    
-    /**
-     * @test
-     */
-    public function throwsExceptionOnPushBeforeNonExistingMiddleware()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->collector->pushBefore('non-existing', 'middleware', function (){});
-    }
-    
-    /**
-     * @test
-     */
-    public function throwsExceptionOnPushAfterNonExistingMiddleware()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->collector->pushAfter('non-existing', 'middleware', function (){});
-    }
-    
-    /**
-     * @test
-     */
-    public function throwsExceptionOnPushBeforeExistingMiddlewareTwice()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->collector->pushMiddleware('middleware', function (){});
-        $this->collector->pushBefore('middleware', 'middleware', function (){});
-    }
-    
-    /**
-     * @test
-     */
-    public function throwsExceptionOnPushAfterExistingMiddlewareTwice()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->collector->pushMiddleware('middleware', function (){});
-        $this->collector->pushAfter('middleware', 'middleware', function (){});
-    }
-    
-    /**
-     * @test
-     */
-    public function throwsExceptionOnPushBeforeInvalidMiddleware()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->collector->pushMiddleware('middleware', function (){});
-        $this->collector->pushBefore('middleware', 'name', new stdClass());
-    }
-    
-    /**
-     * @test
-     */
-    public function throwsExceptionOnPushAfterInvalidMiddleware()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $this->collector->pushMiddleware('middleware', function (){});
-        $this->collector->pushAfter('middleware', 'name', new stdClass());
-    }
-    
-    /**
-     * @test
-     */
-    public function canPushMiddlewareAsString()
-    {
-        $middleware = Mockery::mock(\Abava\Routing\Contract\Middleware::class);
-        $this->container->shouldReceive('make')
-            ->with(get_class($middleware))
-            ->andReturn($middleware)
-            ->once();
-        $this->collector->pushMiddleware('middleware', get_class($middleware));
-        $this->assertSame($middleware, $this->collector->current());
-        // Check that container->make() is called only once,
-        // saving the result in $middlewares property
-        $this->assertSame($middleware, $this->collector->current());
-    }
-    
-    /**
-     * @test
-     */
-    public function canPushMiddlewareAsClosure()
-    {
-        $this->collector->pushMiddleware('middleware', function($request, $next){ return $next($request); });
-        $middleware = $this->collector->current();
-        $this->assertInstanceOf(\Abava\Routing\Contract\Middleware::class, $middleware);
-        $response = Mockery::mock(\Psr\Http\Message\ResponseInterface::class);
-        $result = $middleware->handle(
-            Mockery::mock(\Psr\Http\Message\RequestInterface::class),
-            function(\Psr\Http\Message\RequestInterface $request) use ($response) { return $response; }
-        );
-        $this->assertSame($response, $result);
-    }
-    
     /**
      * @test
      */
@@ -187,36 +34,40 @@ class MiddlewareCollectorTest extends TestCase
         $request = Mockery::mock(\Psr\Http\Message\RequestInterface::class);
         $first = Mockery::mock(\Abava\Routing\Contract\Middleware::class);
         $first->shouldReceive('handle')
-            ->with($request, Mockery::type(Closure::class))
-            ->andReturnUsing(function($request, $next){
-                echo '1';
-                $response = $next($request);
-                echo '1';
-                return $response;
-            })
-            ->once();
-        $second = Mockery::mock(\Abava\Routing\Contract\Middleware::class);
-        $second->shouldReceive('handle')
               ->with($request, Mockery::type(Closure::class))
-              ->andReturnUsing(function($request, $next){
-                  echo '2';
+              ->andReturnUsing(function ($request, $next) {
+                  echo '1';
                   $response = $next($request);
-                  echo '2';
+                  echo '1';
+
                   return $response;
               })
               ->once();
+        $second = Mockery::mock(\Abava\Routing\Contract\Middleware::class);
+        $second->shouldReceive('handle')
+               ->with($request, Mockery::type(Closure::class))
+               ->andReturnUsing(function ($request, $next) {
+                   echo '2';
+                   $response = $next($request);
+                   echo '2';
+
+                   return $response;
+               })
+               ->once();
         $third = Mockery::mock(\Abava\Routing\Contract\Middleware::class);
         $third->shouldReceive('handle')
               ->with($request, Mockery::type(Closure::class))
-              ->andReturnUsing(function($request, $next){
+              ->andReturnUsing(function ($request, $next) {
                   echo '3';
                   $response = $next($request);
                   echo '3';
+
                   return $response;
               })
               ->once();
-        $last = function(){
+        $last = function () {
             echo 'last';
+
             return Mockery::mock(\Psr\Http\Message\ResponseInterface::class);
         };
         $this->collector->pushMiddleware('first', $first);
@@ -238,7 +89,118 @@ class MiddlewareCollectorTest extends TestCase
         $this->assertSame(['third', 'second', 'first'], $names);
         $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $response);
     }
-    
+
+    /**
+     * @test
+     */
+    public function canPushAfter()
+    {
+        /** @var \Abava\Routing\Middleware\Collector $collector */
+        $collector = new class($this->container) extends \Abava\Routing\Middleware\Collector
+        {
+            public function getOrder()
+            {
+                return $this->order;
+            }
+        };
+        $collector->pushMiddleware('first', function () {
+        });
+        $collector->pushMiddleware('third', function () {
+        });
+        $collector->pushAfter('first', 'second', function () {
+        });
+        $this->assertSame(['first', 'second', 'third'], $collector->getOrder());
+    }
+
+    /**
+     * @test
+     */
+    public function canPushAfterInReversedMode()
+    {
+        $this->collector->pushMiddleware('middleware', function () {
+        });
+        $this->collector->rewind();
+
+        $this->expectException(RuntimeException::class);
+
+        $this->collector->pushAfter('middleware', 'another', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function canPushBefore()
+    {
+        /** @var \Abava\Routing\Middleware\Collector $collector */
+        $collector = new class($this->container) extends \Abava\Routing\Middleware\Collector
+        {
+            public function getOrder()
+            {
+                return $this->order;
+            }
+        };
+        $collector->pushMiddleware('first', function () {
+        });
+        $collector->pushMiddleware('third', function () {
+        });
+        $collector->pushBefore('third', 'second', function () {
+        });
+        $this->assertSame(['first', 'second', 'third'], $collector->getOrder());
+    }
+
+    /**
+     * @test
+     */
+    public function canPushBeforeInReversedMode()
+    {
+        $this->collector->pushMiddleware('middleware', function () {
+        });
+        $this->collector->rewind();
+
+        $this->expectException(RuntimeException::class);
+
+        $this->collector->pushBefore('middleware', 'another', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function canPushMiddlewareAsClosure()
+    {
+        $this->collector->pushMiddleware('middleware', function ($request, $next) {
+            return $next($request);
+        });
+        $middleware = $this->collector->current();
+        $this->assertInstanceOf(\Abava\Routing\Contract\Middleware::class, $middleware);
+        $response = Mockery::mock(\Psr\Http\Message\ResponseInterface::class);
+        $result = $middleware->handle(
+            Mockery::mock(\Psr\Http\Message\RequestInterface::class),
+            function (\Psr\Http\Message\RequestInterface $request) use ($response) {
+                return $response;
+            }
+        );
+        $this->assertSame($response, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function canPushMiddlewareAsString()
+    {
+        $middleware = Mockery::mock(\Abava\Routing\Contract\Middleware::class);
+        $this->container->shouldReceive('make')
+                        ->with(get_class($middleware))
+                        ->andReturn($middleware)
+                        ->once();
+        $this->collector->pushMiddleware('middleware', get_class($middleware));
+        $this->assertSame($middleware, $this->collector->current());
+        // Check that container->make() is called only once,
+        // saving the result in $middlewares property
+        $this->assertSame($middleware, $this->collector->current());
+    }
+
     /**
      * @test
      */
@@ -250,38 +212,110 @@ class MiddlewareCollectorTest extends TestCase
         $this->collector->pushMiddleware('second', $middleware);
         $middlewares = array_keys(iterator_to_array($this->collector, true));
         // Middlewares must be returned (traversed) in reversed order
-        $this->assertSame(['second','first'], $middlewares);
+        $this->assertSame(['second', 'first'], $middlewares);
     }
-    
+
     /**
      * @test
      */
-    public function canPushBeforeInReversedMode()
+    public function testPushMiddleware()
     {
-        $this->collector->pushMiddleware('middleware', function(){});
-        $this->collector->rewind();
-
-        $this->expectException(RuntimeException::class);
-
-        $this->collector->pushBefore('middleware', 'another', function(){});
+        $this->assertFalse($this->collector->has('middleware'));
+        $this->collector->pushMiddleware('middleware', Mockery::mock(\Abava\Routing\Contract\Middleware::class));
+        $this->assertTrue($this->collector->has('middleware'));
     }
-    
+
     /**
      * @test
      */
-    public function canPushAfterInReversedMode()
+    public function throwsExceptionOnMiddlewareWithTheSameNameTwice()
     {
-        $this->collector->pushMiddleware('middleware', function(){});
-        $this->collector->rewind();
+        $this->expectException(InvalidArgumentException::class);
 
-        $this->expectException(RuntimeException::class);
-
-        $this->collector->pushAfter('middleware', 'another', function(){});
+        $this->collector->pushMiddleware('middleware', Mockery::mock(\Abava\Routing\Contract\Middleware::class));
+        $this->collector->pushMiddleware('middleware', Mockery::mock(\Abava\Routing\Contract\Middleware::class));
     }
 
-    public function tearDown()
+    /**
+     * @test
+     */
+    public function throwsExceptionOnPushAfterExistingMiddlewareTwice()
     {
-        Mockery::close();
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->collector->pushMiddleware('middleware', function () {
+        });
+        $this->collector->pushAfter('middleware', 'middleware', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function throwsExceptionOnPushAfterInvalidMiddleware()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->collector->pushMiddleware('middleware', function () {
+        });
+        $this->collector->pushAfter('middleware', 'name', new stdClass());
+    }
+
+    /**
+     * @test
+     */
+    public function throwsExceptionOnPushAfterNonExistingMiddleware()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->collector->pushAfter('non-existing', 'middleware', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function throwsExceptionOnPushBeforeExistingMiddlewareTwice()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->collector->pushMiddleware('middleware', function () {
+        });
+        $this->collector->pushBefore('middleware', 'middleware', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function throwsExceptionOnPushBeforeInvalidMiddleware()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->collector->pushMiddleware('middleware', function () {
+        });
+        $this->collector->pushBefore('middleware', 'name', new stdClass());
+    }
+
+    /**
+     * @test
+     */
+    public function throwsExceptionOnPushBeforeNonExistingMiddleware()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->collector->pushBefore('non-existing', 'middleware', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function throwsExceptionOnPushInvalidMiddleware()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->collector->pushMiddleware('middleware', new stdClass());
     }
 
 }

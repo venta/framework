@@ -21,9 +21,13 @@ class RequestFactoryTest extends TestCase
     /**
      * @test
      */
-    public function implementsRequestFactoryContract()
+    public function canCreateRequestWithUriInstance()
     {
-        $this->assertInstanceOf(\Abava\Http\Contract\RequestFactory::class, new \Abava\Http\Factory\RequestFactory);
+        $uri = new Uri('/foo.bar');
+        $request = $this->factory->createServerRequest('GET', $uri);
+        $this->assertInstanceOf(\Abava\Http\Contract\Request::class, $request);
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame($uri, $request->getUri());
     }
 
     /**
@@ -49,12 +53,8 @@ class RequestFactoryTest extends TestCase
     /**
      * @test
      */
-    public function canCreateRequestWithUriInstance()
+    public function implementsRequestFactoryContract()
     {
-        $uri = new Uri('/foo.bar');
-        $request = $this->factory->createServerRequest('GET', $uri);
-        $this->assertInstanceOf(\Abava\Http\Contract\Request::class, $request);
-        $this->assertSame('GET', $request->getMethod());
-        $this->assertSame($uri, $request->getUri());
+        $this->assertInstanceOf(\Abava\Http\Contract\RequestFactory::class, new \Abava\Http\Factory\RequestFactory);
     }
 }

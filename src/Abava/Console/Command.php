@@ -33,6 +33,17 @@ abstract class Command extends BaseCommand implements CommandContract
     protected $output;
 
     /**
+     * Helper method to get input argument
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function arg(string $name)
+    {
+        return $this->input->getArgument($name);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function configure()
@@ -44,7 +55,8 @@ abstract class Command extends BaseCommand implements CommandContract
 
         if (is_array($signature['arguments']) && count($signature['arguments']) > 0) {
             foreach ($signature['arguments'] as $argument) {
-                $this->addArgument($argument['name'], $argument['type'], $argument['description'], $argument['default']);
+                $this->addArgument($argument['name'], $argument['type'], $argument['description'],
+                    $argument['default']);
             }
         } else {
             $this->getDefinition()->addArguments($this->returnArguments());
@@ -62,40 +74,9 @@ abstract class Command extends BaseCommand implements CommandContract
     /**
      * {@inheritdoc}
      */
-    final protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->input = $input;
-        $this->output = $output;
-        return $this->handle($input, $output);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function description(): string
     {
         return '';
-    }
-
-    /**
-     * Making method final to restrict overwrite
-     *
-     * {@inheritdoc}
-     */
-    final public function run(InputInterface $input, OutputInterface $output): int
-    {
-        return parent::run($input, $output);
-    }
-
-    /**
-     * Helper method to get input argument
-     *
-     * @param string $name
-     * @return mixed
-     */
-    public function arg(string $name)
-    {
-        return $this->input->getArgument($name);
     }
 
     /**
@@ -107,6 +88,38 @@ abstract class Command extends BaseCommand implements CommandContract
     public function opt(string $name)
     {
         return $this->input->getOption($name);
+    }
+
+    /**
+     * Returns command arguments array
+     * Values must be instances of InputArgument
+     *
+     * @return array|InputArgument[]
+     */
+    public function returnArguments(): array
+    {
+        return [];
+    }
+
+    /**
+     * Returns command options array
+     * Values must be instances of InputOption
+     *
+     * @return array|InputOption[]
+     */
+    public function returnOptions(): array
+    {
+        return [];
+    }
+
+    /**
+     * Making method final to restrict overwrite
+     *
+     * {@inheritdoc}
+     */
+    final public function run(InputInterface $input, OutputInterface $output): int
+    {
+        return parent::run($input, $output);
     }
 
     /**
@@ -135,25 +148,14 @@ abstract class Command extends BaseCommand implements CommandContract
     }
 
     /**
-     * Returns command arguments array
-     * Values must be instances of InputArgument
-     *
-     * @return array|InputArgument[]
+     * {@inheritdoc}
      */
-    public function returnArguments(): array
+    final protected function execute(InputInterface $input, OutputInterface $output)
     {
-        return [];
-    }
+        $this->input = $input;
+        $this->output = $output;
 
-    /**
-     * Returns command options array
-     * Values must be instances of InputOption
-     *
-     * @return array|InputOption[]
-     */
-    public function returnOptions(): array
-    {
-        return [];
+        return $this->handle($input, $output);
     }
 
 }

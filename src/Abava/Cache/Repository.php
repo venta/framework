@@ -32,6 +32,14 @@ final class Repository implements Cache
     /**
      * @inheritDoc
      */
+    public function delete(string $key): bool
+    {
+        return $this->pool->deleteItem($key);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function get(string $key)
     {
         return $this->pool->getItem($key)->get();
@@ -40,25 +48,9 @@ final class Repository implements Cache
     /**
      * @inheritDoc
      */
-    public function set(string $key, $value): bool
-    {
-        return $this->pool->save((new CacheItem($key))->set($value));
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function has(string $key): bool
     {
         return $this->pool->hasItem($key);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function delete(string $key): bool
-    {
-        return $this->pool->deleteItem($key);
     }
 
     /**
@@ -75,6 +67,14 @@ final class Repository implements Cache
         }
 
         return $this->pool->save($item);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function set(string $key, $value): bool
+    {
+        return $this->pool->save((new CacheItem($key))->set($value));
     }
 
 }

@@ -62,7 +62,8 @@ class RoutingRouteTest extends TestCase
         $this->assertNotSame($route, $new);
 
         // testing middleware immutability
-        $closure = function(){};
+        $closure = function () {
+        };
         $new = $route->withMiddleware('middleware', $closure);
         $this->assertSame(['middleware' => $closure], $new->getMiddlewares());
         $this->assertSame([], $route->getMiddlewares());
@@ -73,7 +74,7 @@ class RoutingRouteTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Middleware must either implement Middleware contract or be callable
-     * @test 
+     * @test
      */
     public function testPassingInvalidMiddleware()
     {
@@ -112,16 +113,6 @@ class RoutingRouteTest extends TestCase
     /**
      * @test
      */
-    public function testUrlBuildParameterDoesntMatchPattern()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $route = new \Abava\Routing\Route(['GET'], '/url/{id:number}', 'handle');
-        $route->url(['id' => 'abc']);
-    }
-
-    /**
-     * @test
-     */
     public function testUrlBuildNonOptionalParameterIsNotProvided()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -137,6 +128,16 @@ class RoutingRouteTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $route = new \Abava\Routing\Route(['GET'], '/url[/{one}[/{two}[/{three}]]]', 'handle');
         $route->url(['two' => 'abc']);
+    }
+
+    /**
+     * @test
+     */
+    public function testUrlBuildParameterDoesntMatchPattern()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $route = new \Abava\Routing\Route(['GET'], '/url/{id:number}', 'handle');
+        $route->url(['id' => 'abc']);
     }
 
 }

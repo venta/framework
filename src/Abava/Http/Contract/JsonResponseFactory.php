@@ -24,5 +24,6 @@ interface JsonResponseFactory
         $data,
         $status = 200,
         array $headers = [],
-        $encodingOptions = JsonResponse::DEFAULT_JSON_FLAGS): Response;
+        $encodingOptions = JsonResponse::DEFAULT_JSON_FLAGS
+    ): Response;
 }

@@ -9,9 +9,12 @@ class GenericStrategyTest extends TestCase
 {
 
     protected $container;
-    protected $route;
-    protected $response;
+
     protected $factory;
+
+    protected $response;
+
+    protected $route;
 
     public function setUp()
     {
@@ -22,45 +25,9 @@ class GenericStrategyTest extends TestCase
         $this->factory = Mockery::mock(\Abava\Http\Factory\ResponseFactory::class);
     }
 
-    /**
-     * @test
-     */
-    public function canReturnResponseInterfaceResult()
+    public function tearDown()
     {
-        $this->container->shouldReceive('call')
-                        ->with($this->route->getCallable(), $this->route->getParameters())
-                        ->andReturn($this->response)
-                        ->once();
-        $strategy = new \Abava\Routing\Strategy\Generic($this->container, $this->factory);
-        $result = $strategy->dispatch($this->route);
-
-        $this->assertSame($this->response, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function canReturnStringableResult()
-    {
-        $this->container->shouldReceive('call')
-                        ->with($this->route->getCallable(), $this->route->getParameters())
-                        ->andReturn(new class
-            {
-                public function __toString()
-                {
-                    return 'string';
-                }
-            })
-                        ->once();
-        // todo check of can be replaced with contract
-        $ventaResponse = Mockery::mock(\Abava\Http\Response::class);
-        $ventaResponse->shouldReceive('append')->with('string')->andReturn($ventaResponse)->once();
-        $this->factory->shouldReceive('new')->withNoArgs()->andReturn($ventaResponse);
-        $this->factory->shouldReceive('createResponse')->withNoArgs()->andReturn($ventaResponse);
-        $strategy = new \Abava\Routing\Strategy\Generic($this->container, $this->factory);
-        $result = $strategy->dispatch($this->route);
-
-        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $result);
+        Mockery::close();
     }
 
     /**
@@ -87,6 +54,47 @@ class GenericStrategyTest extends TestCase
     /**
      * @test
      */
+    public function canReturnResponseInterfaceResult()
+    {
+        $this->container->shouldReceive('call')
+                        ->with($this->route->getCallable(), $this->route->getParameters())
+                        ->andReturn($this->response)
+                        ->once();
+        $strategy = new \Abava\Routing\Strategy\Generic($this->container, $this->factory);
+        $result = $strategy->dispatch($this->route);
+
+        $this->assertSame($this->response, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function canReturnStringableResult()
+    {
+        $this->container->shouldReceive('call')
+                        ->with($this->route->getCallable(), $this->route->getParameters())
+                        ->andReturn(new class
+                        {
+                            public function __toString()
+                            {
+                                return 'string';
+                            }
+                        })
+                        ->once();
+        // todo check of can be replaced with contract
+        $ventaResponse = Mockery::mock(\Abava\Http\Response::class);
+        $ventaResponse->shouldReceive('append')->with('string')->andReturn($ventaResponse)->once();
+        $this->factory->shouldReceive('new')->withNoArgs()->andReturn($ventaResponse);
+        $this->factory->shouldReceive('createResponse')->withNoArgs()->andReturn($ventaResponse);
+        $strategy = new \Abava\Routing\Strategy\Generic($this->container, $this->factory);
+        $result = $strategy->dispatch($this->route);
+
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $result);
+    }
+
+    /**
+     * @test
+     */
     public function throwsExceptionOnInvalidCallerResult()
     {
         $this->expectException(RuntimeException::class);
@@ -98,11 +106,6 @@ class GenericStrategyTest extends TestCase
                         ->once();
         $strategy = new \Abava\Routing\Strategy\Generic($this->container, $this->factory);
         $result = $strategy->dispatch($this->route);
-    }
-
-    public function tearDown()
-    {
-        Mockery::close();
     }
 
 }

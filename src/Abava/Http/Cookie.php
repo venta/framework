@@ -9,29 +9,30 @@ namespace Abava\Http;
  */
 class Cookie implements Contract\Cookie
 {
-    protected $name;
-    protected $value;
-    protected $expire;
-    protected $path;
     protected $domain;
-    protected $secure;
+
+    protected $expire;
+
     protected $httpOnly;
 
-    public function asPlainText()
-    {
-        return $this->__toString();
-    }
+    protected $name;
+
+    protected $path;
+
+    protected $secure;
+
+    protected $value;
 
     /**
      * Cookie constructor.
      *
      * @param        $name
-     * @param null   $value
-     * @param int    $expire
+     * @param null $value
+     * @param int $expire
      * @param string $path
-     * @param null   $domain
-     * @param bool   $secure
-     * @param bool   $httpOnly
+     * @param null $domain
+     * @param bool $secure
+     * @param bool $httpOnly
      */
     public function __construct(
         $name,
@@ -70,6 +71,82 @@ class Cookie implements Contract\Cookie
         $this->httpOnly = (bool)$httpOnly;
     }
 
+    public static function createFromString(string $cookie)
+    {
+        $cookie = str_replace(' ', '', $cookie);
+        $pattern =
+            '/^(\w+)=(\w+);(?:expires=([^\s|\;]+);)?(?:path=([^\s|\;]+);)?(?:domain=([^\s|\;]+);)?(?:(secure);)?(httponly)?/';
+        preg_match($pattern, $cookie, $result);
+        array_shift($result);
+        $reflected = new \ReflectionClass(self::class);
+
+        return $reflected->newInstanceArgs($result);
+    }
+
+    /**
+     * @param $string
+     * @return int timestamp
+     */
+    public static function inDateInterval(string $string)
+    {
+        return (new \DateTime('now'))->add(new \DateInterval($string))->getTimestamp();
+    }
+
+    /**
+     * @param $days
+     * @return int timestamp
+     */
+    public static function inDays($days)
+    {
+        return (new \DateTime('now'))->add(new \DateInterval('P' . $days . 'D'))->getTimestamp();
+    }
+
+    /**
+     * @param $hours
+     * @return int timestamp
+     */
+    public static function inHours($hours)
+    {
+        return (new \DateTime('now'))->add(new \DateInterval('PT' . $hours . 'H'))->getTimestamp();
+    }
+
+    /**
+     * @param $minutes
+     * @return int timestamp
+     */
+    public static function inMinutes($minutes)
+    {
+        return (new \DateTime('now'))->add(new \DateInterval('PT' . $minutes . 'M'))->getTimestamp();
+    }
+
+    /**
+     * @param $months
+     * @return int timestamp
+     */
+    public static function inMonths($months)
+    {
+        return (new \DateTime('now'))->add(new \DateInterval('P' . $months . 'M'))->getTimestamp();
+    }
+
+    /**
+     * @param $days
+     * @return int timestamp
+     */
+    public static function inWeeks($days)
+    {
+        $weeks = $days * 7;
+
+        return (new \DateTime('now'))->add(new \DateInterval('P' . $weeks . 'D'))->getTimestamp();
+    }
+
+    /**
+     * @return int timestamp
+     */
+    public static function outdated()
+    {
+        return (new \DateTime('now'))->sub(new \DateInterval('P12M'))->getTimestamp();
+    }
+
     /**
      * @return string
      */
@@ -106,84 +183,9 @@ class Cookie implements Contract\Cookie
         return (string)$str;
     }
 
-    /**
-     * @param $minutes
-     * @return int timestamp
-     */
-    public static function inMinutes($minutes)
+    public function asPlainText()
     {
-        return (new \DateTime('now'))->add(new \DateInterval('PT' . $minutes . 'M'))->getTimestamp();
-    }
-
-    /**
-     * @param $hours
-     * @return int timestamp
-     */
-    public static function inHours($hours)
-    {
-        return (new \DateTime('now'))->add(new \DateInterval('PT' . $hours . 'H'))->getTimestamp();
-    }
-
-    /**
-     * @param $days
-     * @return int timestamp
-     */
-    public static function inDays($days)
-    {
-        return (new \DateTime('now'))->add(new \DateInterval('P' . $days . 'D'))->getTimestamp();
-    }
-
-    /**
-     * @param $days
-     * @return int timestamp
-     */
-    public static function inWeeks($days)
-    {
-        $weeks = $days * 7;
-
-        return (new \DateTime('now'))->add(new \DateInterval('P' . $weeks . 'D'))->getTimestamp();
-    }
-
-    /**
-     * @param $months
-     * @return int timestamp
-     */
-    public static function inMonths($months)
-    {
-        return (new \DateTime('now'))->add(new \DateInterval('P' . $months . 'M'))->getTimestamp();
-    }
-
-    /**
-     * @param $string
-     * @return int timestamp
-     */
-    public static function inDateInterval(string $string)
-    {
-        return (new \DateTime('now'))->add(new \DateInterval($string))->getTimestamp();
-    }
-
-    /**
-     * @return int timestamp
-     */
-    public static function outdated()
-    {
-        return (new \DateTime('now'))->sub(new \DateInterval('P12M'))->getTimestamp();
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getValue()
-    {
-        return $this->value;
+        return $this->__toString();
     }
 
     /**
@@ -203,11 +205,19 @@ class Cookie implements Contract\Cookie
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isSecure()
+    public function getName()
     {
-        return $this->secure;
+        return $this->name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 
     /**
@@ -218,14 +228,11 @@ class Cookie implements Contract\Cookie
         return $this->httpOnly;
     }
 
-    public static function createFromString(string $cookie)
+    /**
+     * @return bool
+     */
+    public function isSecure()
     {
-        $cookie = str_replace(' ', '', $cookie);
-        $pattern = '/^(\w+)=(\w+);(?:expires=([^\s|\;]+);)?(?:path=([^\s|\;]+);)?(?:domain=([^\s|\;]+);)?(?:(secure);)?(httponly)?/';
-        preg_match($pattern, $cookie, $result);
-        array_shift($result);
-        $reflected = new \ReflectionClass(self::class);
-
-        return $reflected->newInstanceArgs($result);
+        return $this->secure;
     }
 }

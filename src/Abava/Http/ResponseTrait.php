@@ -25,9 +25,10 @@ trait ResponseTrait
 
         return $this;
     }
-    
+
     /**
      * Returns body as a string
+     *
      * @return string
      */
     public function getContent()

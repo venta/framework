@@ -15,16 +15,16 @@ class Collector implements CollectorContract
 {
 
     /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
      * Commands holder
      *
      * @var Command[]
      */
     protected $commands = [];
+
+    /**
+     * @var Container
+     */
+    protected $container;
 
     public function __construct(Container $container)
     {

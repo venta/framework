@@ -24,7 +24,7 @@ interface Collector extends DataGenerator
 
     /**
      * Filters route collection to fit provided request
-     * 
+     *
      * @param RequestInterface $request
      * @return array
      */

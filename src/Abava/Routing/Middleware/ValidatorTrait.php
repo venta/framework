@@ -18,9 +18,9 @@ trait ValidatorTrait
      */
     public function isValidMiddleware($middleware): bool
     {
-        return is_string($middleware) && is_subclass_of($middleware, Middleware::class) ||
-               $middleware instanceof Middleware ||
-               is_callable($middleware);
+        return is_string($middleware) && is_subclass_of($middleware, Middleware::class)
+               || $middleware instanceof Middleware
+               || is_callable($middleware);
     }
 
 }

@@ -17,25 +17,7 @@ interface Request extends ServerRequestInterface
      * {@inheritdoc}
      * @return Request
      */
-    public function withCookieParams(array $cookies);
-
-    /**
-     * {@inheritdoc}
-     * @return Request
-     */
-    public function withQueryParams(array $query);
-
-    /**
-     * {@inheritdoc}
-     * @return Request
-     */
-    public function withUploadedFiles(array $uploadedFiles);
-
-    /**
-     * {@inheritdoc}
-     * @return Request
-     */
-    public function withParsedBody($data);
+    public function withAddedHeader($name, $value);
 
     /**
      * {@inheritdoc}
@@ -47,31 +29,13 @@ interface Request extends ServerRequestInterface
      * {@inheritdoc}
      * @return Request
      */
-    public function withoutAttribute($name);
+    public function withBody(StreamInterface $body);
 
     /**
      * {@inheritdoc}
      * @return Request
      */
-    public function withRequestTarget($requestTarget);
-
-    /**
-     * {@inheritdoc}
-     * @return Request
-     */
-    public function withMethod($method);
-
-    /**
-     * {@inheritdoc}
-     * @return Request
-     */
-    public function withUri(UriInterface $uri, $preserveHost = false);
-
-    /**
-     * {@inheritdoc}
-     * @return Request
-     */
-    public function withProtocolVersion($version);
+    public function withCookieParams(array $cookies);
 
     /**
      * {@inheritdoc}
@@ -83,18 +47,54 @@ interface Request extends ServerRequestInterface
      * {@inheritdoc}
      * @return Request
      */
-    public function withAddedHeader($name, $value);
+    public function withMethod($method);
+
+    /**
+     * {@inheritdoc}
+     * @return Request
+     */
+    public function withParsedBody($data);
+
+    /**
+     * {@inheritdoc}
+     * @return Request
+     */
+    public function withProtocolVersion($version);
+
+    /**
+     * {@inheritdoc}
+     * @return Request
+     */
+    public function withQueryParams(array $query);
+
+    /**
+     * {@inheritdoc}
+     * @return Request
+     */
+    public function withRequestTarget($requestTarget);
+
+    /**
+     * {@inheritdoc}
+     * @return Request
+     */
+    public function withUploadedFiles(array $uploadedFiles);
+
+    /**
+     * {@inheritdoc}
+     * @return Request
+     */
+    public function withUri(UriInterface $uri, $preserveHost = false);
+
+    /**
+     * {@inheritdoc}
+     * @return Request
+     */
+    public function withoutAttribute($name);
 
     /**
      * {@inheritdoc}
      * @return Request
      */
     public function withoutHeader($name);
-
-    /**
-     * {@inheritdoc}
-     * @return Request
-     */
-    public function withBody(StreamInterface $body);
 
 }

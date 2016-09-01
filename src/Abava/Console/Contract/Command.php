@@ -13,13 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 interface Command
 {
     /**
-     * Should return string with command signature
-     *
-     * @return string
-     */
-    public function signature(): string;
-
-    /**
      * Returns command description text
      *
      * @return string
@@ -34,5 +27,12 @@ interface Command
      * @return null|int
      */
     public function handle(InputInterface $input, OutputInterface $output);
+
+    /**
+     * Should return string with command signature
+     *
+     * @return string
+     */
+    public function signature(): string;
 
 }

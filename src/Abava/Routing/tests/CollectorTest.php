@@ -8,13 +8,22 @@ use PHPUnit\Framework\TestCase;
 class CollectorTest extends TestCase
 {
 
-    protected $routeParser;
     protected $dataGenerator;
+
+    protected $routeParser;
 
     public function setUp()
     {
         $this->routeParser = Mockery::mock(\FastRoute\RouteParser::class);
         $this->dataGenerator = Mockery::mock(\FastRoute\DataGenerator::class);
+    }
+
+    /**
+     * @test
+     */
+    public function tearDown()
+    {
+        Mockery::close();
     }
 
     /**
@@ -49,29 +58,15 @@ class CollectorTest extends TestCase
     /**
      * @test
      */
-    public function canGroup()
+    public function canGenerateUrl()
     {
+        $route = Mockery::mock(\Abava\Routing\Route::class);
+        $route->shouldReceive('getName')->withNoArgs()->andReturn('route');
+        $route->shouldReceive('url')->with(['param' => 'value'])->andReturn('/url/value')->once();
         $collector = new \Abava\Routing\Collector($this->routeParser, $this->dataGenerator);
-        $route = new \Abava\Routing\Route(['GET'], 'url', 'handle');
-        $collector->group('prefix', function (\Abava\Routing\Contract\Group $collector) use ($route) {
-            // host and scheme must be set before ->group() call
-            // to affect routes inside new group
-            $collector->setHost('localhost');
-
-            // test group creation inside group
-            $collector->group('more', function (\Abava\Routing\Contract\Group $c) use ($route) {
-                $c->setScheme('https');
-
-                // route must have scheme from this group
-                // and host from the outer one
-                $c->add($route);
-            });
-        });
-        $this->assertCount(1, $collector->getRoutes());
-        $r = $collector->getRoutes()[0];
-        $this->assertSame('/prefix/more/url', $r->getPath());
-        $this->assertSame('https', $r->getScheme());
-        $this->assertSame('localhost', $r->getHost());
+        $collector->add($route);
+        $url = $collector->url('route', ['param' => 'value']);
+        $this->assertSame('/url/value', $url);
     }
 
     /**
@@ -107,8 +102,8 @@ class CollectorTest extends TestCase
         $this->routeParser->shouldReceive('parse')->with('/abc')->andReturn(['route data'])->once();
         $this->routeParser->shouldReceive('parse')->with('/def')->andReturn(['route data'])->once();
         $this->dataGenerator->shouldReceive('addRoute')
-            ->with('GET', 'route data', Mockery::type(\Abava\Routing\Route::class))
-            ->twice();
+                            ->with('GET', 'route data', Mockery::type(\Abava\Routing\Route::class))
+                            ->twice();
         $this->dataGenerator->shouldReceive('getData')->withNoArgs()->andReturn(['parsed data']);
         $request = Mockery::mock(\Psr\Http\Message\RequestInterface::class);
         $uri = Mockery::mock(\Psr\Http\Message\UriInterface::class);
@@ -122,15 +117,29 @@ class CollectorTest extends TestCase
     /**
      * @test
      */
-    public function canGenerateUrl()
+    public function canGroup()
     {
-        $route = Mockery::mock(\Abava\Routing\Route::class);
-        $route->shouldReceive('getName')->withNoArgs()->andReturn('route');
-        $route->shouldReceive('url')->with(['param' => 'value'])->andReturn('/url/value')->once();
         $collector = new \Abava\Routing\Collector($this->routeParser, $this->dataGenerator);
-        $collector->add($route);
-        $url = $collector->url('route', ['param' => 'value']);
-        $this->assertSame('/url/value', $url);
+        $route = new \Abava\Routing\Route(['GET'], 'url', 'handle');
+        $collector->group('prefix', function (\Abava\Routing\Contract\Group $collector) use ($route) {
+            // host and scheme must be set before ->group() call
+            // to affect routes inside new group
+            $collector->setHost('localhost');
+
+            // test group creation inside group
+            $collector->group('more', function (\Abava\Routing\Contract\Group $c) use ($route) {
+                $c->setScheme('https');
+
+                // route must have scheme from this group
+                // and host from the outer one
+                $c->add($route);
+            });
+        });
+        $this->assertCount(1, $collector->getRoutes());
+        $r = $collector->getRoutes()[0];
+        $this->assertSame('/prefix/more/url', $r->getPath());
+        $this->assertSame('https', $r->getScheme());
+        $this->assertSame('localhost', $r->getHost());
     }
 
     /**
@@ -142,14 +151,6 @@ class CollectorTest extends TestCase
 
         $collector = new \Abava\Routing\Collector($this->routeParser, $this->dataGenerator);
         $collector->url('non-existing route');
-    }
-
-    /**
-     * @test
-     */
-    public function tearDown()
-    {
-        Mockery::close();
     }
 
 }

@@ -17,16 +17,6 @@ use Zend\Diactoros\ServerRequestFactory;
 class RequestFactory extends ServerRequestFactory implements RequestFactoryContract
 {
     /**
-     * Create a new server request from PHP globals.
-     *
-     * @return RequestContract
-     */
-    public function createServerRequestFromGlobals(): RequestContract
-    {
-        return $this->createFromBase(parent::fromGlobals());
-    }
-
-    /**
      * Create a new server request.
      *
      * @param string $method
@@ -42,6 +32,16 @@ class RequestFactory extends ServerRequestFactory implements RequestFactoryContr
         }
 
         return new Request([], [], $uri, $method);
+    }
+
+    /**
+     * Create a new server request from PHP globals.
+     *
+     * @return RequestContract
+     */
+    public function createServerRequestFromGlobals(): RequestContract
+    {
+        return $this->createFromBase(parent::fromGlobals());
     }
 
     /**

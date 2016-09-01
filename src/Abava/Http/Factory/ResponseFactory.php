@@ -24,9 +24,14 @@ class ResponseFactory implements
     /**
      * {@inheritdoc}
      */
-    public function createResponse($code = 200): ResponseContract
+    public function createJsonResponse(
+        $data,
+        $status = 200,
+        array $headers = [],
+        $encodingOptions = BaseJsonResponse::DEFAULT_JSON_FLAGS
+    ): ResponseContract
     {
-        return (new Response)->withStatus($code);
+        return new JsonResponse($data, $status, $headers, $encodingOptions);
     }
 
     /**
@@ -40,13 +45,8 @@ class ResponseFactory implements
     /**
      * {@inheritdoc}
      */
-    public function createJsonResponse(
-        $data,
-        $status = 200,
-        array $headers = [],
-        $encodingOptions = BaseJsonResponse::DEFAULT_JSON_FLAGS
-    ): ResponseContract
+    public function createResponse($code = 200): ResponseContract
     {
-        return new JsonResponse($data, $status, $headers, $encodingOptions);
+        return (new Response)->withStatus($code);
     }
 }

@@ -9,10 +9,13 @@ use Psr\Http\Message\UriInterface as Uri;
 class MatcherTest extends TestCase
 {
 
-    protected $factory;
-    protected $request;
     protected $collector;
+
     protected $dispatcher;
+
+    protected $factory;
+
+    protected $request;
 
     public function setUp()
     {
@@ -24,9 +27,14 @@ class MatcherTest extends TestCase
         $this->factory->shouldReceive('make')->with(['data'])->andReturn($this->dispatcher)->once();
         $this->request->shouldReceive('getMethod')->withNoArgs()->andReturn('GET')->once();
         $this->request->shouldReceive('getUri')->withNoArgs()
-            ->andReturn(
-                Mockery::mock(Uri::class)->shouldReceive('getPath')->andReturn('/url')->getMock()
-            )->once();
+                      ->andReturn(
+                          Mockery::mock(Uri::class)->shouldReceive('getPath')->andReturn('/url')->getMock()
+                      )->once();
+    }
+
+    public function tearDown()
+    {
+        Mockery::close();
     }
 
     /**
@@ -38,7 +46,7 @@ class MatcherTest extends TestCase
         $match = [
             \FastRoute\Dispatcher::FOUND,
             $route = new \Abava\Routing\Route(['GET'], '/url', 'controller@action'),
-            $params = ['param' => 'value']
+            $params = ['param' => 'value'],
         ];
 
         // Mock dispatch result
@@ -80,11 +88,6 @@ class MatcherTest extends TestCase
         $this->dispatcher->shouldReceive('dispatch')->with('GET', '/url')->andReturn($match)->once();
         $matcher = new \Abava\Routing\Matcher($this->factory);
         $matcher->match($this->request, $this->collector);
-    }
-
-    public function tearDown()
-    {
-        Mockery::close();
     }
 
 }

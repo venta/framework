@@ -7,16 +7,6 @@ class ParserTest extends TestCase
     /**
      * @test
      */
-    public function canReplacePatternMatchers()
-    {
-        $path = '{id:number}';
-        $replaced = \Abava\Routing\Parser::replacePatternMatchers($path);
-        $this->assertEquals('{id:[0-9]+}', $replaced);
-    }
-
-    /**
-     * @test
-     */
     public function canAddPatterMatcher()
     {
         \Abava\Routing\Parser::addPatternMatcher('test', 'abava');
@@ -32,7 +22,17 @@ class ParserTest extends TestCase
     {
         $parser = new \Abava\Routing\Parser();
         $data = $parser->parse('{id:number}');
-        $this->assertSame([[['id','[0-9]+']]], $data);
+        $this->assertSame([[['id', '[0-9]+']]], $data);
+    }
+
+    /**
+     * @test
+     */
+    public function canReplacePatternMatchers()
+    {
+        $path = '{id:number}';
+        $replaced = \Abava\Routing\Parser::replacePatternMatchers($path);
+        $this->assertEquals('{id:[0-9]+}', $replaced);
     }
 
 }

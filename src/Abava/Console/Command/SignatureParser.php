@@ -13,13 +13,6 @@ use Symfony\Component\Console\Input\InputArgument;
 class SignatureParser implements SignatureParserContract
 {
     /**
-     * Full signature string holder
-     *
-     * @var string
-     */
-    protected $signature;
-
-    /**
      * RegExp to match arguments
      * name[]?:description
      *
@@ -35,6 +28,13 @@ class SignatureParser implements SignatureParserContract
     protected $parametersMatcher = '/{(.*?)}/';
 
     /**
+     * Full signature string holder
+     *
+     * @var string
+     */
+    protected $signature;
+
+    /**
      * @throws \Exception
      * {@inheritdoc}
      */
@@ -45,6 +45,37 @@ class SignatureParser implements SignatureParserContract
         return array_merge($this->parseParameters(), [
             'name' => array_shift($signature),
         ]);
+    }
+
+    /**
+     * Defines type of an argument or option based on options
+     *
+     * @param bool $array
+     * @param bool $optional
+     * @return int
+     */
+    protected function defineType($array = false, $optional = false): int
+    {
+        $type = ($optional) ? InputArgument::OPTIONAL : InputArgument::REQUIRED;
+
+        if ($array) {
+            $type = InputArgument::IS_ARRAY | $type;
+        }
+
+        return $type;
+    }
+
+    /**
+     * Returns array of parameters matches
+     *
+     * @return array
+     */
+    protected function getParameters(): array
+    {
+        $matches = [];
+        preg_match_all($this->parametersMatcher, $this->signature, $matches);
+
+        return $matches[1];
     }
 
     /**
@@ -86,36 +117,5 @@ class SignatureParser implements SignatureParserContract
             'arguments' => $arguments,
             'options' => $options,
         ];
-    }
-
-    /**
-     * Returns array of parameters matches
-     *
-     * @return array
-     */
-    protected function getParameters(): array
-    {
-        $matches = [];
-        preg_match_all($this->parametersMatcher, $this->signature, $matches);
-
-        return $matches[1];
-    }
-
-    /**
-     * Defines type of an argument or option based on options
-     *
-     * @param bool $array
-     * @param bool $optional
-     * @return int
-     */
-    protected function defineType($array = false, $optional = false): int
-    {
-        $type = ($optional) ? InputArgument::OPTIONAL : InputArgument::REQUIRED;
-
-        if ($array) {
-            $type = InputArgument::IS_ARRAY | $type;
-        }
-
-        return $type;
     }
 }

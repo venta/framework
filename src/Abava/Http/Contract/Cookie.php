@@ -12,23 +12,10 @@ namespace Abava\Http\Contract;
 Interface Cookie
 {
     /**
-     * Method that transforms Class to a plain text to include it in Response header
-     *
-     * @return mixed
-     */
-    public function asPlainText();
-
-    /**
-     * @param $minutes int
+     * @param $string string DateInterval format
      * @return int timestamp
      */
-    public static function inMinutes($minutes);
-
-    /**
-     * @param $hours int
-     * @return int timestamp
-     */
-    public static function inHours($hours);
+    public static function inDateInterval(string $string);
 
     /**
      * @param $days int
@@ -37,10 +24,16 @@ Interface Cookie
     public static function inDays($days);
 
     /**
-     * @param $weeks int
+     * @param $hours int
      * @return int timestamp
      */
-    public static function inWeeks($weeks);
+    public static function inHours($hours);
+
+    /**
+     * @param $minutes int
+     * @return int timestamp
+     */
+    public static function inMinutes($minutes);
 
     /**
      * @param $months int
@@ -49,10 +42,10 @@ Interface Cookie
     public static function inMonths($months);
 
     /**
-     * @param $string string DateInterval format
+     * @param $weeks int
      * @return int timestamp
      */
-    public static function inDateInterval(string $string);
+    public static function inWeeks($weeks);
 
     /**
      * @return int timestamp older then now();
@@ -60,14 +53,11 @@ Interface Cookie
     public static function outdated();
 
     /**
-     * @return string
+     * Method that transforms Class to a plain text to include it in Response header
+     *
+     * @return mixed
      */
-    public function getName();
-
-    /**
-     * @return string;
-     */
-    public function getValue();
+    public function asPlainText();
 
     /**
      * @return string
@@ -80,12 +70,22 @@ Interface Cookie
     public function getExpireTime();
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isSecure();
+    public function getName();
+
+    /**
+     * @return string;
+     */
+    public function getValue();
 
     /**
      * @return bool
      */
     public function isHttpOnly();
+
+    /**
+     * @return bool
+     */
+    public function isSecure();
 }

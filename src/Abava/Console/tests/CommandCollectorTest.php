@@ -10,6 +10,11 @@ use PHPUnit\Framework\TestCase;
 class CommandCollectorTest extends TestCase
 {
 
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
     /**
      * @test
      */
@@ -36,11 +41,6 @@ class CommandCollectorTest extends TestCase
 
         $collector = new Collector(Mockery::mock(Container::class));
         $collector->addCommand(stdClass::class);
-    }
-
-    public function tearDown()
-    {
-        Mockery::close();
     }
 
 }

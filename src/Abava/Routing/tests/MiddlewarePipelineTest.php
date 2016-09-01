@@ -4,6 +4,11 @@ use PHPUnit\Framework\TestCase;
 
 class MiddlewarePipelineTest extends TestCase
 {
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
     /**
      * @test
      */
@@ -15,6 +20,7 @@ class MiddlewarePipelineTest extends TestCase
             echo '1';
             $response = $next($request);
             echo '1';
+
             return $response;
         };
 
@@ -22,6 +28,7 @@ class MiddlewarePipelineTest extends TestCase
             echo '2';
             $response = $next($request);
             echo '2';
+
             return $response;
         };
 
@@ -44,14 +51,10 @@ class MiddlewarePipelineTest extends TestCase
             Mockery::mock(\Psr\Http\Message\RequestInterface::class),
             function () {
                 echo '3';
+
                 return Mockery::mock(\Psr\Http\Message\ResponseInterface::class);
             }
         );
-    }
-
-    public function tearDown()
-    {
-        Mockery::close();
     }
 
 }
