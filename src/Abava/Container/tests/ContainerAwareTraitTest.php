@@ -1,5 +1,6 @@
 <?php
 
+use Abava\Container\ContainerAwareTrait;
 use Abava\Container\Contract\Container;
 use PHPUnit\Framework\TestCase;
 
@@ -16,8 +17,9 @@ class ContainerAwareTraitTest extends TestCase
      */
     public function canSetContainer()
     {
-        $class = new class {
-            use \Abava\Container\ContainerAwareTrait;
+        $class = new class
+        {
+            use ContainerAwareTrait;
 
             public function getContainer()
             {
