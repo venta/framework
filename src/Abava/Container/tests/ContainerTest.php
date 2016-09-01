@@ -389,6 +389,37 @@ class ContainerTest extends TestCase
 
     /**
      * @test
+     * @expectedException \Abava\Container\Exception\CircularReferenceException
+     */
+    public function checksDirectCircularDependency()
+    {
+        $container = new Abava\Container\Container;
+        $container->get(D::class);
+    }
+
+    /**
+     * @test
+     * @expectedException \Abava\Container\Exception\CircularReferenceException
+     */
+    public function checksIndirectCircularDependency()
+    {
+        $container = new Abava\Container\Container;
+        $container->get(A::class);
+    }
+
+    /**
+     * @test
+     * @expectedException \Abava\Container\Exception\CircularReferenceException
+     */
+    public function checksInflectionCircularDependency()
+    {
+        $container = new Abava\Container\Container;
+        $container->inflect(E::class, 'setDependency');
+        $container->get(E::class);
+    }
+
+    /**
+     * @test
      */
     public function isSingleton()
     {
@@ -476,36 +507,5 @@ class ContainerTest extends TestCase
     {
         $container = new Abava\Container\Container;
         $container->get(TestClassContract::class);
-    }
-
-    /**
-     * @test
-     * @expectedException \Abava\Container\Exception\CircularReferenceException
-     */
-    public function checksDirectCircularDependency()
-    {
-        $container = new Abava\Container\Container;
-        $container->get(D::class);
-    }
-
-    /**
-     * @test
-     * @expectedException \Abava\Container\Exception\CircularReferenceException
-     */
-    public function checksIndirectCircularDependency()
-    {
-        $container = new Abava\Container\Container;
-        $container->get(A::class);
-    }
-
-    /**
-     * @test
-     * @expectedException \Abava\Container\Exception\CircularReferenceException
-     */
-    public function checksInflectionCircularDependency()
-    {
-        $container = new Abava\Container\Container;
-        $container->inflect(E::class, 'setDependency');
-        $container->get(E::class);
     }
 }
