@@ -2,8 +2,6 @@
 
 namespace Venta\Contract\ExtensionProvider;
 
-use Venta\Contract\Application;
-
 /**
  * Interface Terminate
  *

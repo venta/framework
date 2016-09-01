@@ -18,6 +18,11 @@ use Venta\Contract\Kernel;
  */
 class HttpApplicationTest extends TestCase
 {
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
     /**
      * @test
      */
@@ -65,8 +70,8 @@ class HttpApplicationTest extends TestCase
         $middlewareCollector->shouldReceive('pushMiddleware')->with('name', 'middleware')->once();
         $strategy->shouldReceive('dispatch')->with($route)->andReturn($response)->once();
         $pipeline->shouldReceive('handle')
-            ->with($request, Mockery::type(Closure::class)
-            )->andReturnUsing(function($request, $last){
+                 ->with($request, Mockery::type(Closure::class)
+                 )->andReturnUsing(function ($request, $last) {
                 return $last($request);
             })->once();
         $emitter->shouldReceive('emit')->with($response)->once();
@@ -75,11 +80,6 @@ class HttpApplicationTest extends TestCase
         // Create and run application
         $app = new \Venta\Application\HttpApplication($kernel);
         $app->run();
-    }
-
-    public function tearDown()
-    {
-        Mockery::close();
     }
 
 }

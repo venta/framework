@@ -54,14 +54,6 @@ class RouteMatch extends Command
     /**
      * @inheritDoc
      */
-    public function signature(): string
-    {
-        return 'route:match {path:Uri path to match against} {--method=GET:Specify method} {--host=:Specify host} {--scheme=:Specify scheme}';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function description(): string
     {
         return 'Matches provided path against application routes';
@@ -99,6 +91,14 @@ class RouteMatch extends Command
         } catch (NotAllowedException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function signature(): string
+    {
+        return 'route:match {path:Uri path to match against} {--method=GET:Specify method} {--host=:Specify host} {--scheme=:Specify scheme}';
     }
 
 

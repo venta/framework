@@ -9,6 +9,7 @@ use Whoops\Handler\Handler;
 
 /**
  * Class ErrorHandlerLogger
+ *
  * @package Venta\ErrorHandler
  */
 class ErrorHandlerLogger extends Handler
@@ -44,6 +45,7 @@ class ErrorHandlerLogger extends Handler
             $e->getMessage(),
             ['exception' => $e]
         );
+
         return self::DONE;
     }
 

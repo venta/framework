@@ -31,6 +31,21 @@ class VentaExtensionProviderTest extends TestCase
     /**
      * @test
      */
+    public function canAddCommandsToCollector()
+    {
+        $collector = Mockery::mock(CommandCollectorContract::class);
+        $collector->shouldReceive('addCommand')->with(Routes::class)->once();
+        $collector->shouldReceive('addCommand')->with(RouteMatch::class)->once();
+        $collector->shouldReceive('addCommand')->with(Middlewares::class)->once();
+        $collector->shouldReceive('addCommand')->with(Shell::class)->once();
+
+        $provider = new VentaExtensionProvider();
+        $provider->commands($collector);
+    }
+
+    /**
+     * @test
+     */
     public function canSetContainerBindings()
     {
         $container = new Container();
@@ -49,21 +64,6 @@ class VentaExtensionProviderTest extends TestCase
         $this->assertTrue($container->has(RoutingCollectorContract::class));
         $this->assertTrue($container->has(MiddlewareCollectorContract::class));
         $this->assertTrue($container->has(CommandCollectorContract::class));
-    }
-
-    /**
-     * @test
-     */
-    public function canAddCommandsToCollector()
-    {
-        $collector = Mockery::mock(CommandCollectorContract::class);
-        $collector->shouldReceive('addCommand')->with(Routes::class)->once();
-        $collector->shouldReceive('addCommand')->with(RouteMatch::class)->once();
-        $collector->shouldReceive('addCommand')->with(Middlewares::class)->once();
-        $collector->shouldReceive('addCommand')->with(Shell::class)->once();
-
-        $provider = new VentaExtensionProvider();
-        $provider->commands($collector);
     }
 
 }

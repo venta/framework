@@ -18,6 +18,11 @@ use Whoops\RunInterface;
 class ConsoleApplicationTest extends TestCase
 {
 
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
     /**
      * @test
      */
@@ -31,53 +36,6 @@ class ConsoleApplicationTest extends TestCase
 
         $this->assertSame('Venta', $app->getName());
         $this->assertSame('test', $app->getVersion());
-    }
-
-    /**
-     * @test
-     */
-    public function canRunApplication()
-    {
-        // Creating mock stubs
-        $kernel = Mockery::mock(Kernel::class);
-        $container = Mockery::mock(Container::class);
-        $collector = Mockery::mock(Collector::class);
-
-        // Creating input and output for test environment
-        $input = new ArrayInput([]);
-        $output = new NullOutput();
-
-        // Mocking stub method calls
-        $kernel->shouldReceive('boot')->withNoArgs()->andReturn($container)->once();
-        $kernel->shouldReceive('getVersion')->withNoArgs()->andReturn('test')->once();
-        $container->shouldReceive('set')->with(InputInterface::class, $input)->once();
-        $container->shouldReceive('set')->with(OutputInterface::class, $output)->once();
-        $container->shouldReceive('get')->with(Collector::class)->andReturn($collector)->once();
-        $container->shouldReceive('get')->with(InputInterface::class)->andReturn($input)->once();
-        $container->shouldReceive('get')->with(OutputInterface::class)->andReturn($output)->once();
-        $collector->shouldReceive('getCommands')->withNoArgs()->andReturn([new class extends Command {
-
-            public function signature(): string
-            {
-                return 'test';
-            }
-
-            public function description(): string
-            {
-                return 'test command';
-            }
-
-            public function handle(InputInterface $input, OutputInterface $output)
-            {
-                // this is faux command that does nothing
-            }
-
-        }])->once();
-
-        // Creating and running application
-        $app = new \Venta\Application\ConsoleApplication($kernel);
-        $app->setAutoExit(false);
-        $app->run($input, $output);
     }
 
     /**
@@ -111,9 +69,54 @@ class ConsoleApplicationTest extends TestCase
         $this->assertContains('Exception message', $output->fetch());
     }
 
-    public function tearDown()
+    /**
+     * @test
+     */
+    public function canRunApplication()
     {
-        Mockery::close();
+        // Creating mock stubs
+        $kernel = Mockery::mock(Kernel::class);
+        $container = Mockery::mock(Container::class);
+        $collector = Mockery::mock(Collector::class);
+
+        // Creating input and output for test environment
+        $input = new ArrayInput([]);
+        $output = new NullOutput();
+
+        // Mocking stub method calls
+        $kernel->shouldReceive('boot')->withNoArgs()->andReturn($container)->once();
+        $kernel->shouldReceive('getVersion')->withNoArgs()->andReturn('test')->once();
+        $container->shouldReceive('set')->with(InputInterface::class, $input)->once();
+        $container->shouldReceive('set')->with(OutputInterface::class, $output)->once();
+        $container->shouldReceive('get')->with(Collector::class)->andReturn($collector)->once();
+        $container->shouldReceive('get')->with(InputInterface::class)->andReturn($input)->once();
+        $container->shouldReceive('get')->with(OutputInterface::class)->andReturn($output)->once();
+        $collector->shouldReceive('getCommands')->withNoArgs()->andReturn([
+            new class extends Command
+            {
+
+                public function signature(): string
+                {
+                    return 'test';
+                }
+
+                public function description(): string
+                {
+                    return 'test command';
+                }
+
+                public function handle(InputInterface $input, OutputInterface $output)
+                {
+                    // this is faux command that does nothing
+                }
+
+            },
+        ])->once();
+
+        // Creating and running application
+        $app = new \Venta\Application\ConsoleApplication($kernel);
+        $app->setAutoExit(false);
+        $app->run($input, $output);
     }
 
 }

@@ -27,18 +27,18 @@ interface Kernel
     public function boot(): Container;
 
     /**
-     * Returns kernel version
-     *
-     * @return string
-     */
-    public function getVersion(): string;
-
-    /**
      * Returns current running environment
      *
      * @return string
      */
     public function getEnvironment(): string;
+
+    /**
+     * Returns kernel version
+     *
+     * @return string
+     */
+    public function getVersion(): string;
 
     /**
      * If running in cli

@@ -14,6 +14,7 @@ interface Errors
 
     /**
      * Add error handler to handle exceptions
+     *
      * @see Whoops\Handler\HandlerInterface
      *
      * @param RunInterface $run

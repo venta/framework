@@ -19,60 +19,9 @@ use Venta\Contract\Kernel;
 class KernelTest extends TestCase
 {
 
-    /**
-     * @test
-     */
-    public function canCreateNewInstance()
+    public function tearDown()
     {
-        $container = Mockery::mock(Container::class);
-        $container->shouldReceive('share')->with(Container::class, $container, ['container'])->once();
-        $container->shouldReceive('share')->with(Kernel::class, Mockery::on(function ($arg) {
-            return $arg instanceof Kernel;
-        }), ['kernel'])->once();
-
-        $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
-
-        $this->assertInstanceOf(Kernel::class, $kernel);
-    }
-
-    /**
-     * @test
-     */
-    public function canGetVersion()
-    {
-        $container = Mockery::mock(Container::class);
-        $container->shouldReceive('share');
-
-        $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
-
-        $this->assertTrue(is_string($kernel->getVersion()));
-    }
-
-    /**
-     * @test
-     */
-    public function canGetEnvironment()
-    {
-        $container = Mockery::mock(Container::class);
-        $container->shouldReceive('share');
-
-        $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
-
-        $this->assertSame('test', $kernel->getEnvironment());
-    }
-
-    /**
-     * @test
-     */
-    public function canDetectIsCli()
-    {
-        $container = Mockery::mock(Container::class);
-        $container->shouldReceive('share');
-
-        $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
-
-        // Assuming nobody will run unit-tests from non-cli environment
-        $this->assertTrue($kernel->isCli());
+        Mockery::close();
     }
 
     /**
@@ -116,6 +65,62 @@ class KernelTest extends TestCase
 
     /**
      * @test
+     */
+    public function canCreateNewInstance()
+    {
+        $container = Mockery::mock(Container::class);
+        $container->shouldReceive('share')->with(Container::class, $container, ['container'])->once();
+        $container->shouldReceive('share')->with(Kernel::class, Mockery::on(function ($arg) {
+            return $arg instanceof Kernel;
+        }), ['kernel'])->once();
+
+        $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
+
+        $this->assertInstanceOf(Kernel::class, $kernel);
+    }
+
+    /**
+     * @test
+     */
+    public function canDetectIsCli()
+    {
+        $container = Mockery::mock(Container::class);
+        $container->shouldReceive('share');
+
+        $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
+
+        // Assuming nobody will run unit-tests from non-cli environment
+        $this->assertTrue($kernel->isCli());
+    }
+
+    /**
+     * @test
+     */
+    public function canGetEnvironment()
+    {
+        $container = Mockery::mock(Container::class);
+        $container->shouldReceive('share');
+
+        $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
+
+        $this->assertSame('test', $kernel->getEnvironment());
+    }
+
+    /**
+     * @test
+     */
+    public function canGetVersion()
+    {
+        $container = Mockery::mock(Container::class);
+        $container->shouldReceive('share');
+
+        $kernel = new \Venta\Kernel($container, __DIR__, 'extensions.php');
+
+        $this->assertTrue(is_string($kernel->getVersion()));
+    }
+
+    /**
+     * @test
      * @expectedException RuntimeException
      */
     public function throwsExceptionOnInvalidExtensionFile()
@@ -124,19 +129,6 @@ class KernelTest extends TestCase
         $container->shouldReceive('share');
 
         $kernel = new Venta\Kernel($container, __DIR__, '');
-        $kernel->boot();
-    }
-
-    /**
-     * @test
-     * @expectedException RuntimeException
-     */
-    public function throwsExceptionOnNonExistingExtensionFile()
-    {
-        $container = Mockery::mock(Container::class);
-        $container->shouldReceive('share');
-
-        $kernel = new Venta\Kernel($container, __DIR__, 'some_random_file');
         $kernel->boot();
     }
 
@@ -153,9 +145,17 @@ class KernelTest extends TestCase
         $kernel->boot();
     }
 
-    public function tearDown()
+    /**
+     * @test
+     * @expectedException RuntimeException
+     */
+    public function throwsExceptionOnNonExistingExtensionFile()
     {
-        Mockery::close();
+        $container = Mockery::mock(Container::class);
+        $container->shouldReceive('share');
+
+        $kernel = new Venta\Kernel($container, __DIR__, 'some_random_file');
+        $kernel->boot();
     }
 
 }

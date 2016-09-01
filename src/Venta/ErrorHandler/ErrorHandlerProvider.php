@@ -96,10 +96,12 @@ class ErrorHandlerProvider implements Bindings, Errors, Middlewares
                     $record['extra']['user_agent'] = $request->getHeader('user-agent');
                     $record['extra']['ip'] = $server['REMOTE_ADDR'] ?? null;
                 }
+
                 return $record;
             });
             $handler->setFormatter(new \Monolog\Formatter\LineFormatter());
             $logger->pushHandler($handler);
+
             return $logger;
         }, ['logger', LoggerInterface::class]);
     }

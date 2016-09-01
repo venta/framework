@@ -35,14 +35,6 @@ class Middlewares extends Command
     /**
      * @inheritDoc
      */
-    public function signature(): string
-    {
-        return 'middleware:list';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function description(): string
     {
         return 'Outputs middleware list';
@@ -60,6 +52,14 @@ class Middlewares extends Command
             $table->addRow([++$i, $name, get_class($middleware)]);
         }
         $table->render();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function signature(): string
+    {
+        return 'middleware:list';
     }
 
 }

@@ -22,11 +22,11 @@ class Kernel implements \Venta\Contract\Kernel
 {
 
     /**
-     * Version string holder
+     * DI Container instance
      *
-     * @var string
+     * @var Container
      */
-    protected $version = '0.0.1-hopefully-β-than-M2';
+    protected $container;
 
     /**
      * Array of defined extension providers
@@ -36,13 +36,6 @@ class Kernel implements \Venta\Contract\Kernel
     protected $extensions = [];
 
     /**
-     * Project root absolute path
-     *
-     * @var string
-     */
-    protected $rootPath;
-
-    /**
      * File with array of extension providers
      *
      * @var string
@@ -50,11 +43,18 @@ class Kernel implements \Venta\Contract\Kernel
     protected $extensionsFile;
 
     /**
-     * DI Container instance
+     * Project root absolute path
      *
-     * @var Container
+     * @var string
      */
-    protected $container;
+    protected $rootPath;
+
+    /**
+     * Version string holder
+     *
+     * @var string
+     */
+    protected $version = '0.0.1-hopefully-β-than-M2';
 
     /**
      * Kernel constructor.
@@ -120,17 +120,17 @@ class Kernel implements \Venta\Contract\Kernel
     /**
      * @inheritDoc
      */
-    public function getVersion(): string
+    public function getEnvironment(): string
     {
-        return $this->version;
+        return getenv('APP_ENV') ? getenv('APP_ENV') : 'local';
     }
 
     /**
      * @inheritDoc
      */
-    public function getEnvironment(): string
+    public function getVersion(): string
     {
-        return getenv('APP_ENV') ? getenv('APP_ENV') : 'local';
+        return $this->version;
     }
 
     /**
@@ -150,6 +150,66 @@ class Kernel implements \Venta\Contract\Kernel
     {
         if (!isset($this->extensions[$provider])) {
             $this->extensions[$provider] = new $provider;
+        }
+    }
+
+    /**
+     * Collects extension providers' bindings
+     *
+     * @param Container $container
+     * @return void
+     */
+    protected function collectBindings(Container $container)
+    {
+        foreach ($this->extensions as $provider) {
+            if ($provider instanceof BindingsProvider) {
+                $provider->bindings($container);
+            }
+        }
+    }
+
+    /**
+     * Collects extension providers' commands
+     *
+     * @param CommandCollector $collector
+     * @return void
+     */
+    protected function collectCommands(CommandCollector $collector)
+    {
+        foreach ($this->extensions as $provider) {
+            if ($provider instanceof CommandsProvider) {
+                $provider->commands($collector);
+            }
+        }
+    }
+
+    /**
+     * Collects extension providers' middlewares
+     *
+     * @param MiddlewareCollector $collector
+     * @return void
+     */
+    protected function collectMiddlewares(MiddlewareCollector $collector)
+    {
+        foreach ($this->extensions as $provider) {
+            if ($provider instanceof MiddlewaresProvider) {
+                $provider->middlewares($collector);
+            }
+        }
+    }
+
+    /**
+     * Collects extension providers' routes
+     *
+     * @param RouteCollector $collector
+     * @return void
+     */
+    protected function collectRoutes(RouteCollector $collector)
+    {
+        foreach ($this->extensions as $provider) {
+            if ($provider instanceof RoutesProvider) {
+                $collector->group('/', [$provider, 'routes']);
+            }
         }
     }
 
@@ -179,66 +239,6 @@ class Kernel implements \Venta\Contract\Kernel
 
         foreach ($providers as $provider) {
             $this->addExtensionProvider($provider);
-        }
-    }
-
-    /**
-     * Collects extension providers' bindings
-     *
-     * @param Container $container
-     * @return void
-     */
-    protected function collectBindings(Container $container)
-    {
-        foreach ($this->extensions as $provider) {
-            if ($provider instanceof BindingsProvider) {
-                $provider->bindings($container);
-            }
-        }
-    }
-
-    /**
-     * Collects extension providers' routes
-     *
-     * @param RouteCollector $collector
-     * @return void
-     */
-    protected function collectRoutes(RouteCollector $collector)
-    {
-        foreach ($this->extensions as $provider) {
-            if ($provider instanceof RoutesProvider) {
-                $collector->group('/', [$provider, 'routes']);
-            }
-        }
-    }
-
-    /**
-     * Collects extension providers' middlewares
-     *
-     * @param MiddlewareCollector $collector
-     * @return void
-     */
-    protected function collectMiddlewares(MiddlewareCollector $collector)
-    {
-        foreach ($this->extensions as $provider) {
-            if ($provider instanceof MiddlewaresProvider) {
-                $provider->middlewares($collector);
-            }
-        }
-    }
-
-    /**
-     * Collects extension providers' commands
-     *
-     * @param CommandCollector $collector
-     * @return void
-     */
-    protected function collectCommands(CommandCollector $collector)
-    {
-        foreach ($this->extensions as $provider) {
-            if ($provider instanceof CommandsProvider) {
-                $provider->commands($collector);
-            }
         }
     }
 

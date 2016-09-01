@@ -16,6 +16,13 @@ use Whoops\RunInterface;
 class ErrorHandlerMiddleware implements Middleware
 {
     /**
+     * Response factory to create new Response instance
+     *
+     * @var ResponseFactory
+     */
+    protected $responseFactory;
+
+    /**
      * Whoops error handler instance
      *
      * @see \Whoops\Run
@@ -23,13 +30,6 @@ class ErrorHandlerMiddleware implements Middleware
      * @var RunInterface
      */
     protected $run;
-
-    /**
-     * Response factory to create new Response instance
-     *
-     * @var ResponseFactory
-     */
-    protected $responseFactory;
 
     /**
      * ErrorHandlerMiddleware constructor.
@@ -56,6 +56,7 @@ class ErrorHandlerMiddleware implements Middleware
             $this->run->allowQuit(false);
             $this->run->sendHttpCode(false);
             $this->run->writeToOutput(false);
+
             return $this->responseFactory
                 ->createResponse($e->getCode() >= 400 ? $e->getCode() : 500)
                 ->append($this->run->handleException($e));

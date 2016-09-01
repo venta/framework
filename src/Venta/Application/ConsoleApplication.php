@@ -36,6 +36,27 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
     }
 
     /**
+     * Passes exception to error handler before rendering to output
+     *
+     * @param Exception $e
+     * @param OutputInterface $output
+     * @return void
+     */
+    public function renderException(Exception $e, OutputInterface $output)
+    {
+        if ($this->container->has('error_handler')) {
+            /** @var \Whoops\RunInterface $run */
+            $run = $this->container->get('error_handler');
+            // from now on ConsoleApplication will render exception
+            $run->allowQuit(false);
+            $run->writeToOutput(false);
+            // Ignore the return string, parent call will render exception
+            $run->handleException($e);
+        }
+        parent::renderException($e, $output);
+    }
+
+    /**
      * @inheritDoc
      */
     final public function run(InputInterface $input = null, OutputInterface $output = null)
@@ -84,27 +105,6 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
             $this->container->get(InputInterface::class),
             $this->container->get(OutputInterface::class)
         );
-    }
-
-    /**
-     * Passes exception to error handler before rendering to output
-     *
-     * @param Exception $e
-     * @param OutputInterface $output
-     * @return void
-     */
-    public function renderException(Exception $e, OutputInterface $output)
-    {
-        if ($this->container->has('error_handler')) {
-            /** @var \Whoops\RunInterface $run */
-            $run = $this->container->get('error_handler');
-            // from now on ConsoleApplication will render exception
-            $run->allowQuit(false);
-            $run->writeToOutput(false);
-            // Ignore the return string, parent call will render exception
-            $run->handleException($e);
-        }
-        parent::renderException($e, $output);
     }
 
 }

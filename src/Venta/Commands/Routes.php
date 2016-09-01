@@ -35,14 +35,6 @@ class Routes extends Command
     /**
      * @inheritDoc
      */
-    public function signature(): string
-    {
-        return 'route:list';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function description(): string
     {
         return 'Lists application routes';
@@ -72,6 +64,14 @@ class Routes extends Command
             }
             $table->render();
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function signature(): string
+    {
+        return 'route:list';
     }
 
 }

@@ -13,6 +13,11 @@ use Venta\Commands\Middlewares;
 class MiddlewaresTest extends TestCase
 {
 
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
     /**
      * @test
      */
@@ -29,11 +34,6 @@ class MiddlewaresTest extends TestCase
         $command->handle(new ArrayInput([]), $output = new BufferedOutput());
 
         $this->assertContains('middleware', $output->fetch());
-    }
-
-    public function tearDown()
-    {
-        Mockery::close();
     }
 
 }

@@ -40,5 +40,5 @@ class SampleExtension implements Routes, Middlewares, Bindings, Commands
 }
 
 return [
-    SampleExtension::class
+    SampleExtension::class,
 ];
