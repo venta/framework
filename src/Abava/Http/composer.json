@@ -21,7 +21,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Abava\\Http\\": "/"
+            "Abava\\Http\\": ""
         },
         "exclude-from-classmap": [
             "/tests/"
