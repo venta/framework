@@ -16,7 +16,7 @@ class CircularReferenceException extends ContainerException
      *
      * @var string
      */
-    private $entryId;
+    private $serviceId;
 
     /**
      * List of entries referred to cause a circular reference.
@@ -29,22 +29,22 @@ class CircularReferenceException extends ContainerException
      * CircularReferenceException constructor.
      *
      * @param string $entryId
-     * @param array $resolutionChain
+     * @param array $referenceChain
      * @param Exception|null $previous
      */
-    public function __construct(string $entryId, array $resolutionChain, Exception $previous = null)
+    public function __construct(string $entryId, array $referenceChain, Exception $previous = null)
     {
-        $resolutionChain[] = $entryId;
+        $referenceChain[] = $entryId;
         parent::__construct(
             sprintf('Circular reference detected for "%s", path: "%s".',
-                $entryId, implode(' -> ', $resolutionChain)
+                $entryId, implode(' -> ', $referenceChain)
             ),
             0,
             $previous
         );
 
-        $this->entryId = $entryId;
-        $this->referenceChain = $resolutionChain;
+        $this->serviceId = $entryId;
+        $this->referenceChain = $referenceChain;
     }
 
     /**
@@ -52,9 +52,9 @@ class CircularReferenceException extends ContainerException
      *
      * @return string
      */
-    public function getEntryId(): string
+    public function getServiceId(): string
     {
-        return $this->entryId;
+        return $this->serviceId;
     }
 
     /**

@@ -58,33 +58,6 @@ class ContainerTest extends TestCase
     /**
      * @test
      */
-    public function canApplyInflectionsOnProvidedInstance()
-    {
-        $container = new Abava\Container\Container;
-        $container->inflect(TestClass::class, 'setValue', ['value' => 42]);
-        $test = new TestClass(new stdClass());
-        $container->applyInflections($test);
-
-        $this->assertSame(42, $test->getValue());
-    }
-
-    /**
-     * @test
-     */
-    public function canApplyInflectionsWithResolvedArgs()
-    {
-        $container = new Abava\Container\Container;
-        $container->inflect(SimpleConstructorParametersClass::class, 'setStdClass');
-        $container->set(stdClass::class, new stdClass());
-        $object = new SimpleConstructorParametersClass(new stdClass());
-        $container->applyInflections($object);
-
-        $this->assertSame($container->get(stdClass::class), $object->getItem());
-    }
-
-    /**
-     * @test
-     */
     public function canCallCallableFunctionName()
     {
         $container = new Abava\Container\Container;

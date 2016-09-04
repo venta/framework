@@ -1,0 +1,82 @@
+<?php declare(strict_types = 1);
+
+namespace Abava\Container;
+
+use Abava\Container\Contract\ArgumentResolver as ArgumentResolverContract;
+use Abava\Container\Contract\Container as ContainerContract;
+use Abava\Container\Contract\ContainerAware;
+use Abava\Container\Exception\ContainerException;
+use Closure;
+use ReflectionFunction;
+use ReflectionFunctionAbstract;
+use ReflectionMethod;
+use ReflectionParameter;
+
+/**
+ * Class ResolverTrait
+ *
+ * @package Abava\Container
+ */
+final class ArgumentResolver implements ArgumentResolverContract, ContainerAware
+{
+    use ContainerAwareTrait;
+
+    /**
+     * @var ContainerContract
+     */
+    protected $container;
+
+    /**
+     * ArgumentResolver constructor.
+     *
+     * @param ContainerContract $container
+     */
+    public function __construct(ContainerContract $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function reflectCallable($callable): ReflectionFunctionAbstract
+    {
+        return is_array($callable)
+            ? new ReflectionMethod($callable[0], $callable[1])
+            : new ReflectionFunction($callable);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function resolveArguments(ReflectionFunctionAbstract $function): Closure
+    {
+        return function (array $arguments = []) use ($function) {
+
+            return array_map(function (ReflectionParameter $parameter) use ($arguments, $function) {
+
+                // If passed use argument instead of reflected parameter.
+                $name = $parameter->getName();
+                if (array_key_exists($name, $arguments)) {
+                    return $arguments[$name];
+                }
+
+                // Recursively resolve function arguments.
+                $class = $parameter->getClass();
+                if ($class !== null) {
+                    return $this->container->get($class->getName());
+                }
+
+                // Use argument default value if defined.
+                if ($parameter->isDefaultValueAvailable()) {
+                    return $parameter->getDefaultValue();
+                }
+
+                throw new ContainerException(sprintf(
+                    'Unable to resolve parameter "%s" value for "%s" function (method).', $name, $function->getName()
+                ));
+
+            }, $function->getParameters());
+        };
+    }
+}
