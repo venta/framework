@@ -3,8 +3,10 @@
 namespace Abava\Container;
 
 use Abava\Container\Contract\Container as ContainerContract;
+use Abava\Container\Exception\ArgumentResolveException;
 use Abava\Container\Exception\CircularReferenceException;
 use Abava\Container\Exception\NotFoundException;
+use Abava\Container\Exception\ResolveException;
 use Closure;
 use InvalidArgumentException;
 use ReflectionClass;
@@ -150,11 +152,12 @@ final class Container implements ContainerContract
      */
     public function get($id, array $arguments = [])
     {
+        $originalId = $id;
         $id = $this->normalize($id);
         // We try to resolve alias first to get a real service id.
         $id = $this->aliases[$id] ?? $id;
         if (!$this->isResolvableService($id)) {
-            throw new NotFoundException(sprintf('Unable to resolve service "%s".', $id));
+            throw new NotFoundException($originalId, $this->resolving);
         }
 
         // Look up service in resolved instances first.
@@ -165,7 +168,9 @@ final class Container implements ContainerContract
         // Detect circular references.
         // We mark service as being resolved to detect circular references through out the resolution chain.
         if (isset($this->resolving[$id])) {
-            throw new CircularReferenceException($id, array_keys($this->resolving));
+            throw new CircularReferenceException($originalId, $this->resolving);
+        } else {
+            $this->resolving[$id] = $originalId;
         }
 
         return $this->resolveService($id, $arguments);
@@ -373,6 +378,7 @@ final class Container implements ContainerContract
      */
     private function registerService(string $id, $service)
     {
+        $originalId = $id;
         $id = $this->normalize($id);
 
         if (is_callable($service)) {
@@ -389,10 +395,10 @@ final class Container implements ContainerContract
             $this->instances[$id] = $service;
             $this->shared[$id] = true;
         } else {
-            throw new InvalidArgumentException(sprintf('Invalid service "%s" type.', $id));
+            throw new InvalidArgumentException(sprintf('Invalid service "%s" type.', $originalId));
         }
 
-        $this->keys[$id] = true;
+        $this->keys[$id] = $originalId;
     }
 
     /**
@@ -403,8 +409,6 @@ final class Container implements ContainerContract
      */
     private function resolveService(string $id, array $arguments = [])
     {
-        $this->resolving[$id] = true;
-
         try {
             // Create service factory closure.
             if (!isset($this->factories[$id])) {
@@ -420,14 +424,14 @@ final class Container implements ContainerContract
                 $this->instances[$id] = $object;
             }
 
+            return $object;
+        } catch (ArgumentResolveException $resolveException) {
+            throw new ResolveException($id, $this->resolving, $resolveException);
         } catch (Throwable $e) {
-            unset($this->resolving[$id]);
             throw $e;
+        } finally {
+            unset($this->resolving[$id]);
         }
-
-        unset($this->resolving[$id]);
-
-        return $object;
     }
 
     /**

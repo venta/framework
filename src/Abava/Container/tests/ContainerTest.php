@@ -401,7 +401,7 @@ class ContainerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Interop\Container\Exception\ContainerException
+     * @expectedException \Abava\Container\Exception\ResolveException
      */
     public function throwsContainerExceptionIfCantResolve()
     {

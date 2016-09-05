@@ -5,7 +5,7 @@ namespace Abava\Container;
 use Abava\Container\Contract\ArgumentResolver as ArgumentResolverContract;
 use Abava\Container\Contract\Container as ContainerContract;
 use Abava\Container\Contract\ContainerAware;
-use Abava\Container\Exception\ContainerException;
+use Abava\Container\Exception\ArgumentResolveException;
 use Closure;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;
@@ -72,10 +72,8 @@ final class ArgumentResolver implements ArgumentResolverContract, ContainerAware
                     return $parameter->getDefaultValue();
                 }
 
-                throw new ContainerException(sprintf(
-                    'Unable to resolve parameter "%s" value for "%s" function (method).', $name, $function->getName()
-                ));
-
+                // The argument can't be resolved by this resolver
+                throw new ArgumentResolveException($parameter, $function);
             }, $function->getParameters());
         };
     }
