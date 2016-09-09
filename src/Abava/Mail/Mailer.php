@@ -7,7 +7,7 @@
 namespace Abava\Mail;
 
 use Abava\Config\Contract\Config;
-
+use Abava\Mail\Contract\Mailer as MailerContract;
 /*
  * transport [smtp|mail|sendmail|gmail]
  * username
@@ -29,7 +29,7 @@ use Abava\Config\Contract\Config;
  *
  * @package Abava\Mail
  */
-class Mailer
+class Mailer implements MailerContract
 {
     /**
      * @var $configs Config
@@ -90,7 +90,7 @@ class Mailer
      *
      * @return \Swift_Message
      */
-    public function getMessageBuilder()
+    public function getMessageBuilder(): \Swift_Message
     {
         $messageInstance = \Swift_Message::newInstance();
         $messageInstance->setFrom($this->from)
@@ -113,7 +113,7 @@ class Mailer
      * @param string $transportName
      * @return \Swift_Mailer
      */
-    public function withTransport(string $transportName = '')
+    public function withTransport(string $transportName = ''): \Swift_Mailer
     {
         if ($transportName !== '') {
             $transport = array_key_exists($transportName, $this->transports)
