@@ -8,7 +8,11 @@ namespace Abava\Mail;
 
 use Abava\Config\Contract\Config;
 use Abava\Mail\Contract\Mailer as MailerContract;
+use Abava\Mail\Exception\UnknownTransportException;
+
 /*
+ * Available configuration fields:
+ *
  * transport [smtp|mail|sendmail|gmail]
  * username
  * password
@@ -115,13 +119,7 @@ class Mailer implements MailerContract
      */
     public function withTransport(string $transportName = ''): \Swift_Mailer
     {
-        if ($transportName !== '') {
-            $transport = array_key_exists($transportName, $this->transports)
-                ? $this->transports[$transportName]
-                : $this->transports[$this->defaultTransport];
-        } else {
-            $transport = $this->transports[$this->defaultTransport];
-        }
+        $transport = $this->getTransport($transportName);
 
         return new \Swift_Mailer($transport());
     }
@@ -157,6 +155,28 @@ class Mailer implements MailerContract
     protected function getMailerConfig(Config $config)
     {
         $this->configs = clone $config->get('mailer');
+        $this->to = ($this->configs->get('to') instanceof Config)
+            ? $this->configs->get('to')->toArray()
+            : $this->configs->get('to');
+        $this->from = ($this->configs->get('from') instanceof Config)
+            ? $this->configs->get('from')->toArray()
+            : $this->configs->get('from');
+
+    }
+
+    /**
+     * Returns proper transport closure factory
+     *
+     * @param $transportName
+     * @return \Closure
+     */
+    protected function getTransport($transportName)
+    {
+        if ($transportName === '' || !array_key_exists($transportName, $this->transports)) {
+            return $this->transports[$this->defaultTransport];
+        }
+
+        return $this->transports[$transportName];
     }
 
     /**
@@ -205,7 +225,7 @@ class Mailer implements MailerContract
                 };
                 break;
             default:
-                throw new Exception\TransportException('Unknown transport type');
+                throw new Exception\UnknownTransportException('Unknown transport type');
                 break;
         }
 
@@ -219,27 +239,22 @@ class Mailer implements MailerContract
      */
     protected function registerTransportFactories()
     {
-        if ((bool)$this->configs->get('disable_delivery', false)) {
+        if ($this->configs->get('disable_delivery', false)) {
             $this->defaultTransport = 'null';
             $this->transports['null'] = $this->prepareTransportFactory('null', new \Abava\Config\Config());
-        } else {
-            $this->to = $this->configs->get('to');
-            if ($this->to instanceof Config) {
-                $this->to = $this->to->toArray();
-            }
-            $this->from = $this->configs->get('from');
-            if ($this->from instanceof Config) {
-                $this->from = $this->from->toArray();
-            }
-            foreach ($this->configs as $name => $config) {
-                if ($config instanceof Config && !in_array($name, ['from', 'to'], true)) {
-                    $this->transports[$name] = $this->configureTransport($config);
-                }
-            }
-            $this->defaultTransport = $this->configs->has('default')
-                ? $this->configs->get('default')
-                : key($transports);
+
+            return $this->transports;
         }
+
+        foreach ($this->configs as $name => $config) {
+            if ($config instanceof Config && !in_array($name, ['from', 'to'], true)) {
+                $this->transports[$name] = $this->configureTransport($config);
+            }
+        }
+
+        $this->defaultTransport = $this->configs->has('default')
+            ? $this->configs->get('default')
+            : key($transports);
 
         return $this->transports;
     }
