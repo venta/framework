@@ -8,25 +8,8 @@ namespace Abava\Mail;
 
 use Abava\Config\Contract\Config;
 use Abava\Mail\Contract\Mailer as MailerContract;
+use Abava\Mail\Exception\TransportException;
 use Abava\Mail\Exception\UnknownTransportException;
-
-/*
- * Available configuration fields:
- *
- * transport [smtp|mail|sendmail|gmail]
- * username
- * password
- * host
- * port
- * encryption [tls|ssl]
- * auth_mode[plain|login|cram-md5]
- * spool [?]
- *  * type
- *  * path
- * to
- * from
- * disable_delivery
- */
 
 /**
  * Class Mailer
@@ -104,11 +87,34 @@ class Mailer implements MailerContract
     }
 
     /**
+     * Returns proper transport closure factory
+     *
+     * @param $transportName
+     * @return \Closure
+     */
+    public function getTransport($transportName)
+    {
+        if ($transportName === '' || !array_key_exists($transportName, $this->transports)) {
+            return $this->transports[$this->defaultTransport];
+        }
+
+        return $this->transports[$transportName];
+    }
+
+    /**
      * @return bool
      */
     public function isDisabled() : bool
     {
         return $this->disabled;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isSpoolEnabled()
+    {
+        return $this->configs->has('spool');
     }
 
     /**
@@ -165,21 +171,6 @@ class Mailer implements MailerContract
     }
 
     /**
-     * Returns proper transport closure factory
-     *
-     * @param $transportName
-     * @return \Closure
-     */
-    protected function getTransport($transportName)
-    {
-        if ($transportName === '' || !array_key_exists($transportName, $this->transports)) {
-            return $this->transports[$this->defaultTransport];
-        }
-
-        return $this->transports[$transportName];
-    }
-
-    /**
      * Wrap transport instantiation into closure passing necessary config params
      *
      * @param $transport
@@ -190,7 +181,6 @@ class Mailer implements MailerContract
     protected function prepareTransportFactory($transport, Config $config)
     {
         switch ($transport) {
-            //smtp transport
             case('smtp'):
                 $closure = function () use ($config) {
                     $transportInstance = \Swift_SmtpTransport::newInstance(
@@ -212,13 +202,11 @@ class Mailer implements MailerContract
                     return $transportInstance;
                 };
                 break;
-            //PHP mail() transport
             case('mail'):
                 $closure = function () {
                     return \Swift_MailTransport::newInstance();
                 };
                 break;
-            //Swift_NullTransport
             case('null'):
                 $closure = function () {
                     return \Swift_NullTransport::newInstance();
@@ -256,6 +244,42 @@ class Mailer implements MailerContract
             ? $this->configs->get('default')
             : key($transports);
 
+        if ($this->isSpoolEnabled()) {
+            $this->transports['spool'] = $this->setUpSpoolTransport();
+        }
+
         return $this->transports;
+    }
+
+    /**
+     * @return \Closure|null
+     * @throws UnknownTransportException
+     */
+    protected function setUpSpoolTransport()
+    {
+        $spool = $this->configs->get('spool', false);
+        if ($spool && $spool instanceof Config) {
+            $spoolInstance = null;
+            switch ($spool->get('type')) {
+                case 'memory':
+                    $spoolInstance = new \Swift_MemorySpool();
+                    break;
+                case 'file':
+                    if (!$spool->get('path', false)) {
+                        throw new TransportException('Filesystem spool must provide a path');
+                    }
+                    $spoolInstance = new \Swift_FileSpool($spool->get('path'));
+                    break;
+                default:
+                    throw new UnknownTransportException(sprintf('Unknown spool type "%s".', $spool->get('type')));
+            }
+            if ($spoolInstance !== null) {
+                return function () use ($spoolInstance) {
+                    return new \Swift_SpoolTransport($spoolInstance);
+                };
+            }
+        }
+
+        return null;
     }
 }
