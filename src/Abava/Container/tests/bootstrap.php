@@ -1,6 +1,12 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+if (!class_exists('Composer\Autoload\ClassLoader', false)) {
+    require __DIR__ . '/../vendor/autoload.php';
+}
+
+interface TestClassContract
+{
+}
 
 class SimpleConstructorParametersClass
 {
@@ -52,6 +58,10 @@ class TestClass implements TestClassContract
     }
 }
 
+function createTestClass(stdClass $dependency)
+{
+    return new TestClass($dependency);
+}
 
 class TestClassFactory
 {
@@ -86,11 +96,6 @@ class TestClassFactory
     }
 }
 
-function createTestClass(stdClass $dependency)
-{
-    return new TestClass($dependency);
-}
-
 abstract class StaticTestFactory
 {
 
@@ -100,11 +105,6 @@ abstract class StaticTestFactory
     }
 
 }
-
-interface TestClassContract
-{
-}
-
 
 class A
 {
