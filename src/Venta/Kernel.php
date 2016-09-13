@@ -2,13 +2,20 @@
 
 namespace Venta;
 
-use Abava\Console\Contract\Collector as CommandCollector;
+use Abava\Config\Config;
+use Abava\Config\Contract\Config as ConfigContract;
+use Abava\Config\Contract\Factory;
+use Abava\Console\Command\Collector as CommandCollector;
+use Abava\Console\Contract\Collector as CommandCollectorContract;
 use Abava\Container\Contract\Container;
-use Abava\Routing\Contract\Collector as RouteCollector;
-use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
+use Abava\Routing\Collector as RouteCollector;
+use Abava\Routing\Contract\Collector as RouteCollectorContract;
+use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollectorContract;
+use Abava\Routing\Middleware\Collector as MiddlewareCollector;
 use Dotenv\Dotenv;
 use RuntimeException;
 use Venta\Contract\ExtensionProvider\CommandProvider as CommandsProvider;
+use Venta\Contract\ExtensionProvider\ConfigProvider;
 use Venta\Contract\ExtensionProvider\MiddlewareProvider as MiddlewaresProvider;
 use Venta\Contract\ExtensionProvider\RouteProvider as RoutesProvider;
 use Venta\Contract\ExtensionProvider\ServiceProvider as BindingsProvider;
@@ -94,25 +101,42 @@ class Kernel implements \Venta\Contract\Kernel
         */
         $this->loadExtensionProviders();
 
-        /*
-        * Collect container bindings from extension providers
-        */
-        $this->collectBindings($this->container);
+        // We collect route only on actual access to route collector
+        // This defers iterating through extension providers as much as possible
+        $this->container->share(RouteCollectorContract::class, function () {
+            $collector = $this->container->get(RouteCollector::class);
+            $this->collectRoutes($collector);
 
-        /*
-        * Collect routes from extension providers
-        */
-        $this->collectRoutes($this->container->get(RouteCollector::class));
+            return $collector;
+        });
 
-        /*
-        * Collect middlewares from extension providers
-        */
-        $this->collectMiddlewares($this->container->get(MiddlewareCollector::class));
+        // Collecting middleware in a deferred way
+        $this->container->share(MiddlewareCollectorContract::class, function () {
+            $collector = $this->container->get(MiddlewareCollector::class);
+            $this->collectMiddlewares($collector);
 
-        /*
-        * Collect console commands from extension providers
-        */
-        $this->collectCommands($this->container->get(CommandCollector::class));
+            return $collector;
+        });
+
+        // Collecting console commands in a deferred way
+        $this->container->share(CommandCollectorContract::class, function () {
+            $collector = $this->container->get(CommandCollector::class);
+            $this->collectCommands($collector);
+
+            return $collector;
+        });
+
+        // Collect configs from extension providers on first Config access
+        $this->container->share(ConfigContract::class, function () {
+            $config = $this->collectConfig($this->container->get(Factory::class));
+            // Locking config for further modifications after we merged it with all extension providers
+            $config->lock();
+
+            return $config;
+        }, ['config']);
+
+        // Collect services for DI container from extension providers
+        $this->collectServices($this->container);
 
         return $this->container;
     }
@@ -154,27 +178,12 @@ class Kernel implements \Venta\Contract\Kernel
     }
 
     /**
-     * Collects extension providers' bindings
-     *
-     * @param Container $container
-     * @return void
-     */
-    protected function collectBindings(Container $container)
-    {
-        foreach ($this->extensions as $provider) {
-            if ($provider instanceof BindingsProvider) {
-                $provider->setServices($container);
-            }
-        }
-    }
-
-    /**
      * Collects extension providers' commands
      *
-     * @param CommandCollector $collector
+     * @param CommandCollectorContract $collector
      * @return void
      */
-    protected function collectCommands(CommandCollector $collector)
+    protected function collectCommands(CommandCollectorContract $collector)
     {
         foreach ($this->extensions as $provider) {
             if ($provider instanceof CommandsProvider) {
@@ -184,12 +193,30 @@ class Kernel implements \Venta\Contract\Kernel
     }
 
     /**
+     * Collects and merges config from extension providers
+     *
+     * @param Factory $factory
+     * @return Config
+     */
+    protected function collectConfig(Factory $factory)
+    {
+        $config = $this->container->get(Config::class);
+        foreach ($this->extensions as $provider) {
+            if ($provider instanceof ConfigProvider) {
+                $config = $config->merge($provider->provideConfig($factory));
+            }
+        }
+
+        return $config;
+    }
+
+    /**
      * Collects extension providers' middlewares
      *
-     * @param MiddlewareCollector $collector
+     * @param MiddlewareCollectorContract $collector
      * @return void
      */
-    protected function collectMiddlewares(MiddlewareCollector $collector)
+    protected function collectMiddlewares(MiddlewareCollectorContract $collector)
     {
         foreach ($this->extensions as $provider) {
             if ($provider instanceof MiddlewaresProvider) {
@@ -201,14 +228,28 @@ class Kernel implements \Venta\Contract\Kernel
     /**
      * Collects extension providers' routes
      *
-     * @param RouteCollector $collector
-     * @return void
+     * @param RouteCollectorContract $collector
      */
-    protected function collectRoutes(RouteCollector $collector)
+    protected function collectRoutes(RouteCollectorContract $collector)
     {
         foreach ($this->extensions as $provider) {
             if ($provider instanceof RoutesProvider) {
                 $collector->group('/', [$provider, 'provideRoutes']);
+            }
+        }
+    }
+
+    /**
+     * Collects extension providers' bindings
+     *
+     * @param Container $container
+     * @return void
+     */
+    protected function collectServices(Container $container)
+    {
+        foreach ($this->extensions as $provider) {
+            if ($provider instanceof BindingsProvider) {
+                $provider->setServices($container);
             }
         }
     }
