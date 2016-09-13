@@ -6,10 +6,10 @@ use Abava\Routing\Contract\Collector as RouteCollector;
 use Abava\Routing\Contract\Group;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 use PHPUnit\Framework\TestCase;
-use Venta\Contract\ExtensionProvider\Bindings;
-use Venta\Contract\ExtensionProvider\Commands;
-use Venta\Contract\ExtensionProvider\Middlewares;
-use Venta\Contract\ExtensionProvider\Routes;
+use Venta\Contract\ExtensionProvider\CommandProvider;
+use Venta\Contract\ExtensionProvider\MiddlewareProvider;
+use Venta\Contract\ExtensionProvider\RouteProvider;
+use Venta\Contract\ExtensionProvider\ServiceProvider;
 use Venta\Contract\Kernel;
 
 
@@ -43,10 +43,11 @@ class KernelTest extends TestCase
 
 
         // Mocking Extension Provider with listed interfaces implementation
-        $extension = Mockery::mock(join(', ', [Routes::class, Middlewares::class, Bindings::class, Commands::class]));
-        $extension->shouldReceive('bindings')->with($container)->once();
-        $extension->shouldReceive('middlewares')->with($middlewareCollector)->once();
-        $extension->shouldReceive('commands')->with($commandCollector)->once();
+        $extension = Mockery::mock(join(', ',
+            [RouteProvider::class, MiddlewareProvider::class, ServiceProvider::class, CommandProvider::class]));
+        $extension->shouldReceive('setServices')->with($container)->once();
+        $extension->shouldReceive('provideMiddlewares')->with($middlewareCollector)->once();
+        $extension->shouldReceive('provideCommands')->with($commandCollector)->once();
 
         $kernel = new class($container, __DIR__, 'extensions.php') extends \Venta\Kernel
         {

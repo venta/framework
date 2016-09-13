@@ -5,11 +5,11 @@ namespace Venta\Contract\ExtensionProvider;
 use Abava\Routing\Contract\Group;
 
 /**
- * Interface Routes
+ * Interface RouteProvider
  *
  * @package Venta\Contract\ExtensionProvider
  */
-interface Routes
+interface RouteProvider
 {
 
     /**
@@ -18,6 +18,6 @@ interface Routes
      * @param Group $collector
      * @return void
      */
-    public function routes(Group $collector);
+    public function provideRoutes(Group $collector);
 
 }

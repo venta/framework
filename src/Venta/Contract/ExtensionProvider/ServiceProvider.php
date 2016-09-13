@@ -5,20 +5,20 @@ namespace Venta\Contract\ExtensionProvider;
 use Abava\Container\Contract\Container;
 
 /**
- * Interface Bindings
+ * Interface ServiceProvider
  *
  * @package Venta\Contract\ExtensionProvider
  */
-interface Bindings
+interface ServiceProvider
 {
 
     /**
-     * Set bindings to provided application
-     * or/and save application instance for later use
+     * Set entries to DI container
+     * or/and save container instance for later use
      *
      * @param Container $container
      * @return void
      */
-    public function bindings(Container $container);
+    public function setServices(Container $container);
 
 }

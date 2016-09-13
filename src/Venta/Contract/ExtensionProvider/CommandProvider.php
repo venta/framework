@@ -2,22 +2,22 @@
 
 namespace Venta\Contract\ExtensionProvider;
 
-use Abava\Routing\Contract\Middleware\Collector;
+use Abava\Console\Contract\Collector;
 
 /**
- * Interface Middlewares
+ * Interface CommandProvider
  *
  * @package Venta\Contract\ExtensionProvider
  */
-interface Middlewares
+interface CommandProvider
 {
 
     /**
-     * Add extension middlewares using middleware collector
+     * Add extension console commands
      *
      * @param Collector $collector
      * @return void
      */
-    public function middlewares(Collector $collector);
+    public function provideCommands(Collector $collector);
 
 }

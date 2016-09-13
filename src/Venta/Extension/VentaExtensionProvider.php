@@ -29,15 +29,15 @@ use Venta\Commands\Middlewares;
 use Venta\Commands\RouteMatch;
 use Venta\Commands\Routes;
 use Venta\Commands\Shell;
-use Venta\Contract\ExtensionProvider\Bindings;
-use Venta\Contract\ExtensionProvider\Commands;
+use Venta\Contract\ExtensionProvider\CommandProvider;
+use Venta\Contract\ExtensionProvider\ServiceProvider;
 
 /**
  * Class VentaExtensionProvider
  *
  * @package Venta\Extension
  */
-class VentaExtensionProvider implements Bindings, Commands
+class VentaExtensionProvider implements ServiceProvider, CommandProvider
 {
     /**
      * Interface - implementation map to set to the container
@@ -82,7 +82,17 @@ class VentaExtensionProvider implements Bindings, Commands
     /**
      * @inheritDoc
      */
-    public function bindings(Container $container)
+    public function provideCommands(CommandCollectorContract $collector)
+    {
+        foreach ($this->commands as $command) {
+            $collector->addCommand($command);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setServices(Container $container)
     {
         foreach ($this->bindings as $id => $entry) {
             $container->set($id, $entry);
@@ -90,16 +100,6 @@ class VentaExtensionProvider implements Bindings, Commands
 
         foreach ($this->singletons as $id => $entry) {
             $container->share($id, $entry);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function commands(CommandCollectorContract $collector)
-    {
-        foreach ($this->commands as $command) {
-            $collector->addCommand($command);
         }
     }
 

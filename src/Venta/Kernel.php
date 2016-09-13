@@ -8,10 +8,10 @@ use Abava\Routing\Contract\Collector as RouteCollector;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
 use Dotenv\Dotenv;
 use RuntimeException;
-use Venta\Contract\ExtensionProvider\Bindings as BindingsProvider;
-use Venta\Contract\ExtensionProvider\Commands as CommandsProvider;
-use Venta\Contract\ExtensionProvider\Middlewares as MiddlewaresProvider;
-use Venta\Contract\ExtensionProvider\Routes as RoutesProvider;
+use Venta\Contract\ExtensionProvider\CommandProvider as CommandsProvider;
+use Venta\Contract\ExtensionProvider\MiddlewareProvider as MiddlewaresProvider;
+use Venta\Contract\ExtensionProvider\RouteProvider as RoutesProvider;
+use Venta\Contract\ExtensionProvider\ServiceProvider as BindingsProvider;
 
 /**
  * Class Kernel
@@ -163,7 +163,7 @@ class Kernel implements \Venta\Contract\Kernel
     {
         foreach ($this->extensions as $provider) {
             if ($provider instanceof BindingsProvider) {
-                $provider->bindings($container);
+                $provider->setServices($container);
             }
         }
     }
@@ -178,7 +178,7 @@ class Kernel implements \Venta\Contract\Kernel
     {
         foreach ($this->extensions as $provider) {
             if ($provider instanceof CommandsProvider) {
-                $provider->commands($collector);
+                $provider->provideCommands($collector);
             }
         }
     }
@@ -193,7 +193,7 @@ class Kernel implements \Venta\Contract\Kernel
     {
         foreach ($this->extensions as $provider) {
             if ($provider instanceof MiddlewaresProvider) {
-                $provider->middlewares($collector);
+                $provider->provideMiddlewares($collector);
             }
         }
     }
@@ -208,7 +208,7 @@ class Kernel implements \Venta\Contract\Kernel
     {
         foreach ($this->extensions as $provider) {
             if ($provider instanceof RoutesProvider) {
-                $collector->group('/', [$provider, 'routes']);
+                $collector->group('/', [$provider, 'provideRoutes']);
             }
         }
     }

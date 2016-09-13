@@ -40,7 +40,7 @@ class VentaExtensionProviderTest extends TestCase
         $collector->shouldReceive('addCommand')->with(Shell::class)->once();
 
         $provider = new VentaExtensionProvider();
-        $provider->commands($collector);
+        $provider->provideCommands($collector);
     }
 
     /**
@@ -50,7 +50,7 @@ class VentaExtensionProviderTest extends TestCase
     {
         $container = new Container();
         $provider = new VentaExtensionProvider();
-        $provider->bindings($container);
+        $provider->setServices($container);
 
         $this->assertTrue($container->has(RouteParser::class));
         $this->assertTrue($container->has(DataGenerator::class));

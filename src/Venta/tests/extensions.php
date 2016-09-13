@@ -3,38 +3,38 @@
 use Abava\Container\Contract\Container;
 use Abava\Routing\Contract\Group;
 use Abava\Routing\Contract\Middleware\Collector as MiddlewareCollector;
-use Venta\Contract\ExtensionProvider\Bindings;
-use Venta\Contract\ExtensionProvider\Commands;
-use Venta\Contract\ExtensionProvider\Middlewares;
-use Venta\Contract\ExtensionProvider\Routes;
+use Venta\Contract\ExtensionProvider\CommandProvider;
+use Venta\Contract\ExtensionProvider\MiddlewareProvider;
+use Venta\Contract\ExtensionProvider\RouteProvider;
+use Venta\Contract\ExtensionProvider\ServiceProvider;
 
-class SampleExtension implements Routes, Middlewares, Bindings, Commands
+class SampleExtension implements RouteProvider, MiddlewareProvider, ServiceProvider, CommandProvider
 {
     /**
      * @inheritDoc
      */
-    public function bindings(Container $container)
+    public function provideCommands(\Abava\Console\Contract\Collector $collector)
     {
     }
 
     /**
      * @inheritDoc
      */
-    public function commands(\Abava\Console\Contract\Collector $collector)
+    public function provideMiddlewares(MiddlewareCollector $collector)
     {
     }
 
     /**
      * @inheritDoc
      */
-    public function middlewares(MiddlewareCollector $collector)
+    public function provideRoutes(Group $collector)
     {
     }
 
     /**
      * @inheritDoc
      */
-    public function routes(Group $collector)
+    public function setServices(Container $container)
     {
     }
 }

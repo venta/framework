@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Venta\Contract\ExtensionProvider\{
-    Bindings, Errors, Middlewares
+    Errors, MiddlewareProvider, ServiceProvider
 };
 use Venta\Contract\Kernel;
 use Whoops\Handler\PlainTextHandler;
@@ -21,7 +21,7 @@ use Whoops\RunInterface;
  *
  * @package Venta\ErrorHandler
  */
-class ErrorHandlerProvider implements Bindings, Errors, Middlewares
+class ErrorHandlerProvider implements ServiceProvider, Errors, MiddlewareProvider
 {
 
     /**
@@ -32,12 +32,34 @@ class ErrorHandlerProvider implements Bindings, Errors, Middlewares
     protected $container;
 
     /**
+     * Pushing default error handlers
+     *
+     * @param RunInterface $run
+     * @return void
+     */
+    public function errors(RunInterface $run)
+    {
+        $run->pushHandler($this->container->get(ErrorHandlerLogger::class));
+    }
+
+    /**
+     * Adding error handling middleware
+     *
+     * @param MiddlewareCollector $middlewareCollector
+     * @return void
+     */
+    public function provideMiddlewares(MiddlewareCollector $middlewareCollector)
+    {
+        $middlewareCollector->pushMiddleware('error_handler', ErrorHandlerMiddleware::class);
+    }
+
+    /**
      * Saving Application instance for later use
      *
      * @param Container $container
      * @return void
      */
-    public function bindings(Container $container)
+    public function setServices(Container $container)
     {
         $this->container = $container;
 
@@ -104,28 +126,6 @@ class ErrorHandlerProvider implements Bindings, Errors, Middlewares
 
             return $logger;
         }, ['logger', LoggerInterface::class]);
-    }
-
-    /**
-     * Pushing default error handlers
-     *
-     * @param RunInterface $run
-     * @return void
-     */
-    public function errors(RunInterface $run)
-    {
-        $run->pushHandler($this->container->get(ErrorHandlerLogger::class));
-    }
-
-    /**
-     * Adding error handling middleware
-     *
-     * @param MiddlewareCollector $middlewareCollector
-     * @return void
-     */
-    public function middlewares(MiddlewareCollector $middlewareCollector)
-    {
-        $middlewareCollector->pushMiddleware('error_handler', ErrorHandlerMiddleware::class);
     }
 
 }
