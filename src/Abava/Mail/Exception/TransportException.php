@@ -11,5 +11,4 @@ namespace Abava\Mail\Exception;
 
 class TransportException extends \RuntimeException
 {
-
 }
