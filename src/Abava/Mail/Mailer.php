@@ -140,7 +140,7 @@ class Mailer implements MailerContract
     {
         $spool = $this->spoolTransport;
         if ($spool === null) {
-            throw new TransportException('Spool transport was not defined');
+            throw new TransportException('Mailer spool is not configured');
         }
         $spoolRealTransport = $this->getTransport($transport);
         $this->eventManager->attach(self::SPOOL_SEND_EVENT, 'send.swiftmailer.spooled',
