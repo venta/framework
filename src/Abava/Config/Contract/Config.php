@@ -79,4 +79,9 @@ interface Config extends Countable, ArrayAccess, IteratorAggregate, JsonSerializ
      */
     public function toArray(): array;
 
+    /**
+     * @return string
+     */
+    public function getName(): string;
+
 }

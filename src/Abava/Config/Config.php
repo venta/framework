@@ -29,12 +29,20 @@ final class Config implements ConfigContract
     private $isMutable = true;
 
     /**
+     * Node name
+     *
+     * @var string
+     */
+    private $name;
+
+    /**
      * Config constructor.
      *
      * @param array $data
      */
-    public function __construct(array $data = [])
+    public function __construct(array $data = [], $nodeName = '')
     {
+        $this->name = ($nodeName === '') ? 'root' : $nodeName;
         foreach ($data as $key => $value) {
             $this->set($key, $value);
         }
@@ -237,7 +245,7 @@ final class Config implements ConfigContract
             throw new RuntimeException('Config is locked for modifications.');
         }
         if (is_array($value)) {
-            $value = new self($value);
+            $value = new self($value, $key);
         }
         if (empty($key) || is_int($key)) {
             $this->push($value);
@@ -262,6 +270,14 @@ final class Config implements ConfigContract
         }
 
         return $array;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 
 }

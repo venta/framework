@@ -385,5 +385,20 @@ class ConfigTest extends TestCase
         unset($config['key']);
     }
 
+    /**
+     * @test
+     */
+    public function nameIsAttachedToConfig()
+    {
+        $array = [
+            'key' => 'value',
+            'another' => [
+                'name' => 'qwerty',
+            ],
+        ];
 
+        $config = new Config($array);
+        $this->assertEquals('root', $config->getName());
+        $this->assertEquals('another', $config->get('another')->getName());
+    }
 }
