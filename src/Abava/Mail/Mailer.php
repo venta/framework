@@ -87,6 +87,7 @@ class Mailer implements MailerContract
      */
     public function __construct(Config $config, EventManager $eventManager)
     {
+        die();
         $this->eventManager = $eventManager;
         $this->eventDispatcherAdapter = new EventDispatcherAdapter($eventManager);
         $this->getDefaultConfig($config);
@@ -199,6 +200,9 @@ class Mailer implements MailerContract
      */
     protected function getDefaultConfig(Config $config)
     {
+        if (!$config->has('mailer')){
+            throw new \Exception('Mailer config was not found');
+        }
         $this->configs = clone $config->get('mailer');
         $this->to = ($this->configs->get('to') instanceof Config)
             ? $this->configs->get('to')->toArray()
