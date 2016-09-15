@@ -20,7 +20,7 @@ use Abava\Mail\Exception\UnknownTransportException;
 class Mailer implements MailerContract
 {
 
-    const SPOOL_SEND_EVENT_NAME = 'swiftmailer.spool.send';
+    const SPOOL_SEND_EVENT = 'swiftmailer.spool.send';
 
     /**
      * @var $configs Config
@@ -143,7 +143,7 @@ class Mailer implements MailerContract
             throw new TransportException('Spool transport was not defined');
         }
         $spoolRealTransport = $this->getTransport($transport);
-        $this->eventManager->attach(self::SPOOL_SEND_EVENT_NAME, 'send.swiftmailer.spooled',
+        $this->eventManager->attach(self::SPOOL_SEND_EVENT, 'send.swiftmailer.spooled',
             function () use ($spoolRealTransport, $spool) {
                 $failedRecipients = [];
                 $spool->getSpool()->flushQueue($spoolRealTransport(), $failedRecipients);
@@ -285,7 +285,9 @@ class Mailer implements MailerContract
                 };
                 break;
             default:
-                throw new Exception\UnknownTransportException('Unknown transport type');
+                throw new Exception\UnknownTransportException(
+                    sprintf('Unknown transport type defined in "%s" section', $config->getName())
+                );
                 break;
         }
 
@@ -318,7 +320,7 @@ class Mailer implements MailerContract
         }
 
         if (count($this->transports) === 0) {
-            throw new TransportException('No mail transport defined');
+            throw new TransportException('At least one Mailer transport must be defined');
         }
 
         $this->defaultTransport = $this->configs->has('default', false)
@@ -348,12 +350,17 @@ class Mailer implements MailerContract
                     break;
                 case 'file':
                     if (!$spool->get('path', false)) {
-                        throw new TransportException('Filesystem spool must provide a path');
+                        throw new TransportException('Path must be provided to use File type Spool');
                     }
                     $spoolInstance = new \Swift_FileSpool($spool->get('path'));
                     break;
                 default:
-                    throw new UnknownTransportException(sprintf('Unknown spool type "%s".', $spool->get('type')));
+                    throw new UnknownTransportException(
+                        sprintf('Unknown spool type "%s" defined in "%s" section.',
+                            $spool->get('type'),
+                            $this->configs->getName()
+                        )
+                    );
             }
 
             if ($spoolInstance !== null) {
@@ -374,24 +381,24 @@ class Mailer implements MailerContract
     protected function validateTransportSettings(Config $config)
     {
         if (!$config->has('transport')) {
-            throw new TransportException('Transport was not defined');
+            throw new TransportException(sprintf('Transport was not defined for "%s" section', $config->getName()));
         }
         $transport = $config->get('transport');
         switch ($transport) {
             case('smtp'):
                 if (!$config->has('host')) {
-                    throw new TransportException('Host must be provided for SMTP protocol');
+                    throw new TransportException(
+                        sprintf('Host must be provided to use SMTP protocol in "%s" section', $config->getName())
+                    );
                 }
                 break;
             case('gmail'):
                 if (!$config->has('username') || !$config->has('password')) {
-                    throw new TransportException('Username and password must be provided to use gmail SMTP');
+                    throw new TransportException(
+                        sprintf('Username and password must be provided to use gmail SMTP defined in "%s" section',
+                            $config->getName())
+                    );
                 }
-                break;
-            case('mail'):
-                break;
-            default:
-                throw new UnknownTransportException('Unknown transport type');
                 break;
         }
     }
