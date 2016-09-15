@@ -2,6 +2,8 @@
 
 namespace Venta\Extension;
 
+use Abava\Config\Contract\Factory as ConfigFactoryContract;
+use Abava\Config\Factory as ConfigFactory;
 use Abava\Console\Command\Collector as CommandCollector;
 use Abava\Console\Contract\Collector as CommandCollectorContract;
 use Abava\Container\Contract\Container;
@@ -31,6 +33,8 @@ use Venta\Commands\Routes;
 use Venta\Commands\Shell;
 use Venta\Contract\ExtensionProvider\CommandProvider;
 use Venta\Contract\ExtensionProvider\ServiceProvider;
+use Abava\Event\Contract\EventManager as EventManagerContract;
+use Abava\Event\EventManager;
 
 /**
  * Class VentaExtensionProvider
@@ -77,6 +81,8 @@ class VentaExtensionProvider implements ServiceProvider, CommandProvider
         RoutingCollectorContract::class => RouteCollector::class,
         MiddlewareCollectorContract::class => MiddlewareCollector::class,
         CommandCollectorContract::class => CommandCollector::class,
+        EventManagerContract::class => EventManager::class,
+        ConfigFactoryContract::class => ConfigFactory::class,
     ];
 
     /**
