@@ -87,7 +87,6 @@ class Mailer implements MailerContract
      */
     public function __construct(Config $config, EventManager $eventManager)
     {
-        die();
         $this->eventManager = $eventManager;
         $this->eventDispatcherAdapter = new EventDispatcherAdapter($eventManager);
         $this->getDefaultConfig($config);
