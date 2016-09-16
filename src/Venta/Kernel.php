@@ -283,4 +283,11 @@ class Kernel implements \Venta\Contract\Kernel
         }
     }
 
+    /**
+     * @return string
+     */
+    public function getRootPath()
+    {
+        return $this->rootPath;
+    }
 }
