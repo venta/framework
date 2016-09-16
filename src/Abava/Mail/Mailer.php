@@ -199,7 +199,7 @@ class Mailer implements MailerContract
      */
     protected function getDefaultConfig(Config $config)
     {
-        if (!$config->has('mailer')){
+        if (!$config->has('mailer')) {
             throw new \Exception('Mailer config was not found');
         }
         $this->configs = clone $config->get('mailer');
@@ -220,7 +220,7 @@ class Mailer implements MailerContract
      */
     protected function getTransport($transportName)
     {
-        if ($transportName === '') {
+        if ($transportName === '' || $transportName === 'default') {
             return $this->transports[$this->defaultTransport];
         }
 
