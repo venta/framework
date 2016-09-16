@@ -289,7 +289,9 @@ class Mailer implements MailerContract
                 break;
             default:
                 throw new Exception\UnknownTransportException(
-                    sprintf('Unknown transport type defined in "%s" section', $config->getName())
+                    sprintf('Unknown transport: "%s" defined in "%s" section',
+                        $transport,
+                        $config->getName())
                 );
                 break;
         }
@@ -325,12 +327,7 @@ class Mailer implements MailerContract
         if (count($this->transports) === 0) {
             throw new TransportException('At least one Mailer transport must be defined');
         }
-
-        $this->defaultTransport = $this->configs->has('default', false)
-            ? $this->configs->get('default')
-            : key($this->transports);
-
-
+        $this->defaultTransport = $this->configs->get('default', key($this->transports));
         if ($this->isSpoolEnabled()) {
             $this->spoolTransport = $this->setUpSpoolTransport();
         }

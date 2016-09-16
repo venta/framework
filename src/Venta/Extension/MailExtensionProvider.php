@@ -34,16 +34,13 @@ class MailExtensionProvider implements
     public function provideConfig(FactoryContract $factory): ConfigContract
     {
         $mailConfig = [
-            'some' => 'value',
             'mailer' => [
+                'transport' => 'mail',
                 'spool' => [
                     'type' => 'file',
                     'path' => 'storage/spool',
                 ],
-                'mail' => [
-                    'transport' => 'mail',
-                ],
-            ],
+            ]
         ];
 
         return new Config($mailConfig);
