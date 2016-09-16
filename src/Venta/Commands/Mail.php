@@ -47,6 +47,6 @@ class Mail extends Command
 
     public function signature(): string
     {
-        return 'mailer:send {--transport=default:Specify method}';
+        return 'mailer:send {--transport=default:Specify transport Spool to be sent}';
     }
 }
