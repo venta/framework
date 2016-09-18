@@ -87,9 +87,9 @@ class Mailer implements MailerContract
      */
     public function __construct(Config $config, EventManager $eventManager)
     {
+        $this->getMailerFromGlobalConfig($config);
         $this->eventManager = $eventManager;
         $this->eventDispatcherAdapter = new EventDispatcherAdapter($eventManager);
-        $this->getDefaultConfig($config);
         $this->registerTransports();
     }
 
@@ -143,6 +143,7 @@ class Mailer implements MailerContract
             throw new TransportException('Mailer spool is not configured');
         }
         $spoolRealTransport = $this->getTransport($transport);
+
         $this->eventManager->attach(self::SPOOL_SEND_EVENT, 'send.swiftmailer.spooled',
             function () use ($spoolRealTransport, $spool) {
                 $failedRecipients = [];
@@ -197,7 +198,7 @@ class Mailer implements MailerContract
      *
      * @param Config $config
      */
-    protected function getDefaultConfig(Config $config)
+    protected function getMailerFromGlobalConfig(Config $config)
     {
         if (!$config->has('mailer')) {
             throw new \Exception('Mailer config was not found');
@@ -209,7 +210,6 @@ class Mailer implements MailerContract
         $this->from = ($this->configs->get('from') instanceof Config)
             ? $this->configs->get('from')->toArray()
             : $this->configs->get('from');
-
     }
 
     /**
@@ -307,9 +307,11 @@ class Mailer implements MailerContract
      */
     protected function registerTransports()
     {
-        if ($this->configs->get('disable_delivery', false)) {
+        $deliveryIsDisabled = $this->configs->get('disable_delivery', false);
+        if ($deliveryIsDisabled === true || $deliveryIsDisabled === 'true') {
             $this->defaultTransport = 'null';
             $this->transports['null'] = $this->prepareTransportFactory('null', new \Abava\Config\Config());
+            $this->disabled = true;
 
             return $this->transports;
         }
