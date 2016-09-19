@@ -1,9 +1,5 @@
 <?php declare(strict_types = 1);
-/**
- * Class Mailer
- *
- * @package Abava\Mail
- */
+
 namespace Abava\Mail;
 
 use Abava\Config\Contract\Config;
@@ -11,6 +7,19 @@ use Abava\Event\Contract\EventManager;
 use Abava\Mail\Contract\Mailer as MailerContract;
 use Abava\Mail\Exception\TransportException;
 use Abava\Mail\Exception\UnknownTransportException;
+use Exception;
+use Swift_Events_SimpleEventDispatcher;
+use Swift_Transport_MailTransport;
+use Swift_Message;
+use Swift_Mailer;
+use RuntimeException;
+use Swift_Transport_SpoolTransport;
+use Swift_SmtpTransport;
+use Swift_DependencyContainer;
+use Swift_Transport_SimpleMailInvoker;
+use Swift_Transport_NullTransport;
+use Swift_MemorySpool;
+use Swift_FileSpool;
 
 /**
  * Class Mailer
@@ -35,9 +44,9 @@ class Mailer implements MailerContract
     protected $defaultTransport;
 
     /**
-     * Is sending email disabled in config
+     * Disabled flag
      *
-     * @var $disabled bool
+     * @var bool
      */
     protected $disabled = false;
 
@@ -59,7 +68,7 @@ class Mailer implements MailerContract
     protected $from;
 
     /**
-     * @var \Swift_Transport_SpoolTransport
+     * @var Swift_Transport_SpoolTransport
      */
     protected $spoolTransport;
 
@@ -73,8 +82,7 @@ class Mailer implements MailerContract
     /**
      * Registered transport storage
      *
-     * @throws \Exception
-     * @var $transports array
+     * @var array
      */
     protected $transports = [];
 
@@ -83,7 +91,7 @@ class Mailer implements MailerContract
      *
      * @param Config $config
      * @param EventManager $eventManager
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(Config $config, EventManager $eventManager)
     {
@@ -96,11 +104,11 @@ class Mailer implements MailerContract
     /**
      * Get Swift_Message instance, setting default from if defined/not overwritten
      *
-     * @return \Swift_Message
+     * @return Swift_Message
      */
-    public function getMessageBuilder(): \Swift_Message
+    public function getMessageBuilder(): Swift_Message
     {
-        $messageInstance = \Swift_Message::newInstance();
+        $messageInstance = Swift_Message::newInstance();
         $messageInstance->setFrom($this->from)
                         ->setTo($this->to);
 
@@ -108,7 +116,7 @@ class Mailer implements MailerContract
     }
 
     /**
-     * @return \Swift_Transport_SpoolTransport
+     * @return Swift_Transport_SpoolTransport
      */
     public function getSpoolTransport()
     {
@@ -133,14 +141,14 @@ class Mailer implements MailerContract
 
     /**
      * @param string $transport
-     * @return \Swift_Mailer
+     * @return Swift_Mailer
      * @throws TransportException
      */
     public function spoolWithTransport($transport = '')
     {
         $spool = $this->spoolTransport;
         if ($spool === null) {
-            throw new TransportException('Mailer spool is not configured');
+            throw new TransportException('Mailer spool is not configured.');
         }
         $spoolRealTransport = $this->getTransport($transport);
 
@@ -152,27 +160,27 @@ class Mailer implements MailerContract
                 return $failedRecipients;
             });
 
-        return new \Swift_Mailer($this->spoolTransport);
+        return new Swift_Mailer($this->spoolTransport);
     }
 
     /**
      * Get Swift_Mailer with Swift_Transport
      *
      * @param string $transportName
-     * @return \Swift_Mailer
+     * @return Swift_Mailer
      */
-    public function withTransport(string $transportName = ''): \Swift_Mailer
+    public function withTransport(string $transportName = ''): Swift_Mailer
     {
         $transport = $this->getTransport($transportName);
 
-        return new \Swift_Mailer($transport());
+        return new Swift_Mailer($transport());
     }
 
     /**
      * Parse config file interpreting settings
      *
      * @param Config $config
-     * @throws \RuntimeException|\Exception
+     * @throws RuntimeException|Exception
      * @return \Closure
      */
     protected function configureTransport(Config $config)
@@ -201,7 +209,7 @@ class Mailer implements MailerContract
     protected function getMailerFromGlobalConfig(Config $config)
     {
         if (!$config->has('mailer')) {
-            throw new \Exception('Mailer config was not found');
+            throw new Exception('Mailer config was not found.');
         }
         $this->configs = clone $config->get('mailer');
         $this->to = ($this->configs->get('to') instanceof Config)
@@ -226,7 +234,7 @@ class Mailer implements MailerContract
 
         if (!array_key_exists($transportName, $this->transports)) {
             throw new UnknownTransportException(
-                sprintf('Transport "%s" was not configured', $transportName)
+                sprintf('Transport "%s" was not configured.', $transportName)
             );
         }
 
@@ -239,7 +247,7 @@ class Mailer implements MailerContract
      * @param $transport
      * @param $config Config
      * @return \Closure
-     * @throws \Exception
+     * @throws Exception
      */
     protected function prepareTransportFactory($transport, Config $config)
     {
@@ -247,15 +255,16 @@ class Mailer implements MailerContract
         switch ($transport) {
             case('smtp'):
                 $closure = function () use ($config) {
-                    $transportInstance = new \Swift_SmtpTransport(
+                    $transportInstance = new Swift_SmtpTransport(
                         $config->get('host'),
                         $config->get('port'),
                         $config->get('encryption')
                     );
-                    $dependencies = \Swift_DependencyContainer::getInstance()->createDependenciesFor('transport.smtp');
+                    $dependencies = Swift_DependencyContainer::getInstance()->createDependenciesFor('transport.smtp');
                     foreach ($dependencies as &$dependency) {
-                        if ($dependency instanceof \Swift_Events_SimpleEventDispatcher) {
+                        if ($dependency instanceof Swift_Events_SimpleEventDispatcher) {
                             $dependency = $this->eventDispatcherAdapter;
+                            unset($dependency);
                         }
                     }
                     call_user_func_array([$transportInstance, 'Swift_Transport_EsmtpTransport::__construct'],
@@ -276,20 +285,20 @@ class Mailer implements MailerContract
                 break;
             case('mail'):
                 $closure = function () use ($eventManagerAdapter) {
-                    return new \Swift_Transport_MailTransport(
-                        new \Swift_Transport_SimpleMailInvoker(),
+                    return new Swift_Transport_MailTransport(
+                        new Swift_Transport_SimpleMailInvoker(),
                         $eventManagerAdapter
                     );
                 };
                 break;
             case('null'):
                 $closure = function () use ($eventManagerAdapter) {
-                    return new \Swift_Transport_NullTransport($eventManagerAdapter);
+                    return new Swift_Transport_NullTransport($eventManagerAdapter);
                 };
                 break;
             default:
-                throw new Exception\UnknownTransportException(
-                    sprintf('Unknown transport: "%s" defined in "%s" section',
+                throw new UnknownTransportException(
+                    sprintf('Unknown transport: "%s" defined in "%s" section.',
                         $transport,
                         $config->getName())
                 );
@@ -302,7 +311,7 @@ class Mailer implements MailerContract
     /**
      * Register transport factories
      *
-     * @throws \Exception
+     * @throws Exception
      * @return array
      */
     protected function registerTransports()
@@ -327,7 +336,7 @@ class Mailer implements MailerContract
         }
 
         if (count($this->transports) === 0) {
-            throw new TransportException('At least one Mailer transport must be defined');
+            throw new TransportException('At least one Mailer transport must be defined.');
         }
         $this->defaultTransport = $this->configs->get('default', key($this->transports));
         if ($this->isSpoolEnabled()) {
@@ -338,7 +347,7 @@ class Mailer implements MailerContract
     }
 
     /**
-     * @return \Swift_Transport_SpoolTransport|null
+     * @return Swift_Transport_SpoolTransport|null
      * @throws UnknownTransportException|TransportException|\Swift_IoException
      */
     protected function setUpSpoolTransport()
@@ -348,13 +357,13 @@ class Mailer implements MailerContract
             $spoolInstance = null;
             switch ($spool->get('type')) {
                 case 'memory':
-                    $spoolInstance = new \Swift_MemorySpool();
+                    $spoolInstance = new Swift_MemorySpool();
                     break;
                 case 'file':
                     if (!$spool->get('path', false)) {
-                        throw new TransportException('Path must be provided to use File type Spool');
+                        throw new TransportException('Path must be provided to use File type Spool.');
                     }
-                    $spoolInstance = new \Swift_FileSpool($spool->get('path'));
+                    $spoolInstance = new Swift_FileSpool($spool->get('path'));
                     break;
                 default:
                     throw new UnknownTransportException(
@@ -368,7 +377,7 @@ class Mailer implements MailerContract
             if ($spoolInstance !== null) {
                 $eventManagerAdapter = $this->eventDispatcherAdapter;
 
-                return new \Swift_Transport_SpoolTransport($eventManagerAdapter, $spoolInstance);
+                return new Swift_Transport_SpoolTransport($eventManagerAdapter, $spoolInstance);
             }
         }
 
@@ -383,21 +392,21 @@ class Mailer implements MailerContract
     protected function validateTransportSettings(Config $config)
     {
         if (!$config->has('transport')) {
-            throw new TransportException(sprintf('Transport was not defined for "%s" section', $config->getName()));
+            throw new TransportException(sprintf('Transport was not defined for "%s" section.', $config->getName()));
         }
         $transport = $config->get('transport');
         switch ($transport) {
             case('smtp'):
                 if (!$config->has('host')) {
                     throw new TransportException(
-                        sprintf('Host must be provided to use SMTP protocol in "%s" section', $config->getName())
+                        sprintf('Host must be provided to use SMTP protocol in "%s" section.', $config->getName())
                     );
                 }
                 break;
             case('gmail'):
                 if (!$config->has('username') || !$config->has('password')) {
                     throw new TransportException(
-                        sprintf('Username and password must be provided to use gmail SMTP defined in "%s" section',
+                        sprintf('Username and password must be provided to use gmail SMTP defined in "%s" section.',
                             $config->getName())
                     );
                 }

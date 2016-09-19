@@ -1,14 +1,9 @@
 <?php declare(strict_types = 1);
-/**
- * Class EventDispatcher
- *
- * @package Abava\Mail\Events
- */
-
 
 namespace Abava\Mail;
 
 use Abava\Event\Contract\EventManager as EventManagerContract;
+use Swift_Events_EventObject;
 
 /**
  * Class EventDispatcher
@@ -29,7 +24,7 @@ class EventDispatcherAdapter extends \Swift_Events_SimpleEventDispatcher
     }
 
     /** @inheritdoc */
-    public function dispatchEvent(\Swift_Events_EventObject $evt, $target)
+    public function dispatchEvent(Swift_Events_EventObject $evt, $target)
     {
         parent::dispatchEvent($evt, $target);
         if ($evt->bubbleCancelled()) {
@@ -44,7 +39,7 @@ class EventDispatcherAdapter extends \Swift_Events_SimpleEventDispatcher
      * @param $target
      * @return string
      */
-    protected function normalizeEventName(\Swift_Events_EventObject $evt, $target)
+    protected function normalizeEventName(Swift_Events_EventObject $evt, $target)
     {
         return strtolower(
             str_replace('_', '.', get_class($evt)) .

@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types = 1);
 
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class MailTest  */
+ * Class MailTest
+ */
 class MailTest extends TestCase
 {
     protected $config = [
@@ -158,6 +159,29 @@ class MailTest extends TestCase
 
     /**
      * @test
+     * @expectedException \Abava\Mail\Exception\TransportException
+     */
+    public function fileSpoolPathIsRequired()
+    {
+        $array = [
+            'mailer' => [
+                'mail' => [
+                    'transport' => 'mail',
+                ],
+                'spool' => [
+                    'type' => 'file',
+                ],
+            ],
+        ];
+
+        $config = new \Abava\Config\Config($array);
+        $eventManager = new \Abava\Event\EventManager();
+        $mailer = new \Abava\Mail\Mailer($config, $eventManager);
+        $this->assertInstanceOf(Swift_Transport_SpoolTransport::class, $mailer->spoolWithTransport()->getTransport());
+    }
+
+    /**
+     * @test
      */
     public function gmailIsAutoConfigured()
     {
@@ -173,6 +197,25 @@ class MailTest extends TestCase
         $mailer = new \Abava\Mail\Mailer($config, $eventManager);
 
         $this->assertInstanceOf(\Swift_Transport_SmtpAgent::class, $mailer->withTransport()->getTransport());
+    }
+
+    /**
+     * @test
+     * @expectedException \Abava\Mail\Exception\TransportException
+     */
+    public function gmailRequiresserAndPassword()
+    {
+        $array = [
+            'mailer' => [
+                'mail' => [
+                    'transport' => 'gmail',
+                ],
+            ],
+        ];
+
+        $config = new \Abava\Config\Config($array);
+        $eventManager = new \Abava\Event\EventManager();
+        new \Abava\Mail\Mailer($config, $eventManager);
     }
 
     /**
@@ -250,6 +293,45 @@ class MailTest extends TestCase
 
     /**
      * @test
+     * @expectedException \Abava\Mail\Exception\TransportException
+     */
+    public function smtpRequiresHost()
+    {
+        $array = [
+            'mailer' => [
+                'mail' => [
+                    'transport' => 'smtp',
+                    'port' => '3333',
+                ],
+            ],
+        ];
+
+        $config = new \Abava\Config\Config($array);
+        $eventManager = new \Abava\Event\EventManager();
+        new \Abava\Mail\Mailer($config, $eventManager);
+    }
+
+    /**
+     * @test
+     */
+    public function spoolCanBeExplicitlyDisabled()
+    {
+        $array = [
+            'mailer' => [
+                'mail' => [
+                    'transport' => 'mail',
+                ],
+                'spool' => false,
+            ],
+        ];
+
+        $config = new \Abava\Config\Config($array);
+        $eventManager = new \Abava\Event\EventManager();
+        new \Abava\Mail\Mailer($config, $eventManager);
+    }
+
+    /**
+     * @test
      */
     public function spoolCanUseMemoryStorage()
     {
@@ -261,53 +343,7 @@ class MailTest extends TestCase
                 'spool' => [
                     'type' => 'memory',
                 ],
-            ]
-        ];
-
-        $config = new \Abava\Config\Config($array);
-        $eventManager = new \Abava\Event\EventManager();
-        $mailer = new \Abava\Mail\Mailer($config, $eventManager);
-        $this->assertInstanceOf(Swift_Transport_SpoolTransport::class, $mailer->spoolWithTransport()->getTransport());
-    }
-
-    /**
-     * @test
-     * @expectedException \Abava\Mail\Exception\TransportException
-     */
-    public function fileSpoolPathIsRequired()
-    {
-        $array = [
-            'mailer' => [
-                'mail' => [
-                    'transport' => 'mail',
-                ],
-                'spool' => [
-                    'type' => 'file',
-                ],
-            ]
-        ];
-
-        $config = new \Abava\Config\Config($array);
-        $eventManager = new \Abava\Event\EventManager();
-        $mailer = new \Abava\Mail\Mailer($config, $eventManager);
-        $this->assertInstanceOf(Swift_Transport_SpoolTransport::class, $mailer->spoolWithTransport()->getTransport());
-    }
-
-    /**
-     * @test
-     * @expectedException \Abava\Mail\Exception\UnknownTransportException
-     */
-    public function unknownSpoolTypeProducesException()
-    {
-        $array = [
-            'mailer' => [
-                'mail' => [
-                    'transport' => 'mail',
-                ],
-                'spool' => [
-                    'type' => 'unknown',
-                ],
-            ]
+            ],
         ];
 
         $config = new \Abava\Config\Config($array);
@@ -370,6 +406,29 @@ class MailTest extends TestCase
      * @test
      * @expectedException \Abava\Mail\Exception\UnknownTransportException
      */
+    public function unknownSpoolTypeProducesException()
+    {
+        $array = [
+            'mailer' => [
+                'mail' => [
+                    'transport' => 'mail',
+                ],
+                'spool' => [
+                    'type' => 'unknown',
+                ],
+            ],
+        ];
+
+        $config = new \Abava\Config\Config($array);
+        $eventManager = new \Abava\Event\EventManager();
+        $mailer = new \Abava\Mail\Mailer($config, $eventManager);
+        $this->assertInstanceOf(Swift_Transport_SpoolTransport::class, $mailer->spoolWithTransport()->getTransport());
+    }
+
+    /**
+     * @test
+     * @expectedException \Abava\Mail\Exception\UnknownTransportException
+     */
     public function unknownTransprotTypeThrowsException()
     {
         $array = [
@@ -377,64 +436,6 @@ class MailTest extends TestCase
                 'mail' => [
                     'transport' => 'unknown',
                 ],
-            ],
-        ];
-
-        $config = new \Abava\Config\Config($array);
-        $eventManager = new \Abava\Event\EventManager();
-        new \Abava\Mail\Mailer($config, $eventManager);
-    }
-
-    /**
-     * @test
-     * @expectedException \Abava\Mail\Exception\TransportException
-     */
-    public function gmailRequiresserAndPassword()
-    {
-        $array = [
-            'mailer' => [
-                'mail' => [
-                    'transport' => 'gmail',
-                ],
-            ],
-        ];
-
-        $config = new \Abava\Config\Config($array);
-        $eventManager = new \Abava\Event\EventManager();
-        new \Abava\Mail\Mailer($config, $eventManager);
-    }
-
-    /**
-     * @test
-     * @expectedException \Abava\Mail\Exception\TransportException
-     */
-    public function smtpRequiresHost()
-    {
-        $array = [
-            'mailer' => [
-                'mail' => [
-                    'transport' => 'smtp',
-                    'port' => '3333'
-                ],
-            ],
-        ];
-
-        $config = new \Abava\Config\Config($array);
-        $eventManager = new \Abava\Event\EventManager();
-        new \Abava\Mail\Mailer($config, $eventManager);
-    }
-
-    /**
-     * @test
-     */
-    public function spoolCanBeExplicitlyDisabled()
-    {
-        $array = [
-            'mailer' => [
-                'mail' => [
-                    'transport' => 'mail',
-                ],
-                'spool' => false
             ],
         ];
 
