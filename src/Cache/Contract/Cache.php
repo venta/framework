@@ -13,7 +13,7 @@ interface Cache
 {
 
     /**
-     * Delete key from cache
+     * Delete key from cache.
      *
      * @param  string $key
      * @return bool
