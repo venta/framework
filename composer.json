@@ -17,8 +17,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Venta\\": "src/Venta",
-            "Abava\\": "src/Abava"
+            "Venta\\": "src/"
         },
         "exclude-from-classmap": [
             "**/tests/"
@@ -46,10 +45,10 @@
         "swiftmailer/swiftmailer": "^5.4.2"
     },
     "replace": {
-        "abava/container": "self.version",
-        "abava/http": "self.version",
-        "abava/routing": "self.version",
-        "abava/console": "self.version",
-        "abava/event": "self.version"
+        "venta/container": "self.version",
+        "venta/http": "self.version",
+        "venta/routing": "self.version",
+        "venta/console": "self.version",
+        "venta/event": "self.version"
     }
 }

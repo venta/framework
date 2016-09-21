@@ -1,0 +1,31 @@
+{
+    "name": "venta/contracts",
+    "description": "The Venta Contracts package",
+    "authors": [
+        {
+            "name": "Konstantins Zukovs",
+            "email": "kz@scandiweb.com"
+        },
+        {
+            "name": "Alexey Rehov",
+            "email": "aleksejs@scandiweb.com"
+        },
+        {
+            "name": "Vsevolods Mihailovs",
+            "email": "vsevolods@scandiweb.com"
+        },
+        {
+            "name": "Ilja Lapkovskis",
+            "email": "ilja@scandiweb.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Venta\\Contracts\\": ""
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.0"
+    }
+}

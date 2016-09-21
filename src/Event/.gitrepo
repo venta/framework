@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:venta/event.git
+	branch = master
+	commit = a4339c659575780be9cc7aa2ede3eb4ea5d8751a
+	parent = 0a3b110b51efcd0711b77b8f44068b134f423fc7
+	cmdver = 0.3.0
