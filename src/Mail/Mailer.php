@@ -2,24 +2,24 @@
 
 namespace Venta\Mail;
 
-use Venta\Config\Contract\Config;
-use Venta\Event\Contract\EventManager;
-use Venta\Mail\Contract\Mailer as MailerContract;
+use Exception;
+use RuntimeException;
+use Swift_DependencyContainer;
+use Swift_Events_SimpleEventDispatcher;
+use Swift_FileSpool;
+use Swift_Mailer;
+use Swift_MemorySpool;
+use Swift_Message;
+use Swift_SmtpTransport;
+use Swift_Transport_MailTransport;
+use Swift_Transport_NullTransport;
+use Swift_Transport_SimpleMailInvoker;
+use Swift_Transport_SpoolTransport;
+use Venta\Contracts\Config\Config;
+use Venta\Contracts\Event\EventManager;
+use Venta\Contracts\Mail\Mailer as MailerContract;
 use Venta\Mail\Exception\TransportException;
 use Venta\Mail\Exception\UnknownTransportException;
-use Exception;
-use Swift_Events_SimpleEventDispatcher;
-use Swift_Transport_MailTransport;
-use Swift_Message;
-use Swift_Mailer;
-use RuntimeException;
-use Swift_Transport_SpoolTransport;
-use Swift_SmtpTransport;
-use Swift_DependencyContainer;
-use Swift_Transport_SimpleMailInvoker;
-use Swift_Transport_NullTransport;
-use Swift_MemorySpool;
-use Swift_FileSpool;
 
 /**
  * Class Mailer
@@ -89,7 +89,7 @@ class Mailer implements MailerContract
     /**
      * Mailer constructor.
      *
-     * @param Config $config
+     * @param \Venta\Contracts\Config\Config $config
      * @param EventManager $eventManager
      * @throws Exception
      */
@@ -179,7 +179,7 @@ class Mailer implements MailerContract
     /**
      * Parse config file interpreting settings
      *
-     * @param Config $config
+     * @param \Venta\Contracts\Config\Config $config
      * @throws RuntimeException|Exception
      * @return \Closure
      */
@@ -204,7 +204,7 @@ class Mailer implements MailerContract
     /**
      * Get mailer configs
      *
-     * @param Config $config
+     * @param \Venta\Contracts\Config\Config $config
      */
     protected function getMailerFromGlobalConfig(Config $config)
     {
@@ -385,7 +385,7 @@ class Mailer implements MailerContract
     }
 
     /**
-     * @param Config $config
+     * @param \Venta\Contracts\Config\Config $config
      * @throws TransportException
      * @throws UnknownTransportException
      */

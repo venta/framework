@@ -2,8 +2,8 @@
 
 namespace Venta\Http;
 
-use Venta\Http\Contract\Cookie as CookieContract;
-use Venta\Http\Contract\Response as ResponseContract;
+use Venta\Contracts\Http\Cookie as CookieContract;
+use Venta\Contracts\Http\Response as ResponseContract;
 use Zend\Diactoros\Response as BaseResponse;
 
 /**

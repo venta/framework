@@ -3,22 +3,22 @@
 use FastRoute\DataGenerator;
 use FastRoute\RouteParser;
 use PHPUnit\Framework\TestCase;
-use Venta\Console\Contract\Collector as CommandCollectorContract;
 use Venta\Container\Container;
+use Venta\Contracts\Console\CommandCollector;
+use Venta\Contracts\Http\RequestFactory;
+use Venta\Contracts\Http\ResponseEmitter;
+use Venta\Contracts\Routing\DispatcherFactory;
+use Venta\Contracts\Routing\MiddlewareCollector;
+use Venta\Contracts\Routing\MiddlewarePipeline;
+use Venta\Contracts\Routing\RouteCollector;
+use Venta\Contracts\Routing\RouteMatcher;
+use Venta\Contracts\Routing\Strategy;
+use Venta\Contracts\Routing\UrlGenerator;
 use Venta\Framework\Commands\Middlewares;
 use Venta\Framework\Commands\RouteMatch;
 use Venta\Framework\Commands\Routes;
 use Venta\Framework\Commands\Shell;
 use Venta\Framework\Extension\VentaExtensionProvider;
-use Venta\Http\Contract\Emitter;
-use Venta\Http\Contract\RequestFactory;
-use Venta\Routing\Contract\Collector as RoutingCollectorContract;
-use Venta\Routing\Contract\Dispatcher\DispatcherFactory;
-use Venta\Routing\Contract\Matcher;
-use Venta\Routing\Contract\Middleware\Collector as MiddlewareCollectorContract;
-use Venta\Routing\Contract\Middleware\Pipeline;
-use Venta\Routing\Contract\Strategy;
-use Venta\Routing\Contract\UrlGenerator;
 
 class VentaExtensionProviderTest extends TestCase
 {
@@ -33,7 +33,7 @@ class VentaExtensionProviderTest extends TestCase
      */
     public function canAddCommandsToCollector()
     {
-        $collector = Mockery::mock(CommandCollectorContract::class);
+        $collector = Mockery::mock(CommandCollector::class);
         $collector->shouldReceive('addCommand')->with(Routes::class)->once();
         $collector->shouldReceive('addCommand')->with(RouteMatch::class)->once();
         $collector->shouldReceive('addCommand')->with(Middlewares::class)->once();
@@ -55,15 +55,15 @@ class VentaExtensionProviderTest extends TestCase
         $this->assertTrue($container->has(RouteParser::class));
         $this->assertTrue($container->has(DataGenerator::class));
         $this->assertTrue($container->has(UrlGenerator::class));
-        $this->assertTrue($container->has(Pipeline::class));
+        $this->assertTrue($container->has(MiddlewarePipeline::class));
         $this->assertTrue($container->has(DispatcherFactory::class));
-        $this->assertTrue($container->has(Matcher::class));
+        $this->assertTrue($container->has(RouteMatcher::class));
         $this->assertTrue($container->has(Strategy::class));
         $this->assertTrue($container->has(RequestFactory::class));
-        $this->assertTrue($container->has(Emitter::class));
-        $this->assertTrue($container->has(RoutingCollectorContract::class));
-        $this->assertTrue($container->has(MiddlewareCollectorContract::class));
-        $this->assertTrue($container->has(CommandCollectorContract::class));
+        $this->assertTrue($container->has(ResponseEmitter::class));
+        $this->assertTrue($container->has(RouteCollector::class));
+        $this->assertTrue($container->has(MiddlewareCollector::class));
+        $this->assertTrue($container->has(CommandCollector::class));
     }
 
 }

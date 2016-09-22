@@ -1,7 +1,7 @@
 <?php
 
-use Venta\Http\Cookie;
 use PHPUnit\Framework\TestCase;
+use Venta\Http\Cookie;
 
 /**
  * Class CookieTest
@@ -13,7 +13,7 @@ class CookieTest extends TestCase
      */
     public function cookieIsConstructed()
     {
-        $this->assertInstanceOf(\Venta\Http\Contract\Cookie::class, new Cookie('name', 'value'));
+        $this->assertInstanceOf(\Venta\Contracts\Http\Cookie::class, new Cookie('name', 'value'));
     }
 
     /**

@@ -12,7 +12,7 @@ class EmitterTest extends TestCase
      */
     public function implementsEmitterContract()
     {
-        $this->assertInstanceOf(\Venta\Http\Contract\Emitter::class, new \Venta\Http\Emitter);
+        $this->assertInstanceOf(\Venta\Contracts\Http\ResponseEmitter::class, new Venta\Http\ResponseEmitter);
     }
 
 }

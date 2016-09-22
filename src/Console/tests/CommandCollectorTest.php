@@ -1,8 +1,8 @@
 <?php
 
-use Venta\Console\Command\Collector;
-use Venta\Container\Contract\Container;
 use PHPUnit\Framework\TestCase;
+use Venta\Console\Command\CommandCollector;
+use Venta\Contracts\Container\Container;
 
 /**
  * Class CollectorTest
@@ -24,7 +24,7 @@ class CommandCollectorTest extends TestCase
         $mock = Mockery::mock(MockCommand::class);
         $container->shouldReceive('get')->with(MockCommand::class)->andReturn($mock)->once();
 
-        $collector = new Collector($container);
+        $collector = new CommandCollector($container);
         $collector->addCommand(MockCommand::class);
         $result = $collector->getCommands();
 
@@ -39,7 +39,7 @@ class CommandCollectorTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Provided command "stdClass" doesn\'t extend Venta\Console\Command class.');
 
-        $collector = new Collector(Mockery::mock(Container::class));
+        $collector = new CommandCollector(Mockery::mock(Container::class));
         $collector->addCommand(stdClass::class);
     }
 

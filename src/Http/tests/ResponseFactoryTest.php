@@ -80,7 +80,7 @@ class ResponseFactoryTest extends TestCase
      */
     public function implementsJsonResponseFactoryContract()
     {
-        $this->assertInstanceOf(\Venta\Http\Contract\JsonResponseFactory::class, $this->factory);
+        $this->assertInstanceOf(\Venta\Contracts\Http\JsonResponseFactory::class, $this->factory);
     }
 
     /**
@@ -88,7 +88,7 @@ class ResponseFactoryTest extends TestCase
      */
     public function implementsRedirectResponseFactoryContract()
     {
-        $this->assertInstanceOf(\Venta\Http\Contract\RedirectResponseFactory::class, $this->factory);
+        $this->assertInstanceOf(\Venta\Contracts\Http\RedirectResponseFactory::class, $this->factory);
     }
 
     /**
@@ -96,6 +96,6 @@ class ResponseFactoryTest extends TestCase
      */
     public function implementsResponseFactoryContract()
     {
-        $this->assertInstanceOf(\Venta\Http\Contract\ResponseFactory::class, $this->factory);
+        $this->assertInstanceOf(\Venta\Contracts\Http\ResponseFactory::class, $this->factory);
     }
 }

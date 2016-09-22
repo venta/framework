@@ -2,8 +2,8 @@
 
 namespace Venta\Http;
 
-use Venta\Http\Contract\Response as ResponseContract;
 use Psr\Http\Message\StreamInterface;
+use Venta\Contracts\Http\Response as ResponseContract;
 
 /**
  * Class ResponseTrait

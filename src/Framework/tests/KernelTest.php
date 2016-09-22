@@ -2,22 +2,22 @@
 
 use PHPUnit\Framework\TestCase;
 use Venta\Config\Config;
-use Venta\Config\Contract\Config as ConfigContract;
-use Venta\Config\Contract\Factory;
-use Venta\Console\Command\Collector as CommandCollector;
-use Venta\Console\Contract\Collector as CommandCollectorContract;
-use Venta\Container\Contract\Container;
+use Venta\Console\Command\CommandCollector as CommandCollector;
+use Venta\Contracts\Config\Config as ConfigContract;
+use Venta\Contracts\Config\ConfigFactory;
+use Venta\Contracts\Console\CommandCollector as CommandCollectorContract;
+use Venta\Contracts\Container\Container;
 use Venta\Contracts\ExtensionProvider\CommandProvider;
 use Venta\Contracts\ExtensionProvider\ConfigProvider;
 use Venta\Contracts\ExtensionProvider\MiddlewareProvider;
 use Venta\Contracts\ExtensionProvider\RouteProvider;
 use Venta\Contracts\ExtensionProvider\ServiceProvider;
 use Venta\Contracts\Kernel;
-use Venta\Routing\Collector as RouteCollector;
-use Venta\Routing\Contract\Collector as RouteCollectorContract;
-use Venta\Routing\Contract\Group;
-use Venta\Routing\Contract\Middleware\Collector as MiddlewareCollectorContract;
-use Venta\Routing\Middleware\Collector as MiddlewareCollector;
+use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollectorContract;
+use Venta\Contracts\Routing\RouteCollector as RouteCollectorContract;
+use Venta\Contracts\Routing\RouteGroup;
+use Venta\Routing\Middleware\MiddlewareCollector as MiddlewareCollector;
+use Venta\Routing\RouteCollector as RouteCollector;
 
 
 /**
@@ -54,17 +54,17 @@ class KernelTest extends TestCase
                   ->with(ConfigContract::class, Mockery::type(Closure::class), ['config'])
                   ->passthru();
 
-        $routeCollector = Mockery::mock(Group::class);
+        $routeCollector = Mockery::mock(RouteGroup::class);
         $routeCollector->shouldReceive('group')->with('/', Mockery::type('callable'))->twice();
         $middlewareCollector = Mockery::mock(MiddlewareCollector::class);
         $commandCollector = Mockery::mock(CommandCollector::class);
-        $factory = Mockery::mock(Factory::class);
+        $factory = Mockery::mock(ConfigFactory::class);
 
         $container->shouldReceive('get')->with(RouteCollector::class)->andReturn($routeCollector);
         $container->shouldReceive('get')->with(MiddlewareCollector::class)->andReturn($middlewareCollector);
         $container->shouldReceive('get')->with(CommandCollector::class)->andReturn($commandCollector);
         $container->shouldReceive('get')->with(Config::class)->andReturn(new Config);
-        $container->shouldReceive('get')->with(Factory::class)->andReturn($factory);
+        $container->shouldReceive('get')->with(ConfigFactory::class)->andReturn($factory);
 
         // Mocking Extension Provider with listed interfaces implementation
         $extension = Mockery::mock(join(',', [
@@ -77,7 +77,7 @@ class KernelTest extends TestCase
         $extension->shouldReceive('setServices')->with($container)->once();
         $extension->shouldReceive('provideMiddlewares')->with($middlewareCollector)->once();
         $extension->shouldReceive('provideCommands')->with($commandCollector)->once();
-        $extension->shouldReceive('provideConfig')->with(Mockery::type(Factory::class))->andReturn(new Config)->once();
+        $extension->shouldReceive('provideConfig')->with(Mockery::type(ConfigFactory::class))->andReturn(new Config)->once();
 
         $kernel = new class($container, __DIR__, 'extensions.php') extends \Venta\Framework\Kernel
         {

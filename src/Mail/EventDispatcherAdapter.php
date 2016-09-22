@@ -2,8 +2,8 @@
 
 namespace Venta\Mail;
 
-use Venta\Event\Contract\EventManager as EventManagerContract;
 use Swift_Events_EventObject;
+use Venta\Contracts\Event\EventManager as EventManagerContract;
 
 /**
  * Class EventDispatcher

@@ -2,12 +2,14 @@
 
 namespace Venta\Http;
 
+use Venta\Contracts\Http\Cookie as CookieContract;
+
 /**
- * Cookie class
+ * Class Cookie
  *
  * @package Venta\Http
  */
-class Cookie implements Contract\Cookie
+class Cookie implements CookieContract
 {
     protected $domain;
 

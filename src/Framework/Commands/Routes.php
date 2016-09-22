@@ -6,7 +6,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Console\Command;
-use Venta\Routing\Contract\Collector;
+use Venta\Contracts\Routing\RouteCollector;
 
 /**
  * Class Route
@@ -17,16 +17,16 @@ class Routes extends Command
 {
 
     /**
-     * @var Collector
+     * @var RouteCollector
      */
     protected $collector;
 
     /**
      * Routes constructor.
      *
-     * @param Collector $collector
+     * @param RouteCollector $collector
      */
-    public function __construct(Collector $collector)
+    public function __construct(RouteCollector $collector)
     {
         parent::__construct();
         $this->collector = $collector;

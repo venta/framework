@@ -3,37 +3,37 @@
 namespace Venta\Framework\Extension;
 
 use FastRoute\DataGenerator;
-use FastRoute\RouteParser;
-use Venta\Config\Contract\Factory as ConfigFactoryContract;
-use Venta\Config\Factory as ConfigFactory;
-use Venta\Console\Command\Collector as CommandCollector;
-use Venta\Console\Contract\Collector as CommandCollectorContract;
-use Venta\Container\Contract\Container;
+use FastRoute\RouteParser as RouteParserContract;
+use Venta\Config\ConfigFactory;
+use Venta\Console\Command\CommandCollector as CommandCollector;
+use Venta\Contracts\Config\ConfigFactory as ConfigFactoryContract;
+use Venta\Contracts\Console\CommandCollector as CommandCollectorContract;
+use Venta\Contracts\Container\Container;
+use Venta\Contracts\Event\EventManager as EventManagerContract;
 use Venta\Contracts\ExtensionProvider\CommandProvider;
 use Venta\Contracts\ExtensionProvider\ServiceProvider;
-use Venta\Event\Contract\EventManager as EventManagerContract;
+use Venta\Contracts\Http\RequestFactory as RequestFactoryContract;
+use Venta\Contracts\Http\ResponseEmitter as ResponseEmitterContract;
+use Venta\Contracts\Routing\DispatcherFactory;
+use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollectorContract;
+use Venta\Contracts\Routing\MiddlewarePipeline as MiddlewarePipelineContract;
+use Venta\Contracts\Routing\RouteCollector as RoutingCollectorContract;
+use Venta\Contracts\Routing\RouteMatcher as RouteMatcherContract;
+use Venta\Contracts\Routing\Strategy;
+use Venta\Contracts\Routing\UrlGenerator;
 use Venta\Event\EventManager;
 use Venta\Framework\Commands\Middlewares;
 use Venta\Framework\Commands\RouteMatch;
 use Venta\Framework\Commands\Routes;
 use Venta\Framework\Commands\Shell;
-use Venta\Http\Contract\Emitter as EmitterContract;
-use Venta\Http\Contract\RequestFactory as RequestFactoryContract;
-use Venta\Http\Emitter;
 use Venta\Http\Factory\RequestFactory;
-use Venta\Routing\Collector as RouteCollector;
-use Venta\Routing\Contract\Collector as RoutingCollectorContract;
-use Venta\Routing\Contract\Dispatcher\DispatcherFactory;
-use Venta\Routing\Contract\Matcher as MatcherContract;
-use Venta\Routing\Contract\Middleware\Collector as MiddlewareCollectorContract;
-use Venta\Routing\Contract\Middleware\Pipeline as MiddlewarePipelineContract;
-use Venta\Routing\Contract\Strategy;
-use Venta\Routing\Contract\UrlGenerator;
+use Venta\Http\ResponseEmitter;
 use Venta\Routing\Dispatcher\Factory\GroupCountBasedDispatcherFactory;
-use Venta\Routing\Matcher;
-use Venta\Routing\Middleware\Collector as MiddlewareCollector;
-use Venta\Routing\Middleware\Pipeline as MiddlewarePipeline;
-use Venta\Routing\Parser;
+use Venta\Routing\Middleware\MiddlewareCollector as MiddlewareCollector;
+use Venta\Routing\Middleware\MiddlewarePipeline as MiddlewarePipeline;
+use Venta\Routing\RouteParser;
+use Venta\Routing\RouteCollector as RouteCollector;
+use Venta\Routing\RouteMatcher;
 use Venta\Routing\Strategy\Generic;
 
 /**
@@ -49,12 +49,12 @@ class VentaExtensionProvider implements ServiceProvider, CommandProvider
      * @var array
      */
     protected $bindings = [
-        RouteParser::class => Parser::class,
+        RouteParserContract::class => RouteParser::class,
         DataGenerator::class => DataGenerator\GroupCountBased::class,
         UrlGenerator::class => RouteCollector::class,
         MiddlewarePipelineContract::class => MiddlewarePipeline::class,
         DispatcherFactory::class => GroupCountBasedDispatcherFactory::class,
-        MatcherContract::class => Matcher::class,
+        RouteMatcherContract::class => RouteMatcher::class,
         Strategy::class => Generic::class,
     ];
 
@@ -77,7 +77,7 @@ class VentaExtensionProvider implements ServiceProvider, CommandProvider
      */
     protected $singletons = [
         RequestFactoryContract::class => RequestFactory::class,
-        EmitterContract::class => Emitter::class,
+        ResponseEmitterContract::class => ResponseEmitter::class,
         RoutingCollectorContract::class => RouteCollector::class,
         MiddlewareCollectorContract::class => MiddlewareCollector::class,
         CommandCollectorContract::class => CommandCollector::class,

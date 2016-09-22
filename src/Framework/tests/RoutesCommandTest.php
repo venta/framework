@@ -13,7 +13,7 @@ class RoutesCommandTest extends PHPUnit_Framework_TestCase
      */
     public function canHandleEmptyRouteArray()
     {
-        $routeCollector = Mockery::mock(\Venta\Routing\Contract\Collector::class);
+        $routeCollector = Mockery::mock(\Venta\Contracts\Routing\RouteCollector::class);
         $routeCollector->shouldReceive('getRoutes')->once()->andReturn([]);
 
         $command = new \Venta\Framework\Commands\Routes($routeCollector);
@@ -30,7 +30,7 @@ class RoutesCommandTest extends PHPUnit_Framework_TestCase
      */
     public function canListRoutes()
     {
-        $routeCollector = Mockery::mock(\Venta\Routing\Contract\Collector::class);
+        $routeCollector = Mockery::mock(\Venta\Contracts\Routing\RouteCollector::class);
         $route = (new \Venta\Routing\Route(['GET', 'POST'], '/qwerty', 'callable'))
             ->withHost('localhost')
             ->withMiddleware('middleware1', function () {

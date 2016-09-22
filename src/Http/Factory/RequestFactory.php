@@ -2,11 +2,11 @@
 
 namespace Venta\Http\Factory;
 
-use Venta\Http\Contract\Request as RequestContract;
-use Venta\Http\Contract\RequestFactory as RequestFactoryContract;
-use Venta\Http\Request;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
+use Venta\Contracts\Http\Request as RequestContract;
+use Venta\Contracts\Http\RequestFactory as RequestFactoryContract;
+use Venta\Http\Request;
 use Zend\Diactoros\ServerRequestFactory;
 
 /**

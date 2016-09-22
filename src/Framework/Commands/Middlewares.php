@@ -6,7 +6,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Console\Command;
-use Venta\Routing\Contract\Middleware\Collector;
+use Venta\Contracts\Routing\MiddlewareCollector;
 
 /**
  * Class Middlewares
@@ -17,16 +17,16 @@ class Middlewares extends Command
 {
 
     /**
-     * @var Collector
+     * @var \Venta\Contracts\Routing\MiddlewareCollector
      */
     protected $collector;
 
     /**
      * Middlewares constructor.
      *
-     * @param Collector $collector
+     * @param \Venta\Contracts\Routing\MiddlewareCollector $collector
      */
-    public function __construct(Collector $collector)
+    public function __construct(MiddlewareCollector $collector)
     {
         parent::__construct();
         $this->collector = $collector;

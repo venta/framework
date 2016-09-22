@@ -2,10 +2,10 @@
 
 namespace Venta\Http\Factory;
 
-use Venta\Http\Contract\JsonResponseFactory as JsonResponseFactoryContract;
-use Venta\Http\Contract\RedirectResponseFactory as RedirectResponseFactoryContract;
-use Venta\Http\Contract\Response as ResponseContract;
-use Venta\Http\Contract\ResponseFactory as ResponseFactoryContract;
+use Venta\Contracts\Http\JsonResponseFactory as JsonResponseFactoryContract;
+use Venta\Contracts\Http\RedirectResponseFactory as RedirectResponseFactoryContract;
+use Venta\Contracts\Http\Response as ResponseContract;
+use Venta\Contracts\Http\ResponseFactory as ResponseFactoryContract;
 use Venta\Http\JsonResponse;
 use Venta\Http\RedirectResponse;
 use Venta\Http\Response;

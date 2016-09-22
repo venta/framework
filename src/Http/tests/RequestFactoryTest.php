@@ -25,7 +25,7 @@ class RequestFactoryTest extends TestCase
     {
         $uri = new Uri('/foo.bar');
         $request = $this->factory->createServerRequest('GET', $uri);
-        $this->assertInstanceOf(\Venta\Http\Contract\Request::class, $request);
+        $this->assertInstanceOf(\Venta\Contracts\Http\Request::class, $request);
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame($uri, $request->getUri());
     }
@@ -36,7 +36,7 @@ class RequestFactoryTest extends TestCase
     public function canCreateServerRequestFromGlobals()
     {
         $request = $this->factory->createServerRequestFromGlobals();
-        $this->assertInstanceOf(\Venta\Http\Contract\Request::class, $request);
+        $this->assertInstanceOf(\Venta\Contracts\Http\Request::class, $request);
     }
 
     /**
@@ -45,7 +45,7 @@ class RequestFactoryTest extends TestCase
     public function canCreateServerRequestWithParams()
     {
         $request = $this->factory->createServerRequest('GET', '/foo.bar');
-        $this->assertInstanceOf(\Venta\Http\Contract\Request::class, $request);
+        $this->assertInstanceOf(\Venta\Contracts\Http\Request::class, $request);
         $this->assertSame('GET', $request->getMethod());
         $this->assertSame('/foo.bar', $request->getUri()->__toString());
     }
@@ -55,6 +55,6 @@ class RequestFactoryTest extends TestCase
      */
     public function implementsRequestFactoryContract()
     {
-        $this->assertInstanceOf(\Venta\Http\Contract\RequestFactory::class, new \Venta\Http\Factory\RequestFactory);
+        $this->assertInstanceOf(\Venta\Contracts\Http\RequestFactory::class, new \Venta\Http\Factory\RequestFactory);
     }
 }

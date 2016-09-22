@@ -2,8 +2,8 @@
 
 namespace Venta\Console\Command;
 
-use Venta\Console\Contract\SignatureParser as SignatureParserContract;
 use Symfony\Component\Console\Input\InputArgument;
+use Venta\Contracts\Console\SignatureParser as SignatureParserContract;
 
 /**
  * Class SignatureParser

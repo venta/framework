@@ -5,20 +5,20 @@ namespace Venta\Framework;
 use Dotenv\Dotenv;
 use RuntimeException;
 use Venta\Config\Config;
-use Venta\Config\Contract\Config as ConfigContract;
-use Venta\Config\Contract\Factory;
-use Venta\Console\Command\Collector as CommandCollector;
-use Venta\Console\Contract\Collector as CommandCollectorContract;
-use Venta\Container\Contract\Container;
+use Venta\Console\Command\CommandCollector as CommandCollector;
+use Venta\Contracts\Config\Config as ConfigContract;
+use Venta\Contracts\Config\ConfigFactory;
+use Venta\Contracts\Console\CommandCollector as CommandCollectorContract;
+use Venta\Contracts\Container\Container;
 use Venta\Contracts\ExtensionProvider\CommandProvider as CommandsProvider;
 use Venta\Contracts\ExtensionProvider\ConfigProvider;
 use Venta\Contracts\ExtensionProvider\MiddlewareProvider as MiddlewaresProvider;
 use Venta\Contracts\ExtensionProvider\RouteProvider as RoutesProvider;
 use Venta\Contracts\ExtensionProvider\ServiceProvider as BindingsProvider;
-use Venta\Routing\Collector as RouteCollector;
-use Venta\Routing\Contract\Collector as RouteCollectorContract;
-use Venta\Routing\Contract\Middleware\Collector as MiddlewareCollectorContract;
-use Venta\Routing\Middleware\Collector as MiddlewareCollector;
+use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollectorContract;
+use Venta\Contracts\Routing\RouteCollector as RouteCollectorContract;
+use Venta\Routing\Middleware\MiddlewareCollector as MiddlewareCollector;
+use Venta\Routing\RouteCollector as RouteCollector;
 
 /**
  * Class Kernel
@@ -31,7 +31,7 @@ class Kernel implements \Venta\Contracts\Kernel
     /**
      * DI Container instance
      *
-     * @var Container
+     * @var \Venta\Contracts\Container\Container
      */
     protected $container;
 
@@ -66,7 +66,7 @@ class Kernel implements \Venta\Contracts\Kernel
     /**
      * Kernel constructor.
      *
-     * @param Container $container
+     * @param \Venta\Contracts\Container\Container $container
      * @param string $rootPath
      * @param string $extensionsFile
      */
@@ -128,7 +128,7 @@ class Kernel implements \Venta\Contracts\Kernel
 
         // Collect configs from extension providers on first Config access
         $this->container->share(ConfigContract::class, function () {
-            $config = $this->collectConfig($this->container->get(Factory::class));
+            $config = $this->collectConfig($this->container->get(ConfigFactory::class));
             // Locking config for further modifications after we merged it with all extension providers
             $config->lock();
 
@@ -195,10 +195,10 @@ class Kernel implements \Venta\Contracts\Kernel
     /**
      * Collects and merges config from extension providers
      *
-     * @param Factory $factory
+     * @param \Venta\Contracts\Config\ConfigFactory $factory
      * @return Config
      */
-    protected function collectConfig(Factory $factory)
+    protected function collectConfig(ConfigFactory $factory)
     {
         $config = $this->container->get(Config::class);
         foreach ($this->extensions as $provider) {
@@ -242,7 +242,7 @@ class Kernel implements \Venta\Contracts\Kernel
     /**
      * Collects extension providers' bindings
      *
-     * @param Container $container
+     * @param \Venta\Contracts\Container\Container $container
      * @return void
      */
     protected function collectServices(Container $container)

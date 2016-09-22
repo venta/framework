@@ -2,7 +2,7 @@
 
 namespace Venta\Contracts;
 
-use Venta\Container\Contract\Container;
+use Venta\Contracts\Container\Container;
 
 /**
  * Interface Kernel
@@ -22,7 +22,7 @@ interface Kernel
     /**
      * Bootstraps kernel and returns container instance
      *
-     * @return Container
+     * @return \Venta\Contracts\Container\Container
      */
     public function boot(): Container;
 

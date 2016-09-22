@@ -6,9 +6,9 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Console\Command;
-use Venta\Http\Contract\RequestFactory;
-use Venta\Routing\Contract\Collector;
-use Venta\Routing\Contract\Matcher;
+use Venta\Contracts\Http\RequestFactory;
+use Venta\Contracts\Routing\RouteCollector;
+use Venta\Contracts\Routing\RouteMatcher;
 use Venta\Routing\Exceptions\NotAllowedException;
 use Venta\Routing\Exceptions\NotFoundException;
 use Zend\Diactoros\Uri;
@@ -22,12 +22,12 @@ class RouteMatch extends Command
 {
 
     /**
-     * @var Collector
+     * @var RouteCollector
      */
     protected $collector;
 
     /**
-     * @var Matcher
+     * @var \Venta\Contracts\Routing\RouteMatcher
      */
     protected $matcher;
 
@@ -39,11 +39,11 @@ class RouteMatch extends Command
     /**
      * RouteMatch constructor.
      *
-     * @param Collector $collector
-     * @param Matcher $matcher
+     * @param RouteCollector $collector
+     * @param \Venta\Contracts\Routing\RouteMatcher $matcher
      * @param RequestFactory $requestFactory
      */
-    public function __construct(Collector $collector, Matcher $matcher, RequestFactory $requestFactory)
+    public function __construct(RouteCollector $collector, RouteMatcher $matcher, RequestFactory $requestFactory)
     {
         parent::__construct();
         $this->collector = $collector;

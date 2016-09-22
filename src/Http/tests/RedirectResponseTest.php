@@ -12,6 +12,6 @@ class RedirectResponseTest extends TestCase
      */
     public function implementsResponseContract()
     {
-        $this->assertInstanceOf(\Venta\Http\Contract\Response::class, new \Venta\Http\RedirectResponse(''));
+        $this->assertInstanceOf(\Venta\Contracts\Http\Response::class, new \Venta\Http\RedirectResponse(''));
     }
 }

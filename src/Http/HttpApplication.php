@@ -3,14 +3,14 @@
 namespace Venta\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Venta\Container\Contract\Container;
+use Venta\Contracts\Container\Container;
+use Venta\Contracts\Http\ResponseEmitter as EmitterContract;
 use Venta\Contracts\Kernel;
-use Venta\Http\Contract\Emitter as EmitterContract;
-use Venta\Routing\Contract\Collector;
-use Venta\Routing\Contract\Matcher;
-use Venta\Routing\Contract\Middleware\Collector as MiddlewareCollector;
-use Venta\Routing\Contract\Middleware\Pipeline;
-use Venta\Routing\Contract\Strategy;
+use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollector;
+use Venta\Contracts\Routing\MiddlewarePipeline;
+use Venta\Contracts\Routing\RouteCollector;
+use Venta\Contracts\Routing\RouteMatcher;
+use Venta\Contracts\Routing\Strategy;
 use Venta\Routing\Route;
 
 /**
@@ -58,10 +58,10 @@ class HttpApplication implements \Venta\Contracts\Application\HttpApplication
         |
         | Find route matching provided request instance
         */
-        /** @var Matcher $matcher */
-        $matcher = $this->container->get(Matcher::class);
-        /** @var Collector $routeCollector */
-        $routeCollector = $this->container->get(Collector::class);
+        /** @var RouteMatcher $matcher */
+        $matcher = $this->container->get(RouteMatcher::class);
+        /** @var RouteCollector $routeCollector */
+        $routeCollector = $this->container->get(RouteCollector::class);
         $route = $matcher->match($request, $routeCollector);
 
         /*
@@ -81,7 +81,7 @@ class HttpApplication implements \Venta\Contracts\Application\HttpApplication
         | Route may have its own middlewares. Push them to the end of
         | the middleware stack
         */
-        /** @var MiddlewareCollector $middlewareCollector */
+        /** @var \Venta\Contracts\Routing\MiddlewareCollector $middlewareCollector */
         $middlewareCollector = $this->container->get(MiddlewareCollector::class);
         foreach ($route->getMiddlewares() as $name => $middleware) {
             $middlewareCollector->pushMiddleware($name, $middleware);
@@ -107,8 +107,8 @@ class HttpApplication implements \Venta\Contracts\Application\HttpApplication
         |
         | Pass request to middleware pipeline to get response in return
         */
-        /** @var Pipeline $middlewarePipeline */
-        $middlewarePipeline = $this->container->get(Pipeline::class);
+        /** @var MiddlewarePipeline $middlewarePipeline */
+        $middlewarePipeline = $this->container->get(MiddlewarePipeline::class);
         $response = $middlewarePipeline->handle($request, $last);
 
         /*

@@ -10,8 +10,8 @@ namespace Venta\Framework\Commands;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Console\Command;
-use Venta\Container\Contract\Container;
-use Venta\Event\Contract\EventManager as EventManagerContract;
+use Venta\Contracts\Container\Container;
+use Venta\Contracts\Event\EventManager as EventManagerContract;
 
 
 class Mail extends Command

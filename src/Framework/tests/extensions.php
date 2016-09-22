@@ -1,19 +1,19 @@
 <?php
 
-use Venta\Container\Contract\Container;
-use Venta\Routing\Contract\Group;
-use Venta\Routing\Contract\Middleware\Collector as MiddlewareCollector;
+use Venta\Contracts\Container\Container;
 use Venta\Contracts\ExtensionProvider\CommandProvider;
 use Venta\Contracts\ExtensionProvider\MiddlewareProvider;
 use Venta\Contracts\ExtensionProvider\RouteProvider;
 use Venta\Contracts\ExtensionProvider\ServiceProvider;
+use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollector;
+use Venta\Contracts\Routing\RouteGroup;
 
 class SampleExtension implements RouteProvider, MiddlewareProvider, ServiceProvider, CommandProvider
 {
     /**
      * @inheritDoc
      */
-    public function provideCommands(\Venta\Console\Contract\Collector $collector)
+    public function provideCommands(\Venta\Contracts\Console\CommandCollector $collector)
     {
     }
 
@@ -27,7 +27,7 @@ class SampleExtension implements RouteProvider, MiddlewareProvider, ServiceProvi
     /**
      * @inheritDoc
      */
-    public function provideRoutes(Group $collector)
+    public function provideRoutes(RouteGroup $collector)
     {
     }
 

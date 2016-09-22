@@ -3,14 +3,14 @@
 namespace Venta\Framework\Extension;
 
 use Venta\Config\Config;
-use Venta\Config\Contract\Config as ConfigContract;
-use Venta\Config\Contract\Factory as FactoryContract;
-use Venta\Console\Contract\Collector as CollectorContract;
-use Venta\Container\Contract\Container as ContainerContract;
+use Venta\Contracts\Config\Config as ConfigContract;
+use Venta\Contracts\Config\ConfigFactory as FactoryContract;
+use Venta\Contracts\Console\CommandCollector as CollectorContract;
+use Venta\Contracts\Container\Container as ContainerContract;
 use Venta\Contracts\ExtensionProvider\CommandProvider;
 use Venta\Contracts\ExtensionProvider\ConfigProvider;
 use Venta\Contracts\ExtensionProvider\ServiceProvider;
-use Venta\Mail\Contract\Mailer as MailerContract;
+use Venta\Contracts\Mail\Mailer as MailerContract;
 
 /**
  * Class MailExtensionProvider  */

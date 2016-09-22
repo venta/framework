@@ -7,8 +7,8 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Console\Command;
-use Venta\Console\Contract\Collector;
-use Venta\Container\Contract\Container;
+use Venta\Contracts\Console\CommandCollector;
+use Venta\Contracts\Container\Container;
 use Venta\Contracts\Kernel;
 use Whoops\RunInterface;
 
@@ -77,7 +77,7 @@ class ConsoleApplicationTest extends TestCase
         // Creating mock stubs
         $kernel = Mockery::mock(Kernel::class);
         $container = Mockery::mock(Container::class);
-        $collector = Mockery::mock(Collector::class);
+        $collector = Mockery::mock(CommandCollector::class);
 
         // Creating input and output for test environment
         $input = new ArrayInput([]);
@@ -88,7 +88,7 @@ class ConsoleApplicationTest extends TestCase
         $kernel->shouldReceive('getVersion')->withNoArgs()->andReturn('test')->once();
         $container->shouldReceive('set')->with(InputInterface::class, $input)->once();
         $container->shouldReceive('set')->with(OutputInterface::class, $output)->once();
-        $container->shouldReceive('get')->with(Collector::class)->andReturn($collector)->once();
+        $container->shouldReceive('get')->with(CommandCollector::class)->andReturn($collector)->once();
         $container->shouldReceive('get')->with(InputInterface::class)->andReturn($input)->once();
         $container->shouldReceive('get')->with(OutputInterface::class)->andReturn($output)->once();
         $collector->shouldReceive('getCommands')->withNoArgs()->andReturn([

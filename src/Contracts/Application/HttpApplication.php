@@ -5,7 +5,7 @@ namespace Venta\Contracts\Application;
 /**
  * Interface HttpApplication
  *
- * @package Venta\Contracts
+ * @package Venta\Contracts\Application
  */
 interface HttpApplication
 {

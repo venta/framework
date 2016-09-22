@@ -1,7 +1,7 @@
 <?php
 
-use Venta\Http\Cookie;
 use PHPUnit\Framework\TestCase;
+use Venta\Http\Cookie;
 
 /**
  * Class ResponseTest
@@ -16,7 +16,7 @@ class ResponseTest extends TestCase
         $response = new \Venta\Http\Response();
         $this->assertEmpty($response->getBody()->__toString());
         $result = $response->append('abc');
-        $this->assertInstanceOf(\Venta\Http\Contract\Response::class, $result);
+        $this->assertInstanceOf(\Venta\Contracts\Http\Response::class, $result);
         $this->assertSame($response, $result);
         $this->assertSame($response->getBody(), $result->getBody());
         $this->assertContains('abc', $response->getBody()->__toString());
@@ -174,6 +174,6 @@ class ResponseTest extends TestCase
      */
     public function implementsResponseContract()
     {
-        $this->assertInstanceOf(\Venta\Http\Contract\Response::class, new \Venta\Http\Response);
+        $this->assertInstanceOf(\Venta\Contracts\Http\Response::class, new \Venta\Http\Response);
     }
 }

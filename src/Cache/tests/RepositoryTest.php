@@ -16,7 +16,7 @@ class RepositoryTest extends TestCase
     public function canGetSetHasDelete()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
-        $cache = new \Venta\Cache\Repository($pool);
+        $cache = new \Venta\Cache\Cache($pool);
         $pool->shouldReceive('hasItem')->with('key')->andReturn(false, true, false)->times(3);
 
         $this->assertFalse($cache->has('key'));
@@ -47,7 +47,7 @@ class RepositoryTest extends TestCase
     public function canPutWithDateTimeExpire()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
-        $cache = new \Venta\Cache\Repository($pool);
+        $cache = new \Venta\Cache\Cache($pool);
 
         $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem) {
             $this->assertSame('key', $cacheItem->getKey());
@@ -65,7 +65,7 @@ class RepositoryTest extends TestCase
     public function canPutWithIntExpire()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
-        $cache = new \Venta\Cache\Repository($pool);
+        $cache = new \Venta\Cache\Cache($pool);
 
         $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem) {
             $this->assertSame('key', $cacheItem->getKey());
@@ -83,7 +83,7 @@ class RepositoryTest extends TestCase
     public function canPutWithIntervalExpire()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
-        $cache = new \Venta\Cache\Repository($pool);
+        $cache = new \Venta\Cache\Cache($pool);
 
         $interval = new DateInterval('P1M');
 
@@ -108,7 +108,7 @@ class RepositoryTest extends TestCase
     public function canPutWithoutExpire()
     {
         $pool = Mockery::mock(\Psr\Cache\CacheItemPoolInterface::class);
-        $cache = new \Venta\Cache\Repository($pool);
+        $cache = new \Venta\Cache\Cache($pool);
 
         $pool->shouldReceive('save')->with(Mockery::on(function (\Cache\Adapter\Common\CacheItem $cacheItem) {
             $this->assertSame('key', $cacheItem->getKey());

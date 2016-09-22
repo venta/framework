@@ -3,14 +3,14 @@
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Venta\Container\Contract\Container;
+use Venta\Contracts\Container\Container;
+use Venta\Contracts\Http\ResponseEmitter;
 use Venta\Contracts\Kernel;
-use Venta\Http\Contract\Emitter;
-use Venta\Routing\Contract\Collector;
-use Venta\Routing\Contract\Matcher;
-use Venta\Routing\Contract\Middleware\Collector as MiddlewareCollector;
-use Venta\Routing\Contract\Middleware\Pipeline;
-use Venta\Routing\Contract\Strategy;
+use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollector;
+use Venta\Contracts\Routing\MiddlewarePipeline;
+use Venta\Contracts\Routing\RouteCollector;
+use Venta\Contracts\Routing\RouteMatcher;
+use Venta\Contracts\Routing\Strategy;
 use Venta\Routing\Route;
 
 /**
@@ -44,25 +44,25 @@ class HttpApplicationTest extends TestCase
         // Define mock stubs used in ->run() method
         $container = Mockery::mock(Container::class);
         $request = Mockery::mock(ServerRequestInterface::class);
-        $matcher = Mockery::mock(Matcher::class);
-        $routeCollector = Mockery::mock(Collector::class);
+        $matcher = Mockery::mock(RouteMatcher::class);
+        $routeCollector = Mockery::mock(RouteCollector::class);
         $route = Mockery::mock(Route::class);
         $middlewareCollector = Mockery::mock(MiddlewareCollector::class);
         $strategy = Mockery::mock(Strategy::class);
-        $pipeline = Mockery::mock(Pipeline::class);
-        $emitter = Mockery::mock(Emitter::class);
+        $pipeline = Mockery::mock(MiddlewarePipeline::class);
+        $emitter = Mockery::mock(ResponseEmitter::class);
         $response = Mockery::mock(ResponseInterface::class);
         $kernel = Mockery::mock(Kernel::class);
 
         // Mock container calls
         $container->shouldReceive('get')->with(ServerRequestInterface::class)->andReturn($request);
-        $container->shouldReceive('get')->with(Matcher::class)->andReturn($matcher);
-        $container->shouldReceive('get')->with(Collector::class)->andReturn($routeCollector);
+        $container->shouldReceive('get')->with(RouteMatcher::class)->andReturn($matcher);
+        $container->shouldReceive('get')->with(RouteCollector::class)->andReturn($routeCollector);
         $container->shouldReceive('share')->with(Route::class, $route, ['route']);
         $container->shouldReceive('get')->with(MiddlewareCollector::class)->andReturn($middlewareCollector);
         $container->shouldReceive('get')->with(Strategy::class)->andReturn($strategy);
-        $container->shouldReceive('get')->with(Pipeline::class)->andReturn($pipeline);
-        $container->shouldReceive('get')->with(Emitter::class)->andReturn($emitter);
+        $container->shouldReceive('get')->with(MiddlewarePipeline::class)->andReturn($pipeline);
+        $container->shouldReceive('get')->with(ResponseEmitter::class)->andReturn($emitter);
 
         // Mock stub calls
         $matcher->shouldReceive('match')->with($request, $routeCollector)->andReturn($route)->once();

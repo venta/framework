@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Interface ConsoleApplication
  *
- * @package Venta\Contracts
+ * @package Venta\Contracts\Application
  */
 interface ConsoleApplication
 {

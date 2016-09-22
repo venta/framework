@@ -5,12 +5,12 @@ namespace Venta\Framework\ErrorHandler;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
-use Venta\Container\Contract\Container;
+use Venta\Contracts\Container\Container;
 use Venta\Contracts\ExtensionProvider\{
     Errors, MiddlewareProvider, ServiceProvider
 };
 use Venta\Contracts\Kernel;
-use Venta\Routing\Contract\Middleware\Collector as MiddlewareCollector;
+use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollector;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -27,7 +27,7 @@ class ErrorHandlerProvider implements ServiceProvider, Errors, MiddlewareProvide
     /**
      * Container instance
      *
-     * @var Container
+     * @var \Venta\Contracts\Container\Container
      */
     protected $container;
 
@@ -45,7 +45,7 @@ class ErrorHandlerProvider implements ServiceProvider, Errors, MiddlewareProvide
     /**
      * Adding error handling middleware
      *
-     * @param MiddlewareCollector $middlewareCollector
+     * @param \Venta\Contracts\Routing\MiddlewareCollector $middlewareCollector
      * @return void
      */
     public function provideMiddlewares(MiddlewareCollector $middlewareCollector)

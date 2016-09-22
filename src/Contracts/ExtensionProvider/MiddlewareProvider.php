@@ -2,7 +2,7 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Venta\Routing\Contract\Middleware\Collector;
+use Venta\Contracts\Routing\MiddlewareCollector;
 
 /**
  * Interface MiddlewareProvider
@@ -15,9 +15,9 @@ interface MiddlewareProvider
     /**
      * Add extension middlewares using middleware collector
      *
-     * @param Collector $collector
+     * @param MiddlewareCollector $collector
      * @return void
      */
-    public function provideMiddlewares(Collector $collector);
+    public function provideMiddlewares(MiddlewareCollector $collector);
 
 }

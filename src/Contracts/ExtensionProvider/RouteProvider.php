@@ -2,7 +2,7 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Venta\Routing\Contract\Group;
+use Venta\Contracts\Routing\RouteGroup;
 
 /**
  * Interface RouteProvider
@@ -15,9 +15,9 @@ interface RouteProvider
     /**
      * Add extension routes using routes collector
      *
-     * @param Group $collector
+     * @param \Venta\Contracts\Routing\RouteGroup $collector
      * @return void
      */
-    public function provideRoutes(Group $collector);
+    public function provideRoutes(RouteGroup $collector);
 
 }

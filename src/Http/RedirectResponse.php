@@ -2,7 +2,7 @@
 
 namespace Venta\Http;
 
-use Venta\Http\Contract\Response as ResponseContract;
+use Venta\Contracts\Http\Response as ResponseContract;
 use Zend\Diactoros\Response\RedirectResponse as BaseRedirectResponse;
 
 /**

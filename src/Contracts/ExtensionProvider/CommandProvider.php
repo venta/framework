@@ -2,7 +2,7 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Venta\Console\Contract\Collector;
+use Venta\Contracts\Console\CommandCollector;
 
 /**
  * Interface CommandProvider
@@ -15,9 +15,9 @@ interface CommandProvider
     /**
      * Add extension console commands
      *
-     * @param Collector $collector
+     * @param CommandCollector $collector
      * @return void
      */
-    public function provideCommands(Collector $collector);
+    public function provideCommands(CommandCollector $collector);
 
 }

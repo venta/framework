@@ -2,7 +2,7 @@
 
 namespace Venta\Http;
 
-use Venta\Http\Contract\Request as RequestContract;
+use Venta\Contracts\Http\Request as RequestContract;
 use Zend\Diactoros\ServerRequest as BaseRequest;
 
 /**

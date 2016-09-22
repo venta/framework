@@ -6,9 +6,9 @@ use Exception;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Console\Contract\Collector;
-use Venta\Container\Contract\Container;
 use Venta\Contracts\Application\ConsoleApplication as ConsoleApplicationContract;
+use Venta\Contracts\Console\CommandCollector;
+use Venta\Contracts\Container\Container;
 use Venta\Contracts\Kernel;
 
 /**
@@ -90,8 +90,8 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
         |
         | Add collected commands to application
         */
-        /** @var Collector $collector */
-        $collector = $this->container->get(Collector::class);
+        /** @var \Venta\Contracts\Console\CommandCollector $collector */
+        $collector = $this->container->get(CommandCollector::class);
         $this->addCommands($collector->getCommands());
 
         /*

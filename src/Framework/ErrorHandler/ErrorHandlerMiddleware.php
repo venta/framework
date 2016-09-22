@@ -4,8 +4,8 @@ namespace Venta\Framework\ErrorHandler;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Venta\Contracts\Routing\Middleware;
 use Venta\Http\Factory\ResponseFactory;
-use Venta\Routing\Contract\Middleware;
 use Whoops\RunInterface;
 
 /**

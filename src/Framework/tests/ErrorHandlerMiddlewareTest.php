@@ -24,7 +24,7 @@ namespace
                             ->with(500)
                             ->andReturn(new \Venta\Http\Response('php://memory', 500));
             $middleware = new \Venta\Framework\ErrorHandler\ErrorHandlerMiddleware($run, $responseFactory);
-            $request = Mockery::mock(\Venta\Http\Contract\Request::class);
+            $request = Mockery::mock(\Venta\Contracts\Http\Request::class);
             $result = $middleware->handle($request, function () use ($e) {
                 throw $e;
             });

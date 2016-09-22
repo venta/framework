@@ -2,7 +2,7 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Venta\Container\Contract\Container;
+use Venta\Contracts\Container\Container;
 
 /**
  * Interface ServiceProvider

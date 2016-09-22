@@ -2,13 +2,13 @@
 
 namespace Venta\Console;
 
-use Venta\Console\Command\SignatureParser;
-use Venta\Console\Contract\Command as CommandContract;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\{
     InputArgument, InputInterface, InputOption
 };
 use Symfony\Component\Console\Output\OutputInterface;
+use Venta\Console\Command\SignatureParser;
+use Venta\Contracts\Console\Command as CommandContract;
 
 /**
  * Class Command

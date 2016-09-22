@@ -2,8 +2,8 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Venta\Config\Contract\Config;
-use Venta\Config\Contract\Factory;
+use Venta\Contracts\Config\Config;
+use Venta\Contracts\Config\ConfigFactory;
 
 /**
  * Interface ConfigProvider
@@ -16,9 +16,9 @@ interface ConfigProvider
     /**
      * Provides config, may use factory to load from file
      *
-     * @param Factory $factory
+     * @param ConfigFactory $factory
      * @return Config
      */
-    public function provideConfig(Factory $factory): Config;
+    public function provideConfig(ConfigFactory $factory): Config;
 
 }

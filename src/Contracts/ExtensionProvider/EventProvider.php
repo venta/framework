@@ -2,7 +2,7 @@
 
 namespace Venta\Contracts\ExtensionProvider;
 
-use Venta\Event\Contract\EventManager;
+use Venta\Contracts\Event\EventManager;
 
 /**
  * Interface EventProvider

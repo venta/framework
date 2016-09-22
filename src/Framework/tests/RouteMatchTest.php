@@ -5,10 +5,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Venta\Contracts\Http\RequestFactory;
+use Venta\Contracts\Routing\RouteCollector;
+use Venta\Contracts\Routing\RouteMatcher;
 use Venta\Framework\Commands\RouteMatch;
-use Venta\Http\Contract\RequestFactory;
-use Venta\Routing\Contract\Collector;
-use Venta\Routing\Contract\Matcher;
 use Venta\Routing\Exceptions\NotAllowedException;
 use Venta\Routing\Exceptions\NotFoundException;
 use Venta\Routing\Route;
@@ -30,8 +30,8 @@ class RouteMatchTest extends TestCase
     public function canHandleNotAllowedException()
     {
         // Mocking stubs
-        $collector = Mockery::mock(Collector::class);
-        $matcher = Mockery::mock(Matcher::class);
+        $collector = Mockery::mock(RouteCollector::class);
+        $matcher = Mockery::mock(RouteMatcher::class);
         $requestFactory = Mockery::mock(RequestFactory::class);
         $request = Mockery::mock(ServerRequestInterface::class);
 
@@ -55,8 +55,8 @@ class RouteMatchTest extends TestCase
     public function canHandleNotFoundException()
     {
         // Mocking stubs
-        $collector = Mockery::mock(Collector::class);
-        $matcher = Mockery::mock(Matcher::class);
+        $collector = Mockery::mock(RouteCollector::class);
+        $matcher = Mockery::mock(RouteMatcher::class);
         $requestFactory = Mockery::mock(RequestFactory::class);
         $request = Mockery::mock(ServerRequestInterface::class);
 
@@ -80,8 +80,8 @@ class RouteMatchTest extends TestCase
     public function canMatchAgainstHostAndScheme()
     {
         // Mocking stubs
-        $collector = Mockery::mock(Collector::class);
-        $matcher = Mockery::mock(Matcher::class);
+        $collector = Mockery::mock(RouteCollector::class);
+        $matcher = Mockery::mock(RouteMatcher::class);
         $requestFactory = Mockery::mock(RequestFactory::class);
         $request = Mockery::mock(ServerRequestInterface::class);
 
@@ -112,8 +112,8 @@ class RouteMatchTest extends TestCase
     public function canMatchRoute()
     {
         // Mocking stubs
-        $collector = Mockery::mock(Collector::class);
-        $matcher = Mockery::mock(Matcher::class);
+        $collector = Mockery::mock(RouteCollector::class);
+        $matcher = Mockery::mock(RouteMatcher::class);
         $requestFactory = Mockery::mock(RequestFactory::class);
         $request = Mockery::mock(ServerRequestInterface::class);
 
