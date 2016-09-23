@@ -4,9 +4,6 @@ use PHPUnit\Framework\TestCase;
 use Venta\Console\Command\CommandCollector;
 use Venta\Contracts\Container\Container;
 
-/**
- * Class CollectorTest
- */
 class CommandCollectorTest extends TestCase
 {
 
@@ -42,10 +39,5 @@ class CommandCollectorTest extends TestCase
         $collector = new CommandCollector(Mockery::mock(Container::class));
         $collector->addCommand(stdClass::class);
     }
-
-}
-
-abstract class MockCommand extends \Venta\Console\Command
-{
 
 }

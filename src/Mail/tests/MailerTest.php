@@ -2,10 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class MailTest
- */
-class MailTest extends TestCase
+class MailerTest extends TestCase
 {
     protected $config = [
         'mailer' => [

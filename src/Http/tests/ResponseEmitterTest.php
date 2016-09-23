@@ -2,10 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class EmitterTest
- */
-class EmitterTest extends TestCase
+class ResponseEmitterTest extends TestCase
 {
     /**
      * @test

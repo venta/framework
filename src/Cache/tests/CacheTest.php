@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class RepositoryTest extends TestCase
+class CacheTest extends TestCase
 {
     public function tearDown()
     {

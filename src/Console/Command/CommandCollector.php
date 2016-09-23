@@ -2,7 +2,7 @@
 
 namespace Venta\Console\Command;
 
-use Venta\Contracts\Console\Command;
+use Venta\Console\Command;
 use Venta\Contracts\Console\CommandCollector as CommandCollectorContract;
 use Venta\Contracts\Container\Container;
 
@@ -17,7 +17,7 @@ class CommandCollector implements CommandCollectorContract
     /**
      * Commands holder
      *
-     * @var \Venta\Contracts\Console\Command[]
+     * @var Command[]
      */
     protected $commands = [];
 
@@ -26,6 +26,11 @@ class CommandCollector implements CommandCollectorContract
      */
     protected $container;
 
+    /**
+     * CommandCollector constructor.
+     *
+     * @param Container $container
+     */
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -36,7 +41,7 @@ class CommandCollector implements CommandCollectorContract
      */
     public function addCommand(string $commandClassName)
     {
-        if (!is_subclass_of($commandClassName, \Venta\Console\Command::class)) {
+        if (!is_subclass_of($commandClassName, Command::class)) {
             throw new \InvalidArgumentException(
                 sprintf('Provided command "%s" doesn\'t extend Venta\Console\Command class.', $commandClassName)
             );
