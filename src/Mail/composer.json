@@ -33,6 +33,7 @@
     },
     "require": {
         "php": "^7.0",
+        "venta/contracts": "dev-master",
         "swiftmailer/swiftmailer": "^5.4.2"
     }
 }

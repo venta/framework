@@ -45,6 +45,7 @@
         "swiftmailer/swiftmailer": "^5.4.2"
     },
     "replace": {
+        "venta/contracts": "self.version",
         "venta/container": "self.version",
         "venta/http": "self.version",
         "venta/routing": "self.version",
