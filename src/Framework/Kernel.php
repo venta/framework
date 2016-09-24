@@ -82,7 +82,6 @@ class Kernel implements \Venta\Contracts\Kernel
         /*
          * Binding basic singletons - container and kernel objects
          */
-        $container->share(Container::class, $container, ['container']);
         $container->share(\Venta\Contracts\Kernel::class, $this, ['kernel']);
     }
 
