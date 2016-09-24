@@ -33,7 +33,7 @@ class HttpApplicationTest extends TestCase
 
         $app = new \Venta\Http\HttpApplication($kernel);
 
-        $this->assertInstanceOf(\Venta\Contracts\Application\HttpApplication::class, $app);
+        $this->assertInstanceOf(\Venta\Contracts\Http\HttpApplication::class, $app);
     }
 
     /**

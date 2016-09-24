@@ -18,7 +18,7 @@ use Venta\Routing\Route;
  *
  * @package Venta\Application
  */
-class HttpApplication implements \Venta\Contracts\Application\HttpApplication
+class HttpApplication implements \Venta\Contracts\Http\HttpApplication
 {
 
     /**

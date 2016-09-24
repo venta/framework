@@ -1,11 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Contracts\Application;
+namespace Venta\Contracts\Http;
 
 /**
  * Interface HttpApplication
  *
- * @package Venta\Contracts\Application
+ * @package Venta\Contracts\Http
  */
 interface HttpApplication
 {

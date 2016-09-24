@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Contracts\Application;
+namespace Venta\Contracts\Console;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Interface ConsoleApplication
  *
- * @package Venta\Contracts\Application
+ * @package Venta\Contracts\Console
  */
 interface ConsoleApplication
 {

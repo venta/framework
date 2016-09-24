@@ -6,8 +6,8 @@ use Exception;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Contracts\Application\ConsoleApplication as ConsoleApplicationContract;
 use Venta\Contracts\Console\CommandCollector;
+use Venta\Contracts\Console\ConsoleApplication as ConsoleApplicationContract;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Kernel;
 
