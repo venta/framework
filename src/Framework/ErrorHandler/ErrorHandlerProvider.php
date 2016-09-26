@@ -9,7 +9,7 @@ use Venta\Contracts\Container\Container;
 use Venta\Contracts\ExtensionProvider\{
     Errors, MiddlewareProvider, ServiceProvider
 };
-use Venta\Contracts\Kernel;
+use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollector;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
@@ -69,7 +69,7 @@ class ErrorHandlerProvider implements ServiceProvider, Errors, MiddlewareProvide
         $whoops = new Run();
         $whoops->register();
 
-        /** @var Kernel $kernel */
+        /** @var \Venta\Contracts\Kernel\Kernel $kernel */
         $kernel = $container->get(Kernel::class);
         if ($kernel->isCli()) {
             // We don't need pretty pages in cli mode
@@ -97,7 +97,7 @@ class ErrorHandlerProvider implements ServiceProvider, Errors, MiddlewareProvide
             $logger = new \Monolog\Logger('venta');
             $handler = new \Monolog\Handler\StreamHandler(__DIR__ . '/../storage/logs/app.log');
             $handler->pushProcessor(function ($record) use ($c) {
-                /** @var Kernel $kernel */
+                /** @var \Venta\Contracts\Kernel\Kernel $kernel */
                 $kernel = $c->get(Kernel::class);
                 if ($kernel->isCli()) {
                     // Add cli command related extra info

@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Console\Command;
 use Venta\Contracts\Console\CommandCollector;
 use Venta\Contracts\Container\Container;
-use Venta\Contracts\Kernel;
+use Venta\Contracts\Kernel\Kernel;
 use Whoops\RunInterface;
 
 /**

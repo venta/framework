@@ -25,7 +25,7 @@ use Venta\Routing\RouteCollector as RouteCollector;
  *
  * @package Venta
  */
-class Kernel implements \Venta\Contracts\Kernel
+class Kernel implements \Venta\Contracts\Kernel\Kernel
 {
 
     /**
@@ -82,7 +82,7 @@ class Kernel implements \Venta\Contracts\Kernel
         /*
          * Binding basic singletons - container and kernel objects
          */
-        $container->share(\Venta\Contracts\Kernel::class, $this, ['kernel']);
+        $container->share(\Venta\Contracts\Kernel\Kernel::class, $this, ['kernel']);
     }
 
     /**

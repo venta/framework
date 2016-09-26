@@ -5,7 +5,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Http\ResponseEmitter;
-use Venta\Contracts\Kernel;
+use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollector;
 use Venta\Contracts\Routing\MiddlewarePipeline;
 use Venta\Contracts\Routing\RouteCollector;

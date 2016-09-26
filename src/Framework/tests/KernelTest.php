@@ -12,7 +12,7 @@ use Venta\Contracts\ExtensionProvider\ConfigProvider;
 use Venta\Contracts\ExtensionProvider\MiddlewareProvider;
 use Venta\Contracts\ExtensionProvider\RouteProvider;
 use Venta\Contracts\ExtensionProvider\ServiceProvider;
-use Venta\Contracts\Kernel;
+use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollectorContract;
 use Venta\Contracts\Routing\RouteCollector as RouteCollectorContract;
 use Venta\Contracts\Routing\RouteGroup;

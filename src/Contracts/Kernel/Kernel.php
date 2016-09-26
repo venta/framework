@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Contracts;
+namespace Venta\Contracts\Kernel;
 
 use Venta\Contracts\Container\Container;
 
