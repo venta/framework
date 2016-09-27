@@ -12,10 +12,12 @@ use Venta\Contracts\Event\EventManager;
 interface EventProvider
 {
     /**
-     * Function, called in order to collect defined events
+     * Function, called in order to collect events.
      *
-     * @param EventManager $manager
-     * @return mixed
+     * Expects array as return value, where array key is event name,
+     * and array value(s) are listener definitions.
+     *
+     * @return array
      */
-    public function provideEvents(EventManager $manager);
+    public function provideEvents(): array;
 }
