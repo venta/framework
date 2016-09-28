@@ -7,7 +7,7 @@ namespace Venta\Contracts\Event;
  *
  * @package Venta\Contracts\Event
  */
-interface Dispatcher
+interface EventDispatcher
 {
     /**
      * Clear all listeners for a given event.
