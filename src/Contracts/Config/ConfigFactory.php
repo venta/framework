@@ -16,6 +16,6 @@ interface ConfigFactory
      * @param $filename
      * @return Config
      */
-    public function fromFile($filename): Config;
+    public function createFromFile($filename): Config;
 
 }

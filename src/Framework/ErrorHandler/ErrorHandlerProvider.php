@@ -6,11 +6,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Venta\Contracts\Container\Container;
-use Venta\Contracts\ExtensionProvider\{
-    Errors, MiddlewareProvider, ServiceProvider
-};
 use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollector;
+use Venta\Contracts\ServiceProvider\{
+    Errors, MiddlewareProvider
+};
+use Venta\ServiceProvider\AbstractServiceProvider;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
@@ -19,18 +20,10 @@ use Whoops\RunInterface;
 /**
  * Class ErrorHandlerProvider
  *
- * @package Venta\ErrorHandler
+ * @package Venta\Framework\ErrorHandler
  */
-class ErrorHandlerProvider implements ServiceProvider, Errors, MiddlewareProvider
+class ErrorHandlerProvider extends AbstractServiceProvider
 {
-
-    /**
-     * Container instance
-     *
-     * @var \Venta\Contracts\Container\Container
-     */
-    protected $container;
-
     /**
      * Pushing default error handlers
      *
@@ -59,7 +52,7 @@ class ErrorHandlerProvider implements ServiceProvider, Errors, MiddlewareProvide
      * @param Container $container
      * @return void
      */
-    public function setServices(Container $container)
+    public function provideServices(Container $container)
     {
         $this->container = $container;
 
@@ -128,4 +121,11 @@ class ErrorHandlerProvider implements ServiceProvider, Errors, MiddlewareProvide
         }, ['logger', LoggerInterface::class]);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function boot()
+    {
+        // TODO: Implement boot() method.
+    }
 }

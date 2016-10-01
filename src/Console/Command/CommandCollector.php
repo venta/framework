@@ -3,16 +3,18 @@
 namespace Venta\Console\Command;
 
 use Venta\Console\Command;
+use Venta\Container\ContainerAwareTrait;
 use Venta\Contracts\Console\CommandCollector as CommandCollectorContract;
-use Venta\Contracts\Container\Container;
+use Venta\Contracts\Container\ContainerAware;
 
 /**
  * Class Collector
  *
  * @package Venta\Console\Command
  */
-class CommandCollector implements CommandCollectorContract
+class CommandCollector implements CommandCollectorContract, ContainerAware
 {
+    use ContainerAwareTrait;
 
     /**
      * Commands holder
@@ -20,21 +22,6 @@ class CommandCollector implements CommandCollectorContract
      * @var Command[]
      */
     protected $commands = [];
-
-    /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * CommandCollector constructor.
-     *
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
 
     /**
      * @inheritDoc

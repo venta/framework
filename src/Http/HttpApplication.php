@@ -5,7 +5,7 @@ namespace Venta\Http;
 use Psr\Http\Message\ServerRequestInterface;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Http\ResponseEmitter as EmitterContract;
-use Venta\Contracts\Kernel;
+use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollector;
 use Venta\Contracts\Routing\MiddlewarePipeline;
 use Venta\Contracts\Routing\RouteCollector;
@@ -27,29 +27,28 @@ class HttpApplication implements \Venta\Contracts\Http\HttpApplication
     protected $container;
 
     /**
+     * @var Kernel
+     */
+    protected $kernel;
+
+    /**
      * HttpApplication constructor.
      *
      * @param Kernel $kernel
      */
     public function __construct(Kernel $kernel)
     {
-        $this->container = $kernel->boot();
+        $this->kernel = $kernel;
     }
 
     /**
      * @inheritDoc
      */
-    public function run()
+    public function run(ServerRequestInterface $request)
     {
-        /*
-        |--------------------------------------------------------------------------
-        | Making request
-        |--------------------------------------------------------------------------
-        |
-        | Getting ServerRequest instance from container
-        */
-        /** @var ServerRequestInterface $request */
-        $request = $this->container->get(ServerRequestInterface::class);
+        $this->kernel->boot();
+
+        $this->container = $this->kernel->getContainer();
 
         /*
         |--------------------------------------------------------------------------

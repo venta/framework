@@ -8,10 +8,7 @@ use Venta\Config\ConfigFactory;
 use Venta\Console\Command\CommandCollector as CommandCollector;
 use Venta\Contracts\Config\ConfigFactory as ConfigFactoryContract;
 use Venta\Contracts\Console\CommandCollector as CommandCollectorContract;
-use Venta\Contracts\Container\Container;
 use Venta\Contracts\Event\EventManager as EventManagerContract;
-use Venta\Contracts\ExtensionProvider\CommandProvider;
-use Venta\Contracts\ExtensionProvider\ServiceProvider;
 use Venta\Contracts\Http\RequestFactory as RequestFactoryContract;
 use Venta\Contracts\Http\ResponseEmitter as ResponseEmitterContract;
 use Venta\Contracts\Routing\DispatcherFactory;
@@ -31,17 +28,18 @@ use Venta\Http\ResponseEmitter;
 use Venta\Routing\Dispatcher\Factory\GroupCountBasedDispatcherFactory;
 use Venta\Routing\Middleware\MiddlewareCollector as MiddlewareCollector;
 use Venta\Routing\Middleware\MiddlewarePipeline as MiddlewarePipeline;
-use Venta\Routing\RouteParser;
 use Venta\Routing\RouteCollector as RouteCollector;
 use Venta\Routing\RouteMatcher;
+use Venta\Routing\RouteParser;
 use Venta\Routing\Strategy\Generic;
+use Venta\ServiceProvider\AbstractServiceProvider;
 
 /**
- * Class VentaExtensionProvider
+ * Class VentaServiceProvider
  *
- * @package Venta\Extension
+ * @package Venta\Framework\Extension
  */
-class VentaExtensionProvider implements ServiceProvider, CommandProvider
+class VentaServiceProvider extends AbstractServiceProvider
 {
     /**
      * Interface - implementation map to set to the container
@@ -56,18 +54,6 @@ class VentaExtensionProvider implements ServiceProvider, CommandProvider
         DispatcherFactory::class => GroupCountBasedDispatcherFactory::class,
         RouteMatcherContract::class => RouteMatcher::class,
         Strategy::class => Generic::class,
-    ];
-
-    /**
-     * Array of commands to add
-     *
-     * @var array
-     */
-    protected $commands = [
-        Routes::class,
-        RouteMatch::class,
-        Middlewares::class,
-        Shell::class,
     ];
 
     /**
@@ -86,27 +72,23 @@ class VentaExtensionProvider implements ServiceProvider, CommandProvider
     ];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
-    public function provideCommands(CommandCollectorContract $collector)
-    {
-        foreach ($this->commands as $command) {
-            $collector->addCommand($command);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setServices(Container $container)
+    public function boot()
     {
         foreach ($this->bindings as $id => $entry) {
-            $container->set($id, $entry);
+            $this->container->set($id, $entry);
         }
 
         foreach ($this->singletons as $id => $entry) {
-            $container->share($id, $entry);
+            $this->container->share($id, $entry);
         }
-    }
 
+        $this->provideCommands(
+            Routes::class,
+            RouteMatch::class,
+            Middlewares::class,
+            Shell::class
+        );
+    }
 }

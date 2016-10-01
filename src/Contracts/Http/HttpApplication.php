@@ -2,6 +2,8 @@
 
 namespace Venta\Contracts\Http;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 /**
  * Interface HttpApplication
  *
@@ -13,8 +15,8 @@ interface HttpApplication
     /**
      * Runs HTTP Application
      *
-     * @return void
+     * @param ServerRequestInterface $request
      */
-    public function run();
+    public function run(ServerRequestInterface $request);
 
 }

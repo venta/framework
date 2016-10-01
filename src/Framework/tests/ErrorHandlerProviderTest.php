@@ -18,7 +18,7 @@ class ErrorHandlerProviderTest extends PHPUnit_Framework_TestCase
             ->with(\Venta\Framework\ErrorHandler\ErrorHandlerLogger::class)
             ->andReturn($errorHandlerLogger);
         $provider = new \Venta\Framework\ErrorHandler\ErrorHandlerProvider();
-        $provider->setServices($app);
+        $provider->provideServices($app);
         $run = Mockery::mock(\Whoops\RunInterface::class);
         $run->shouldReceive('pushHandler')->with($errorHandlerLogger);
         $provider->errors($run);
@@ -30,7 +30,7 @@ class ErrorHandlerProviderTest extends PHPUnit_Framework_TestCase
 
         $app = Mockery::mock(\Venta\Contracts\Application::class);
         $provider = new \Venta\Framework\ErrorHandler\ErrorHandlerProvider();
-        $provider->setServices($app);
+        $provider->provideServices($app);
         $collector = Mockery::mock(\Venta\Contracts\Routing\MiddlewareCollector::class);
         $collector->shouldReceive('pushMiddleware')
                   ->with('error_handler', \Venta\Framework\ErrorHandler\ErrorHandlerMiddleware::class);

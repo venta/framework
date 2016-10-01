@@ -18,7 +18,7 @@ use Venta\Framework\Commands\Middlewares;
 use Venta\Framework\Commands\RouteMatch;
 use Venta\Framework\Commands\Routes;
 use Venta\Framework\Commands\Shell;
-use Venta\Framework\Extension\VentaExtensionProvider;
+use Venta\Framework\Extension\VentaServiceProvider;
 
 class VentaExtensionProviderTest extends TestCase
 {
@@ -39,7 +39,7 @@ class VentaExtensionProviderTest extends TestCase
         $collector->shouldReceive('addCommand')->with(Middlewares::class)->once();
         $collector->shouldReceive('addCommand')->with(Shell::class)->once();
 
-        $provider = new VentaExtensionProvider();
+        $provider = new VentaServiceProvider();
         $provider->provideCommands($collector);
     }
 
@@ -49,8 +49,8 @@ class VentaExtensionProviderTest extends TestCase
     public function canSetContainerBindings()
     {
         $container = new Container();
-        $provider = new VentaExtensionProvider();
-        $provider->setServices($container);
+        $provider = new VentaServiceProvider();
+        $provider->provideServices($container);
 
         $this->assertTrue($container->has(RouteParser::class));
         $this->assertTrue($container->has(DataGenerator::class));

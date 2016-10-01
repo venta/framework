@@ -9,7 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Contracts\Console\CommandCollector;
 use Venta\Contracts\Console\ConsoleApplication as ConsoleApplicationContract;
 use Venta\Contracts\Container\Container;
-use Venta\Contracts\Kernel;
+use Venta\Contracts\Kernel\Kernel;
+
 
 /**
  * Class ConsoleApplication
@@ -25,13 +26,19 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
     protected $container;
 
     /**
+     * @var Kernel
+     */
+    protected $kernel;
+
+    /**
      * HttpApplication constructor.
      *
      * @param Kernel $kernel
      */
     public function __construct(Kernel $kernel)
     {
-        $this->container = $kernel->boot();
+        $this->kernel = $kernel;
+
         parent::__construct('Venta', $kernel->getVersion());
     }
 
@@ -61,6 +68,10 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
      */
     final public function run(InputInterface $input = null, OutputInterface $output = null)
     {
+        $this->kernel->boot();
+
+        $this->container = $this->kernel->getContainer();
+
         /*
         |--------------------------------------------------------------------------
         | Bind input

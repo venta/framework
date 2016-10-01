@@ -20,31 +20,45 @@ interface Kernel
     const ENV_TEST = 'test';
 
     /**
-     * Bootstraps kernel and returns container instance
+     * Boots framework kernel.
      *
-     * @return \Venta\Contracts\Container\Container
+     * @return void
      */
-    public function boot(): Container;
+    public function boot();
 
     /**
-     * Returns current running environment
+     * Returns service container instance.
+     *
+     * @return Container
+     */
+    public function getContainer(): Container;
+
+    /**
+     * Returns current running environment.
      *
      * @return string
      */
     public function getEnvironment(): string;
 
     /**
-     * Returns kernel version
+     * Returns kernel version.
      *
      * @return string
      */
     public function getVersion(): string;
 
     /**
-     * If running in cli
+     * If running in cli.
      *
      * @return bool
      */
     public function isCli(): bool;
+
+    /**
+     * Returns application root path.
+     *
+     * @return string
+     */
+    public function getRootPath(): string;
 
 }
