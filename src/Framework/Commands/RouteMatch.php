@@ -9,8 +9,8 @@ use Venta\Console\Command;
 use Venta\Contracts\Http\RequestFactory;
 use Venta\Contracts\Routing\RouteCollector;
 use Venta\Contracts\Routing\RouteMatcher;
-use Venta\Routing\Exceptions\NotAllowedException;
-use Venta\Routing\Exceptions\NotFoundException;
+use Venta\Routing\Exception\NotAllowedException;
+use Venta\Routing\Exception\NotFoundException;
 use Zend\Diactoros\Uri;
 
 /**
