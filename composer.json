@@ -50,6 +50,7 @@
         "venta/http": "self.version",
         "venta/routing": "self.version",
         "venta/console": "self.version",
-        "venta/event": "self.version"
+        "venta/event": "self.version",
+        "venta/service-provider": "self.version"
     }
 }
