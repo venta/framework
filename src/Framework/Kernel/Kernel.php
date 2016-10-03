@@ -142,15 +142,16 @@ class Kernel implements KernelContract
         // Register base services.
         $this->container->share(KernelContract::class, $this, ['kernel']);
 
-//        $this->container->share(
-//            ServerRequestInterface::class,
-//            [RequestFactoryContract::class, 'createServerRequestFromGlobals'],
-//            ['request', RequestInterface::class, Request::class]
-//        );
-
         $this->container->share(ResponseFactoryContract::class, ResponseFactory::class);
-        $this->container->share(InputInterface::class, new ArgvInput(), ['console.input']);
-        $this->container->share(OutputInterface::class, new ConsoleOutput(), ['console.output']);
+
+        // todo: refactor along with console package.
+        $this->container->share(InputInterface::class, function () {
+            return new ArgvInput();
+        }, ['console.input']);
+        $this->container->share(OutputInterface::class, function () {
+            return new ConsoleOutput();
+        }, ['console.output']);
+
         $this->container->share(RouteCollectorContract::class, RouteCollector::class);
         $this->container->share(MiddlewareCollectorContract::class, MiddlewareCollector::class);
         $this->container->share(CommandCollectorContract::class, CommandCollector::class);
