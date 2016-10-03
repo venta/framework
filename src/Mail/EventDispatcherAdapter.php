@@ -3,7 +3,7 @@
 namespace Venta\Mail;
 
 use Swift_Events_EventObject;
-use Venta\Contracts\Event\EventManager as EventManagerContract;
+use Venta\Contracts\Event\EventDispatcher;
 
 /**
  * Class EventDispatcher
@@ -13,17 +13,24 @@ use Venta\Contracts\Event\EventManager as EventManagerContract;
 class EventDispatcherAdapter extends \Swift_Events_SimpleEventDispatcher
 {
     /**
-     * EventDispatcher constructor.
-     *
-     * @param EventManagerContract $eventManager
+     * @var EventDispatcher
      */
-    public function __construct(EventManagerContract $eventManager)
+    private $eventDispatcher;
+
+    /**
+     * EventDispatcherAdapter constructor.
+     *
+     * @param EventDispatcher $eventDispatcher
+     */
+    public function __construct(EventDispatcher $eventDispatcher)
     {
         parent::__construct();
-        $this->em = $eventManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritdoc
+     */
     public function dispatchEvent(Swift_Events_EventObject $evt, $target)
     {
         parent::dispatchEvent($evt, $target);
@@ -31,7 +38,7 @@ class EventDispatcherAdapter extends \Swift_Events_SimpleEventDispatcher
             return;
         }
         $eventName = $this->normalizeEventName($evt, $target);
-        $this->em->trigger($eventName, ['swiftEventObject' => $evt]);
+        $this->eventDispatcher->trigger($eventName, ['swiftEventObject' => $evt]);
     }
 
     /**

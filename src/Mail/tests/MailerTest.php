@@ -19,8 +19,8 @@ class MailerTest extends TestCase
     public function __construct()
     {
         $config = new \Venta\Config\Config($this->config);
-        $eventManager = new \Venta\Event\EventManager();
-        $this->mailer = new Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $this->mailer = new Venta\Mail\Mailer($config, $eventDispatcher);
     }
 
     /**
@@ -44,8 +44,8 @@ class MailerTest extends TestCase
             ],
         ];
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new Venta\Mail\Mailer($config, $eventDispatcher);
         $mailer->spoolWithTransport();
     }
 
@@ -67,8 +67,8 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new \Venta\Mail\Mailer($config, $eventDispatcher);
 
         $this->assertInstanceOf(\Swift_Transport_MailTransport::class, $mailer->withTransport('mail')->getTransport());
         $this->assertInstanceOf(\Swift_Transport_SmtpAgent::class, $mailer->withTransport('smtp')->getTransport());
@@ -87,8 +87,8 @@ class MailerTest extends TestCase
             ],
         ];
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new Venta\Mail\Mailer($config, $eventDispatcher);
         $this->assertEquals(['fromTeam@ventacommerce.com' => null], $mailer->getMessageBuilder()->getFrom());
         $this->assertEquals(['toTeam@ventacommerce.com' => null], $mailer->getMessageBuilder()->getTo());
     }
@@ -112,8 +112,8 @@ class MailerTest extends TestCase
             ],
         ];
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new Venta\Mail\Mailer($config, $eventDispatcher);
 
         $this->assertEquals([
             'fromTeam@ventacommerce.com' => 'team',
@@ -144,8 +144,8 @@ class MailerTest extends TestCase
             ],
         ];
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new Venta\Mail\Mailer($config, $eventDispatcher);
         $message = $mailer->getMessageBuilder()
                           ->setTo('venta@ventacommerce.com')
                           ->setFrom('fromVenta@ventacommerce.com');
@@ -172,8 +172,8 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new \Venta\Mail\Mailer($config, $eventDispatcher);
         $this->assertInstanceOf(Swift_Transport_SpoolTransport::class, $mailer->spoolWithTransport()->getTransport());
     }
 
@@ -190,8 +190,8 @@ class MailerTest extends TestCase
             ],
         ];
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new \Venta\Mail\Mailer($config, $eventDispatcher);
 
         $this->assertInstanceOf(\Swift_Transport_SmtpAgent::class, $mailer->withTransport()->getTransport());
     }
@@ -211,8 +211,8 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        new \Venta\Mail\Mailer($config, $eventDispatcher);
     }
 
     /**
@@ -221,9 +221,9 @@ class MailerTest extends TestCase
     public function mailerCanBeContructed()
     {
         $config = new \Venta\Config\Config($this->config);
-        $eventManager = new \Venta\Event\EventManager();
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
 
-        $this->assertInstanceOf(Venta\Mail\Mailer::class, new Venta\Mail\Mailer($config, $eventManager));
+        $this->assertInstanceOf(Venta\Mail\Mailer::class, new Venta\Mail\Mailer($config, $eventDispatcher));
     }
 
     /**
@@ -237,8 +237,8 @@ class MailerTest extends TestCase
             ],
         ];
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new Venta\Mail\Mailer($config, $eventDispatcher);
 
         $this->assertFalse($mailer->isDisabled());
     }
@@ -256,8 +256,8 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        new Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        new Venta\Mail\Mailer($config, $eventDispatcher);
     }
 
     /**
@@ -281,8 +281,8 @@ class MailerTest extends TestCase
             ],
         ];
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new Venta\Mail\Mailer($config, $eventDispatcher);
 
         $this->assertTrue($mailer->isDisabled());
         $this->assertInstanceOf(\Swift_Transport_NullTransport::class, $mailer->withTransport()->getTransport());
@@ -304,8 +304,8 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        new \Venta\Mail\Mailer($config, $eventDispatcher);
     }
 
     /**
@@ -323,8 +323,8 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        new \Venta\Mail\Mailer($config, $eventDispatcher);
     }
 
     /**
@@ -344,8 +344,8 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new \Venta\Mail\Mailer($config, $eventDispatcher);
         $this->assertInstanceOf(Swift_Transport_SpoolTransport::class, $mailer->spoolWithTransport()->getTransport());
     }
 
@@ -381,8 +381,8 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        new \Venta\Mail\Mailer($config, $eventDispatcher);
     }
 
     /**
@@ -395,8 +395,8 @@ class MailerTest extends TestCase
             'db_host' => 'localhost',
         ];
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        new \Venta\Mail\Mailer($config, $eventDispatcher);
     }
 
     /**
@@ -417,8 +417,8 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        $mailer = new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        $mailer = new \Venta\Mail\Mailer($config, $eventDispatcher);
         $this->assertInstanceOf(Swift_Transport_SpoolTransport::class, $mailer->spoolWithTransport()->getTransport());
     }
 
@@ -437,7 +437,7 @@ class MailerTest extends TestCase
         ];
 
         $config = new \Venta\Config\Config($array);
-        $eventManager = new \Venta\Event\EventManager();
-        new \Venta\Mail\Mailer($config, $eventManager);
+        $eventDispatcher = new \Venta\Event\EventDispatcher();
+        new \Venta\Mail\Mailer($config, $eventDispatcher);
     }
 }

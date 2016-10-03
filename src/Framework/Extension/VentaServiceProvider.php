@@ -8,7 +8,7 @@ use Venta\Config\ConfigFactory;
 use Venta\Console\Command\CommandCollector as CommandCollector;
 use Venta\Contracts\Config\ConfigFactory as ConfigFactoryContract;
 use Venta\Contracts\Console\CommandCollector as CommandCollectorContract;
-use Venta\Contracts\Event\EventManager as EventManagerContract;
+use Venta\Contracts\Event\EventDispatcher as EventDispatcherContract;
 use Venta\Contracts\Http\RequestFactory as RequestFactoryContract;
 use Venta\Contracts\Http\ResponseEmitter as ResponseEmitterContract;
 use Venta\Contracts\Routing\DispatcherFactory;
@@ -18,7 +18,7 @@ use Venta\Contracts\Routing\RouteCollector as RoutingCollectorContract;
 use Venta\Contracts\Routing\RouteMatcher as RouteMatcherContract;
 use Venta\Contracts\Routing\Strategy;
 use Venta\Contracts\Routing\UrlGenerator;
-use Venta\Event\EventManager;
+use Venta\Event\EventDispatcher;
 use Venta\Framework\Commands\Middlewares;
 use Venta\Framework\Commands\RouteMatch;
 use Venta\Framework\Commands\Routes;
@@ -67,7 +67,7 @@ class VentaServiceProvider extends AbstractServiceProvider
         RoutingCollectorContract::class => RouteCollector::class,
         MiddlewareCollectorContract::class => MiddlewareCollector::class,
         CommandCollectorContract::class => CommandCollector::class,
-        EventManagerContract::class => EventManager::class,
+        EventDispatcherContract::class => EventDispatcher::class,
         ConfigFactoryContract::class => ConfigFactory::class,
     ];
 

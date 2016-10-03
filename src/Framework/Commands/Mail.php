@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Console\Command;
 use Venta\Contracts\Container\Container;
-use Venta\Contracts\Event\EventManager as EventManagerContract;
+use Venta\Contracts\Event\EventDispatcher;
 
 
 class Mail extends Command
@@ -34,8 +34,8 @@ class Mail extends Command
 
     public function handle(InputInterface $input, OutputInterface $output)
     {
-        /** @var $em \Venta\Event\EventManager */
-        $em = $this->container->get(EventManagerContract::class);
+        /** @var $em EventDispatcher */
+        $em = $this->container->get(EventDispatcher::class);
 
         /** @var $mailer \Venta\Mail\Mailer */
         $mailer = $this->container->get('mailer');

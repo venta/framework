@@ -16,7 +16,7 @@ use Swift_Transport_NullTransport;
 use Swift_Transport_SimpleMailInvoker;
 use Swift_Transport_SpoolTransport;
 use Venta\Contracts\Config\Config;
-use Venta\Contracts\Event\EventManager;
+use Venta\Contracts\Event\EventDispatcher;
 use Venta\Contracts\Mail\Mailer as MailerContract;
 use Venta\Mail\Exception\TransportException;
 use Venta\Mail\Exception\UnknownTransportException;
@@ -56,9 +56,9 @@ class Mailer implements MailerContract
     protected $eventDispatcherAdapter;
 
     /**
-     * @var EventManager
+     * @var EventDispatcher
      */
-    protected $eventManager;
+    protected $eventDispatcher;
 
     /**
      * Default From:
@@ -90,14 +90,14 @@ class Mailer implements MailerContract
      * Mailer constructor.
      *
      * @param \Venta\Contracts\Config\Config $config
-     * @param EventManager $eventManager
+     * @param EventDispatcher $eventDispatcher
      * @throws Exception
      */
-    public function __construct(Config $config, EventManager $eventManager)
+    public function __construct(Config $config, EventDispatcher $eventDispatcher)
     {
         $this->getMailerFromGlobalConfig($config);
-        $this->eventManager = $eventManager;
-        $this->eventDispatcherAdapter = new EventDispatcherAdapter($eventManager);
+        $this->eventDispatcher = $eventDispatcher;
+        $this->eventDispatcherAdapter = new EventDispatcherAdapter($eventDispatcher);
         $this->registerTransports();
     }
 
@@ -152,7 +152,7 @@ class Mailer implements MailerContract
         }
         $spoolRealTransport = $this->getTransport($transport);
 
-        $this->eventManager->attach(self::SPOOL_SEND_EVENT, 'send.swiftmailer.spooled',
+        $this->eventDispatcher->attach(self::SPOOL_SEND_EVENT, 'send.swiftmailer.spooled',
             function () use ($spoolRealTransport, $spool) {
                 $failedRecipients = [];
                 $spool->getSpool()->flushQueue($spoolRealTransport(), $failedRecipients);
@@ -251,7 +251,7 @@ class Mailer implements MailerContract
      */
     protected function prepareTransportFactory($transport, Config $config)
     {
-        $eventManagerAdapter = $this->eventDispatcherAdapter;
+        $eventDispatcherAdapter = $this->eventDispatcherAdapter;
         switch ($transport) {
             case('smtp'):
                 $closure = function () use ($config) {
@@ -284,16 +284,16 @@ class Mailer implements MailerContract
                 };
                 break;
             case('mail'):
-                $closure = function () use ($eventManagerAdapter) {
+                $closure = function () use ($eventDispatcherAdapter) {
                     return new Swift_Transport_MailTransport(
                         new Swift_Transport_SimpleMailInvoker(),
-                        $eventManagerAdapter
+                        $eventDispatcherAdapter
                     );
                 };
                 break;
             case('null'):
-                $closure = function () use ($eventManagerAdapter) {
-                    return new Swift_Transport_NullTransport($eventManagerAdapter);
+                $closure = function () use ($eventDispatcherAdapter) {
+                    return new Swift_Transport_NullTransport($eventDispatcherAdapter);
                 };
                 break;
             default:
@@ -375,9 +375,9 @@ class Mailer implements MailerContract
             }
 
             if ($spoolInstance !== null) {
-                $eventManagerAdapter = $this->eventDispatcherAdapter;
+                $eventDispatcherAdapter = $this->eventDispatcherAdapter;
 
-                return new Swift_Transport_SpoolTransport($eventManagerAdapter, $spoolInstance);
+                return new Swift_Transport_SpoolTransport($eventDispatcherAdapter, $spoolInstance);
             }
         }
 
