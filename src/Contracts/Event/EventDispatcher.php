@@ -10,13 +10,6 @@ namespace Venta\Contracts\Event;
 interface EventDispatcher
 {
     /**
-     * Clear all listeners for a given event.
-     *
-     * @param  string $eventName
-     */
-    public function clearListeners(string $eventName);
-
-    /**
      * Add event listener.
      *
      * @param string   $eventName
@@ -24,6 +17,22 @@ interface EventDispatcher
      * @param int      $priority
      */
     public function attach(string $eventName, callable $listener, int $priority = 0);
+
+    /**
+     * Clear all listeners for a given event.
+     *
+     * @param  string $eventName
+     */
+    public function clearListeners(string $eventName);
+
+    /**
+     * Returns new event instance.
+     *
+     * @param  string $eventName
+     * @param  array  $data
+     * @return Event
+     */
+    public function createEvent(string $eventName, array $data = []): Event;
 
     /**
      * Trigger an event.
