@@ -17,11 +17,18 @@
     ],
     "autoload": {
         "psr-4": {
-            "Venta\\": "src/"
-        },
-        "exclude-from-classmap": [
-            "**/tests/"
-        ]
+            "Venta\\Cache\\": "src/Cache/src/",
+            "Venta\\Config\\": "src/Config/src/",
+            "Venta\\Console\\": "src/Console/src/",
+            "Venta\\Container\\": "src/Container/src/",
+            "Venta\\Contracts\\": "src/Contracts/src/",
+            "Venta\\Event\\": "src/Event/src/",
+            "Venta\\Framework\\": "src/Framework/",
+            "Venta\\Http\\": "src/Http/src/",
+            "Venta\\Mail\\": "src/Mail/src/",
+            "Venta\\Routing\\": "src/Routing/src/",
+            "Venta\\ServiceProvider\\": "src/ServiceProvider/src/"
+        }
     },
     "minimum-stability": "dev",
     "require-dev": {
