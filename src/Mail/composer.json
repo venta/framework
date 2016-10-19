@@ -21,11 +21,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Venta\\Mail\\": ""
-        },
-        "exclude-from-classmap": [
-            "/tests/"
-        ]
+            "Venta\\Mail\\": "src/"
+        }
     },
     "minimum-stability": "dev",
     "require-dev": {

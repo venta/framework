@@ -21,11 +21,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Venta\\Http\\": ""
-        },
-        "exclude-from-classmap": [
-            "/tests/"
-        ]
+            "Venta\\Http\\": "src/"
+        }
     },
     "minimum-stability": "dev",
     "require-dev": {

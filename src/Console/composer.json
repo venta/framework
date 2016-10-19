@@ -21,11 +21,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Venta\\Console\\": ""
-        },
-        "exclude-from-classmap": [
-            "/tests/"
-        ]
+            "Venta\\Console\\": "src/"
+        }
     },
     "minimum-stability": "stable",
     "require-dev": {

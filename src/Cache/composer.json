@@ -21,11 +21,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Venta\\Cache\\": ""
-        },
-        "exclude-from-classmap": [
-            "/tests/"
-        ]
+            "Venta\\Cache\\": "src/"
+        }
     },
     "minimum-stability": "dev",
     "require-dev": {
