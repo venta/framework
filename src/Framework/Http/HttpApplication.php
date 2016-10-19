@@ -1,9 +1,10 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Http;
+namespace Venta\Framework\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Venta\Contracts\Container\Container;
+use Venta\Contracts\Http\HttpApplication as HttpApplicationContract;
 use Venta\Contracts\Http\ResponseEmitter as EmitterContract;
 use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollector;
@@ -16,9 +17,9 @@ use Venta\Routing\Route;
 /**
  * Class HttpApplication
  *
- * @package Venta\Application
+ * @package Venta\Framework\Http
  */
-class HttpApplication implements \Venta\Contracts\Http\HttpApplication
+class HttpApplication implements HttpApplicationContract
 {
 
     /**

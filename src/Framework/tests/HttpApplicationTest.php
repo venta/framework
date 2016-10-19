@@ -31,7 +31,7 @@ class HttpApplicationTest extends TestCase
         $kernel = Mockery::mock(Kernel::class);
         $kernel->shouldReceive('boot')->withNoArgs()->andReturn(Mockery::mock(Container::class))->once();
 
-        $app = new \Venta\Http\HttpApplication($kernel);
+        $app = new \Venta\Framework\Http\HttpApplication($kernel);
 
         $this->assertInstanceOf(\Venta\Contracts\Http\HttpApplication::class, $app);
     }
@@ -78,7 +78,7 @@ class HttpApplicationTest extends TestCase
         $kernel->shouldReceive('boot')->withNoArgs()->andReturn($container)->once();
 
         // Create and run application
-        $app = new \Venta\Http\HttpApplication($kernel);
+        $app = new \Venta\Framework\Http\HttpApplication($kernel);
         $app->run();
     }
 
