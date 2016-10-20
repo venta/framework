@@ -2,9 +2,8 @@
 
 namespace Venta\Contracts\Routing;
 
-use Closure;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Interface Middleware
@@ -14,12 +13,17 @@ use Psr\Http\Message\ResponseInterface;
 interface Middleware
 {
     /**
-     * Function, called on middleware execution
+     * Process a server request and return a response.
      *
-     * @param RequestInterface $request
-     * @param Closure $next
+     * Takes the incoming request and optionally modifies it before delegating
+     * to the next frame to get a response.
+     *
+     * @link https://github.com/php-fig/fig-standards/blob/master/proposed/http-middleware/middleware.md#24-psrhttpmiddlewareservermiddlewareinterface
+     *
+     * @param ServerRequestInterface $request
+     * @param Delegate $delegate
      * @return ResponseInterface
      */
-    public function handle(RequestInterface $request, Closure $next) : ResponseInterface;
+    public function process(ServerRequestInterface $request, Delegate $delegate): ResponseInterface;
 
 }

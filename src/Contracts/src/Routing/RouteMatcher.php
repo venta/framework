@@ -2,8 +2,7 @@
 
 namespace Venta\Contracts\Routing;
 
-use Psr\Http\Message\RequestInterface;
-use Venta\Routing\Route;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Interface RouteMatcher
@@ -14,12 +13,12 @@ interface RouteMatcher
 {
 
     /**
-     * Finds route matching provided request
+     * Matches route collection against provided request.
      *
-     * @param RequestInterface $request
-     * @param RouteCollector $collector
+     * @param ServerRequestInterface $request
+     * @param RouteCollection $routeCollection
      * @return Route
      */
-    public function match(RequestInterface $request, RouteCollector $collector): Route;
+    public function match(ServerRequestInterface $request, RouteCollection $routeCollection): Route;
 
 }

@@ -32,6 +32,7 @@
     },
     "minimum-stability": "dev",
     "require-dev": {
+        "phpspec/phpspec": "^3.1",
         "phpunit/phpunit": "^5.4",
         "mockery/mockery": "^0.9.5"
     },

@@ -2,27 +2,20 @@
 
 namespace Venta\Contracts\Routing;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
 /**
  * Interface MiddlewarePipeline
  *
  * @package Venta\Contracts\Routing
  */
-interface MiddlewarePipeline
+interface MiddlewarePipeline extends Middleware
 {
 
     /**
-     * Process middleware pipeline:
-     * - add $last as the last middleware
-     * - pass $request instance through pipeline
-     * - expect Response instance on the end
+     * Return an instance with the specified middleware added to the pipeline.
      *
-     * @param RequestInterface $request
-     * @param callable $last
-     * @return ResponseInterface
+     * @param Middleware $middleware
+     * @return MiddlewarePipeline
      */
-    public function handle(RequestInterface $request, callable $last): ResponseInterface;
+    public function withMiddleware(Middleware $middleware): MiddlewarePipeline;
 
 }

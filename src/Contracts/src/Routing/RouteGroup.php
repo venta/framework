@@ -7,15 +7,16 @@ namespace Venta\Contracts\Routing;
  *
  * @package Venta\Contracts\Routing
  */
-interface RouteGroup extends RouteCollector
+interface RouteGroup extends RouteCollection
 {
 
     /**
-     * Collect routes assigned to the group
+     * Calls callback to collect routes passing new group instance.
      *
-     * @return void
+     * @param callable $callback
+     * @return RouteGroup
      */
-    public function collect();
+    public static function collect(callable $callback): RouteGroup;
 
     /**
      * Set host for whole route group

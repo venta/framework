@@ -1,0 +1,6 @@
+suites:
+    routing_suite:
+        namespace: Venta\Routing
+        psr4_prefix: Venta\Routing
+        src_path: src/Routing/src
+        spec_path: src/Routing

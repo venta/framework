@@ -13,7 +13,7 @@ interface DispatcherFactory
 {
 
     /**
-     * Make dispatcher instance and pass $data array
+     * Creates dispatcher with provided parsed route data.
      *
      * @param array $data
      * @return Dispatcher

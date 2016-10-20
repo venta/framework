@@ -2,6 +2,9 @@
 
 namespace Venta\Framework\Kernel;
 
+use FastRoute\DataGenerator\GroupCountBased;
+use FastRoute\RouteCollector;
+use FastRoute\RouteParser\Std;
 use Psr\Log\LoggerAwareInterface;
 use ReflectionObject;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -17,15 +20,21 @@ use Venta\Contracts\Container\ContainerAware;
 use Venta\Contracts\Http\ResponseFactory as ResponseFactoryContract;
 use Venta\Contracts\Kernel\Kernel as KernelContract;
 use Venta\Contracts\Kernel\KernelBootStage;
+use Venta\Contracts\Routing\DispatcherFactory;
 use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollectorContract;
-use Venta\Contracts\Routing\RouteCollector as RouteCollectorContract;
+use Venta\Contracts\Routing\MiddlewarePipelineFactory;
+use Venta\Contracts\Routing\Route;
+use Venta\Contracts\Routing\RouteCollection;
+use Venta\Contracts\Routing\RouteDispatcherFactory;
+use Venta\Contracts\Routing\RouteGroup;
+use Venta\Contracts\Routing\RouteMatcher;
+use Venta\Contracts\Routing\RouteParser;
 use Venta\Framework\Kernel\BootStage\BootServiceProviders;
 use Venta\Framework\Kernel\BootStage\DetectEnvironment;
 use Venta\Framework\Kernel\BootStage\LoadApplicationConfiguration;
 use Venta\Framework\Kernel\BootStage\RegisterErrorHandler;
 use Venta\Http\Factory\ResponseFactory;
-use Venta\Routing\Middleware\MiddlewareCollector as MiddlewareCollector;
-use Venta\Routing\RouteCollector as RouteCollector;
+use Venta\Routing\Router;
 
 /**
  * Class Kernel
@@ -152,8 +161,20 @@ class Kernel implements KernelContract
             return new ConsoleOutput();
         }, ['console.output']);
 
-        $this->container->share(RouteCollectorContract::class, RouteCollector::class);
-        $this->container->share(MiddlewareCollectorContract::class, MiddlewareCollector::class);
+        // routing services
+        $this->container->share(DispatcherFactory::class, \Venta\Routing\DispatcherFactory::class);
+        $this->container->share(MiddlewarePipelineFactory::class, \Venta\Routing\MiddlewarePipelineFactory::class);
+        $this->container->set(Route::class, \Venta\Routing\Route::class);
+        $this->container->share(RouteCollection::class, \Venta\Routing\RouteCollection::class);
+        $this->container->share(RouteDispatcherFactory::class, \Venta\Routing\RouteDispatcherFactory::class);
+        $this->container->share(RouteMatcher::class, \Venta\Routing\RouteMatcher::class);
+        $this->container->share(RouteParser::class, \Venta\Routing\RouteParser::class);
+        $this->container->share(Router::class, Router::class);
+        $this->container->set(RouteGroup::class, \Venta\Routing\RouteGroup::class);
+        $this->container->set(RouteCollector::class, function () {
+            return new RouteCollector(new Std(), new GroupCountBased());
+        });
+
         $this->container->share(CommandCollectorContract::class, CommandCollector::class);
         $this->container->share(ConfigFactoryContract::class, ConfigFactory::class);
 
