@@ -7,7 +7,7 @@ use Venta\Container\Container;
 use Venta\Contracts\Console\CommandCollector;
 use Venta\Contracts\Http\RequestFactory;
 use Venta\Contracts\Http\ResponseEmitter;
-use Venta\Contracts\Routing\DispatcherFactory;
+use Venta\Contracts\Routing\FastrouteDispatcherFactory;
 use Venta\Contracts\Routing\MiddlewareCollector;
 use Venta\Contracts\Routing\MiddlewarePipeline;
 use Venta\Contracts\Routing\RouteCollector;
@@ -56,7 +56,7 @@ class VentaExtensionProviderTest extends TestCase
         $this->assertTrue($container->has(DataGenerator::class));
         $this->assertTrue($container->has(UrlGenerator::class));
         $this->assertTrue($container->has(MiddlewarePipeline::class));
-        $this->assertTrue($container->has(DispatcherFactory::class));
+        $this->assertTrue($container->has(FastrouteDispatcherFactory::class));
         $this->assertTrue($container->has(RouteMatcher::class));
         $this->assertTrue($container->has(Strategy::class));
         $this->assertTrue($container->has(RequestFactory::class));

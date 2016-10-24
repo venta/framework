@@ -5,11 +5,11 @@ namespace Venta\Contracts\Routing;
 use FastRoute\Dispatcher;
 
 /**
- * Interface DispatcherFactory
+ * Interface FastrouteDispatcherFactory
  *
  * @package Venta\Contracts\Routing
  */
-interface DispatcherFactory
+interface FastrouteDispatcherFactory
 {
 
     /**

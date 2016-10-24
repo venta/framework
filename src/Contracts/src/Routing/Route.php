@@ -50,4 +50,47 @@ interface Route
      */
     public function getVariables(): array;
 
+    /**
+     * @param string $host
+     * @return Route
+     */
+    public function withHost(string $host): Route;
+
+    /**
+     * @param string $middleware
+     * @return Route
+     */
+    public function withMiddleware(string $middleware): Route;
+
+    /**
+     * Set the name.
+     *
+     * @param string $name
+     * @return Route
+     */
+    public function withName(string $name): Route;
+
+    /**
+     * Prefix the path.
+     *
+     * @param string $prefix
+     * @return Route
+     */
+    public function withPathPrefix(string $prefix): Route;
+
+    /**
+     * Set the scheme.
+     *
+     * @param string $scheme
+     * @return Route
+     */
+    public function withScheme(string $scheme): Route;
+
+    /**
+     * Set route parameters.
+     *
+     * @param array $variables
+     * @return Route
+     */
+    public function withVariables(array $variables): Route;
 }

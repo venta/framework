@@ -20,9 +20,10 @@ use Venta\Contracts\Container\ContainerAware;
 use Venta\Contracts\Http\ResponseFactory as ResponseFactoryContract;
 use Venta\Contracts\Kernel\Kernel as KernelContract;
 use Venta\Contracts\Kernel\KernelBootStage;
-use Venta\Contracts\Routing\DispatcherFactory;
+use Venta\Contracts\Routing\FastrouteDispatcherFactory;
 use Venta\Contracts\Routing\MiddlewareCollector as MiddlewareCollectorContract;
 use Venta\Contracts\Routing\MiddlewarePipelineFactory;
+use Venta\Contracts\Routing\RequestRouteCollectionFactory;
 use Venta\Contracts\Routing\Route;
 use Venta\Contracts\Routing\RouteCollection;
 use Venta\Contracts\Routing\RouteDispatcherFactory;
@@ -162,11 +163,17 @@ class Kernel implements KernelContract
         }, ['console.output']);
 
         // routing services
-        $this->container->share(DispatcherFactory::class, \Venta\Routing\DispatcherFactory::class);
-        $this->container->share(MiddlewarePipelineFactory::class, \Venta\Routing\MiddlewarePipelineFactory::class);
+        $this->container->share(FastrouteDispatcherFactory::class,
+            \Venta\Routing\Factory\GroupCountBasedDispatcherFactory::class);
+        $this->container->share(
+            RequestRouteCollectionFactory::class,
+            \Venta\Routing\Factory\RequestRouteCollectionFactory::class
+        );
+        $this->container->share(MiddlewarePipelineFactory::class,
+            \Venta\Routing\Factory\MiddlewarePipelineFactory::class);
         $this->container->set(Route::class, \Venta\Routing\Route::class);
         $this->container->share(RouteCollection::class, \Venta\Routing\RouteCollection::class);
-        $this->container->share(RouteDispatcherFactory::class, \Venta\Routing\RouteDispatcherFactory::class);
+        $this->container->share(RouteDispatcherFactory::class, \Venta\Routing\Factory\RouteDispatcherFactory::class);
         $this->container->share(RouteMatcher::class, \Venta\Routing\RouteMatcher::class);
         $this->container->share(RouteParser::class, \Venta\Routing\RouteParser::class);
         $this->container->share(Router::class, Router::class);
