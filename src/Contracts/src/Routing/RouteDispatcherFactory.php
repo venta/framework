@@ -14,8 +14,8 @@ interface RouteDispatcherFactory
      * Returns route handler dispatching delegate.
      *
      * @param Route $route
-     * @return Delegate
+     * @return RouteDispatcher
      */
-    public function create(Route $route): Delegate;
+    public function create(Route $route): RouteDispatcher;
 
 }

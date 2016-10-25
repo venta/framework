@@ -22,16 +22,9 @@ interface Kernel
     /**
      * Boots framework kernel.
      *
-     * @return void
-     */
-    public function boot();
-
-    /**
-     * Returns service container instance.
-     *
      * @return Container
      */
-    public function getContainer(): Container;
+    public function boot(): Container;
 
     /**
      * Returns current running environment.

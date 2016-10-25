@@ -18,7 +18,7 @@ use Venta\Framework\Commands\Middlewares;
 use Venta\Framework\Commands\RouteMatch;
 use Venta\Framework\Commands\Routes;
 use Venta\Framework\Commands\Shell;
-use Venta\Framework\Extension\VentaServiceProvider;
+use Venta\Framework\ServiceProvider\VentaServiceProvider;
 
 class VentaExtensionProviderTest extends TestCase
 {

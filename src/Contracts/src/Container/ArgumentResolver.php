@@ -12,7 +12,7 @@ use ReflectionMethod;
  *
  * @package Venta\Contracts\Container
  */
-interface ArgumentResolver extends ContainerAware
+interface ArgumentResolver
 {
     /**
      * Create reflector depending on callable type.

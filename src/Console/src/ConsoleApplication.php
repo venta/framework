@@ -25,10 +25,6 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
      */
     protected $container;
 
-    /**
-     * @var Kernel
-     */
-    protected $kernel;
 
     /**
      * HttpApplication constructor.
@@ -37,7 +33,7 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
      */
     public function __construct(Kernel $kernel)
     {
-        $this->kernel = $kernel;
+        $this->container = $kernel->boot();
 
         parent::__construct('Venta', $kernel->getVersion());
     }
@@ -68,10 +64,6 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
      */
     final public function run(InputInterface $input = null, OutputInterface $output = null)
     {
-        $this->kernel->boot();
-
-        $this->container = $this->kernel->getContainer();
-
         /*
         |--------------------------------------------------------------------------
         | Bind input

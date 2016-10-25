@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Extension;
+namespace Venta\Framework\ServiceProvider;
 
 use Venta\Contracts\Mail\Mailer as MailerContract;
 use Venta\Framework\Commands\Mail;
@@ -8,9 +8,9 @@ use Venta\Mail\Mailer;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
 /**
- * Class MailExtensionProvider
+ * Class MailServiceProvider
  *
- * @package Venta\Framework\Extension
+ * @package Venta\Framework\ServiceProvider
  */
 class MailServiceProvider extends AbstractServiceProvider
 {

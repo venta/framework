@@ -7,7 +7,7 @@ namespace Venta\Contracts\Container;
  *
  * @package Venta\Contracts\Container
  */
-interface ObjectInflector extends ArgumentResolverAware
+interface ObjectInflector
 {
     /**
      * Add new object inflection to be applied.

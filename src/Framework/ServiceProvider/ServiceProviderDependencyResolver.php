@@ -5,7 +5,7 @@ namespace Venta\Framework\ServiceProvider;
 use LogicException;
 
 /**
- * Class ServiceProviderDependencyResolver.
+ * Class ServiceProviderDependencyResolver
  *
  * @package Venta\Framework\ServiceProvider
  */

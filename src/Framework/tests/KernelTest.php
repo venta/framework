@@ -79,7 +79,7 @@ class KernelTest extends TestCase
         $extension->shouldReceive('provideCommands')->with($commandCollector)->once();
         $extension->shouldReceive('provideConfig')->with(Mockery::type(ConfigFactory::class))->andReturn(new Config)->once();
 
-        $kernel = new class($container, __DIR__, 'providers.php') extends \Venta\Framework\Kernel\Kernel
+        $kernel = new class($container, __DIR__, 'providers.php') extends \Venta\Framework\Kernel\AbstractKernel
         {
 
             public function addExtensionProviderInstance($name, $instance)
@@ -109,7 +109,7 @@ class KernelTest extends TestCase
             return $arg instanceof Kernel;
         }), ['kernel'])->once();
 
-        $kernel = new \Venta\Framework\Kernel\Kernel($container, __DIR__, 'providers.php');
+        $kernel = new \Venta\Framework\Kernel\AbstractKernel($container, __DIR__, 'providers.php');
 
         $this->assertInstanceOf(Kernel::class, $kernel);
     }
@@ -122,7 +122,7 @@ class KernelTest extends TestCase
         $container = Mockery::mock(Container::class);
         $container->shouldReceive('share');
 
-        $kernel = new \Venta\Framework\Kernel\Kernel($container, __DIR__, 'providers.php');
+        $kernel = new \Venta\Framework\Kernel\AbstractKernel($container, __DIR__, 'providers.php');
 
         // Assuming nobody will run unit-tests from non-cli environment
         $this->assertTrue($kernel->isCli());
@@ -136,7 +136,7 @@ class KernelTest extends TestCase
         $container = Mockery::mock(Container::class);
         $container->shouldReceive('share');
 
-        $kernel = new \Venta\Framework\Kernel\Kernel($container, __DIR__, 'providers.php');
+        $kernel = new \Venta\Framework\Kernel\AbstractKernel($container, __DIR__, 'providers.php');
 
         $this->assertSame('test', $kernel->getEnvironment());
     }
@@ -149,7 +149,7 @@ class KernelTest extends TestCase
         $container = Mockery::mock(Container::class);
         $container->shouldReceive('share');
 
-        $kernel = new \Venta\Framework\Kernel\Kernel($container, __DIR__, 'providers.php');
+        $kernel = new \Venta\Framework\Kernel\AbstractKernel($container, __DIR__, 'providers.php');
 
         $this->assertTrue(is_string($kernel->getVersion()));
     }
@@ -163,7 +163,7 @@ class KernelTest extends TestCase
         $container = Mockery::mock(Container::class);
         $container->shouldReceive('share');
 
-        $kernel = new \Venta\Framework\Kernel\Kernel($container, __DIR__, '');
+        $kernel = new \Venta\Framework\Kernel\AbstractKernel($container, __DIR__, '');
         $kernel->boot();
     }
 
@@ -176,7 +176,7 @@ class KernelTest extends TestCase
         $container = Mockery::mock(Container::class);
         $container->shouldReceive('share');
 
-        $kernel = new \Venta\Framework\Kernel\Kernel($container, __DIR__, 'broken_extensions_file.php');
+        $kernel = new \Venta\Framework\Kernel\AbstractKernel($container, __DIR__, 'broken_extensions_file.php');
         $kernel->boot();
     }
 
@@ -189,7 +189,7 @@ class KernelTest extends TestCase
         $container = Mockery::mock(Container::class);
         $container->shouldReceive('share');
 
-        $kernel = new \Venta\Framework\Kernel\Kernel($container, __DIR__, 'some_random_file');
+        $kernel = new \Venta\Framework\Kernel\AbstractKernel($container, __DIR__, 'some_random_file');
         $kernel->boot();
     }
 

@@ -41,9 +41,7 @@ class CommandCollector implements CommandCollectorContract, ContainerAware
      */
     public function getCommands(): array
     {
-        return array_map(function ($command) {
-            return $this->container->get($command);
-        }, $this->commands);
+        return array_map([$this->container, 'get'], $this->commands);
     }
 
 }
