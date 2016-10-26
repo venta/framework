@@ -4,6 +4,7 @@ namespace Venta\Framework\Extensions\Event;
 
 use Venta\Container\ContainerAwareTrait;
 use Venta\Contracts\Container\ContainerAware;
+use Venta\Contracts\Event\Event as EventContract;
 use Venta\Event\EventDispatcher as BaseEventDispatcher;
 
 /**
