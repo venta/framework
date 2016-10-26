@@ -3,7 +3,7 @@
 namespace Venta\Framework\ServiceProvider;
 
 use Venta\Contracts\Event\EventDispatcher;
-use Venta\Framework\Extensions\Event\EventDispatcher as ContainerAwareEventDispatcher;
+use Venta\Framework\Event\EventDispatcher as ContainerAwareEventDispatcher;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
 /**
@@ -11,7 +11,7 @@ use Venta\ServiceProvider\AbstractServiceProvider;
  *
  * @package Venta\Framework
  */
-class EventDispatcherServiceProvider extends AbstractServiceProvider
+class EventServiceProvider extends AbstractServiceProvider
 {
     /**
      * @inheritDoc

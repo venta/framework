@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Extensions\Event;
+namespace Venta\Framework\Event;
 
 use Venta\Container\ContainerAwareTrait;
 use Venta\Contracts\Container\ContainerAware;
