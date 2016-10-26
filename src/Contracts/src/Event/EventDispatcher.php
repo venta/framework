@@ -12,30 +12,17 @@ interface EventDispatcher
     /**
      * Attach an event listener.
      *
-     * @param string   $eventName
-     * @param callable $listener
-     * @param int      $priority
-     */
-    public function attach(string $eventName, callable $listener, int $priority = 0);
-
-    /**
-     * Clear all listeners for a given event.
-     *
      * @param  string $eventName
+     * @param  mixed  $listener
+     * @param  int    $priority
+     * @throws InvalidArgumentException
      */
-    public function clearListeners(string $eventName);
-
-    /**
-     * Subscribes subscriber to dispatcher.
-     *
-     * @param  EventSubscriber $subscriber
-     */
-    public function subscribe(EventSubscriber $subscriber);
+    public function addListener(string $eventName, $listener, int $priority = 0);
 
     /**
      * Trigger an event.
      *
      * @param  Event $event
      */
-    public function trigger(Event $event);
+    public function dispatch(Event $event);
 }

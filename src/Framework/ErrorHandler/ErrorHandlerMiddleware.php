@@ -13,7 +13,7 @@ use Whoops\RunInterface;
  *
  * @package Venta\ErrorHandler
  */
-class ErrorHandlerMiddleware implements Middleware
+class ErrorHandlerMiddleware
 {
     /**
      * Response factory to create new Response instance
