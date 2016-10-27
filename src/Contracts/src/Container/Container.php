@@ -11,14 +11,6 @@ use Interop\Container\ContainerInterface;
  */
 interface Container extends ContainerInterface
 {
-    /**
-     * Add alias for container service.
-     *
-     * @param string $id
-     * @param string $alias
-     * @return void
-     */
-    public function alias(string $id, string $alias);
 
     /**
      * Invoke a callable with resolving dependencies.
@@ -57,18 +49,14 @@ interface Container extends ContainerInterface
      *
      * @param string $id Container service identifier.
      * @param mixed $service Container service definition.
-     * @param array $aliases List of service identifier aliases container should be able to resolve by.
-     * @return void
      */
-    public function set(string $id, $service, array $aliases = []);
+    public function set(string $id, $service);
 
     /**
      * Add shared instance to container.
      *
      * @param string $id Container service identifier.
      * @param mixed $service
-     * @param array $aliases
-     * @return void
      */
-    public function share(string $id, $service, array $aliases = []);
+    public function share(string $id, $service);
 }
