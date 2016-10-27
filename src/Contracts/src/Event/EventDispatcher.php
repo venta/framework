@@ -13,9 +13,8 @@ interface EventDispatcher
      * Attach an event listener.
      *
      * @param  string $eventName
-     * @param  mixed  $listener
+     * @param  callable $listener
      * @param  int    $priority
-     * @throws InvalidArgumentException
      */
     public function addListener(string $eventName, $listener, int $priority = 0);
 

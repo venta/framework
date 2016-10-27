@@ -21,7 +21,7 @@ class EventDispatcher extends BaseEventDispatcher implements ContainerAware
      */
     protected function callListener($listener, EventContract $event)
     {
-        $this->container->callWithArguments($listener, [$event]);
+        $this->container->call($listener, [$event]);
     }
 
     /**
