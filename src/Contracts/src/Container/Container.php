@@ -29,22 +29,6 @@ interface Container extends ContainerInterface
     public function call($callable, array $arguments = []);
 
     /**
-     * Invoke a callable without resolving dependencies.
-     *
-     * @param $callable
-     * @param array $arguments
-     */
-    public function callWithArguments($callable, array $arguments);
-
-    /**
-     * Defines, if passed in item is callable by container.
-     *
-     * @param  mixed $callable
-     * @return bool
-     */
-    public function isCallable($callable): bool;
-
-    /**
      * {@inheritDoc}
      * @param array $arguments
      */
@@ -59,6 +43,14 @@ interface Container extends ContainerInterface
      * @return void
      */
     public function inflect(string $id, string $method, array $arguments = []);
+
+    /**
+     * Defines, if passed in item is callable by container.
+     *
+     * @param  mixed $callable
+     * @return bool
+     */
+    public function isCallable($callable): bool;
 
     /**
      * Add an service to the container. It allows to assign multiple aliases to resolve a single definition.
