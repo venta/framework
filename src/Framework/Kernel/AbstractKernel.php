@@ -2,7 +2,6 @@
 
 namespace Venta\Framework\Kernel;
 
-use Interop\Container\ContainerInterface;
 use InvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
 use Venta\Config\ConfigFactory;
@@ -46,7 +45,7 @@ abstract class AbstractKernel implements Kernel
         }
 
         /** @var Config $config */
-        $config = $container->get('config');
+        $config = $container->get(Config::class);
 
         // Here we boot service providers on by one. The correct order must be ensured in advance.
         foreach ($this->getServiceProvidersToBoot() as $providerClass) {
@@ -66,7 +65,7 @@ abstract class AbstractKernel implements Kernel
      */
     public function getEnvironment(): string
     {
-        return getenv('APP_ENV') ? getenv('APP_ENV') : 'local';
+        return getenv('APP_ENV') ?: 'local';
     }
 
     /**
@@ -190,14 +189,13 @@ abstract class AbstractKernel implements Kernel
      */
     private function initServiceContainer()
     {
+        /** @var Container $container */
         $container = new $this->containerClass;
 
-        $container->share(Container::class, $container, ['container', ContainerInterface::class]);
-        $container->share(Kernel::class, $this, ['kernel']);
+        $container->share(Container::class, $container);
+        $container->share(Kernel::class, $this);
 
         $container->share(ConfigFactoryContract::class, ConfigFactory::class);
-
-
 
         // Register default inflections.
         $container->inflect(ContainerAware::class, 'setContainer', ['container' => $container]);
