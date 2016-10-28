@@ -1,13 +1,13 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\ServiceProvider;
+namespace Venta\Framework\Kernel\Resolver;
 
 use LogicException;
 
 /**
  * Class ServiceProviderDependencyResolver
  *
- * @package Venta\Framework\ServiceProvider
+ * @package Venta\Framework\Kernel\Resolver
  */
 class ServiceProviderDependencyResolver
 {

@@ -14,7 +14,7 @@ use Venta\Contracts\ServiceProvider\ServiceProvider;
 use Venta\Framework\Kernel\Module\ConfigurationLoadingModule;
 use Venta\Framework\Kernel\Module\EnvironmentDetectionModule;
 use Venta\Framework\Kernel\Module\ErrorHandlingModule;
-use Venta\Framework\ServiceProvider\ServiceProviderDependencyResolver;
+use Venta\Framework\Kernel\Resolver\ServiceProviderDependencyResolver;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
 /**
@@ -47,8 +47,9 @@ abstract class AbstractKernel implements Kernel
         /** @var Config $config */
         $config = $container->get(Config::class);
 
-        // Here we boot service providers on by one. The correct order must be ensured in advance.
-        foreach ($this->getServiceProvidersToBoot() as $providerClass) {
+        // Here we boot service providers on by one. The correct order is ensured be resolver.
+        $resolver = $container->get(ServiceProviderDependencyResolver::class);
+        foreach ($resolver->resolve($this->registerServiceProviders()) as $providerClass) {
             $this->bootServiceProvider($providerClass, $container, $config);
         }
 
@@ -114,19 +115,6 @@ abstract class AbstractKernel implements Kernel
         $provider->boot();
 
         // todo: dispatch event
-    }
-
-    /**
-     * Returns a list of service provider classes considering their mutual dependence.
-     *
-     * @return string[]
-     */
-    protected function getServiceProvidersToBoot(): array
-    {
-        /** @var ServiceProviderDependencyResolver $providerSequenceResolver */
-        $providerSequenceResolver = new ServiceProviderDependencyResolver; // todo: remove tight coupling
-
-        return $providerSequenceResolver->resolve($this->registerServiceProviders());
     }
 
     /**
