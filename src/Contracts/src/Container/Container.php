@@ -26,7 +26,6 @@ interface Container extends ContainerInterface
      * @param string $id
      * @param callable $callable
      * @param bool $shared
-     * @return
      */
     public function factory(string $id, $callable, $shared = false);
 
@@ -50,7 +49,7 @@ interface Container extends ContainerInterface
      * Register concrete object.
      *
      * @param string $id
-     * @param $instance
+     * @param object $instance
      */
     public function instance(string $id, $instance);
 
@@ -68,8 +67,6 @@ interface Container extends ContainerInterface
      * @param string $id Container service identifier.
      * @param string $service Container service definition.
      * @param bool $shared
-     * @return
-     * @internal param bool $share
      */
     public function set(string $id, string $service, $shared = false);
 }
