@@ -21,6 +21,16 @@ interface Container extends ContainerInterface
     public function call($callable, array $arguments = []);
 
     /**
+     * Register callable factory definition.
+     *
+     * @param string $id
+     * @param callable $callable
+     * @param bool $shared
+     * @return
+     */
+    public function factory(string $id, $callable, $shared = false);
+
+    /**
      * {@inheritDoc}
      * @param array $arguments
      */
@@ -37,6 +47,14 @@ interface Container extends ContainerInterface
     public function inflect(string $id, string $method, array $arguments = []);
 
     /**
+     * Register concrete object.
+     *
+     * @param string $id
+     * @param $instance
+     */
+    public function instance(string $id, $instance);
+
+    /**
      * Defines, if passed in item is callable by container.
      *
      * @param  mixed $callable
@@ -45,18 +63,13 @@ interface Container extends ContainerInterface
     public function isCallable($callable): bool;
 
     /**
-     * Add an service to the container. It allows to assign multiple aliases to resolve a single definition.
+     * Register class name definition.
      *
      * @param string $id Container service identifier.
-     * @param mixed $service Container service definition.
+     * @param string $service Container service definition.
+     * @param bool $shared
+     * @return
+     * @internal param bool $share
      */
-    public function set(string $id, $service);
-
-    /**
-     * Add shared instance to container.
-     *
-     * @param string $id Container service identifier.
-     * @param mixed $service
-     */
-    public function share(string $id, $service);
+    public function set(string $id, string $service, $shared = false);
 }
