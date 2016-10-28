@@ -192,10 +192,10 @@ abstract class AbstractKernel implements Kernel
         /** @var Container $container */
         $container = new $this->containerClass;
 
-        $container->share(Container::class, $container);
-        $container->share(Kernel::class, $this);
+        $container->instance(Container::class, $container);
+        $container->instance(Kernel::class, $this);
 
-        $container->share(ConfigFactoryContract::class, ConfigFactory::class);
+        $container->set(ConfigFactoryContract::class, ConfigFactory::class, true);
 
         // Register default inflections.
         $container->inflect(ContainerAware::class, 'setContainer', ['container' => $container]);

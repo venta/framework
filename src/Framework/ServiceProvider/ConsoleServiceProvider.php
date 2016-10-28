@@ -25,15 +25,15 @@ class ConsoleServiceProvider extends AbstractServiceProvider
     public function boot()
     {
         // todo: refactor along with console package.
-        $this->container->share(InputInterface::class, function () {
+        $this->container->factory(InputInterface::class, function () {
             return new ArgvInput;
-        });
+        }, true);
 
-        $this->container->share(OutputInterface::class, function () {
+        $this->container->factory(OutputInterface::class, function () {
             return new ConsoleOutput;
-        });
+        }, true);
 
-        $this->container->share(CommandCollectorContract::class, CommandCollector::class);
+        $this->container->set(CommandCollectorContract::class, CommandCollector::class, true);
 
         $this->provideCommands(
             Shell::class

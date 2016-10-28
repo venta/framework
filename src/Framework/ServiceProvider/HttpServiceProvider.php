@@ -23,13 +23,14 @@ class HttpServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container->share(ResponseFactoryContract::class, ResponseFactory::class);
-        $this->container->share(ResponseEmitterContract::class, ResponseEmitter::class);
+        $this->container->set(ResponseFactoryContract::class, ResponseFactory::class, true);
+        $this->container->set(ResponseEmitterContract::class, ResponseEmitter::class, true);
 
         // todo: bind to factory interface (if possible)
-        $this->container->share(
+        $this->container->factory(
             Request::class,
-            [RequestFactory::class, 'createServerRequestFromGlobals']
+            [RequestFactory::class, 'createServerRequestFromGlobals'],
+            true
         );
     }
 }

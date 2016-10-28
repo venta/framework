@@ -40,20 +40,20 @@ class RoutingServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container->share(FastrouteDispatcherFactory::class, GroupCountBasedDispatcherFactory::class);
-        $this->container->share(RequestRouteCollectionFactoryContract::class, RequestRouteCollectionFactory::class);
-        $this->container->share(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class);
-        $this->container->share(RouteCollectionContract::class, RouteCollection::class);
-        $this->container->share(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class);
-        $this->container->share(RouteMatcherContract::class, RouteMatcher::class);
-        $this->container->share(RouteParserContract::class, RouteParser::class);
-        $this->container->share(RouterContract::class, Router::class);
+        $this->container->set(FastrouteDispatcherFactory::class, GroupCountBasedDispatcherFactory::class, true);
+        $this->container->set(RequestRouteCollectionFactoryContract::class, RequestRouteCollectionFactory::class, true);
+        $this->container->set(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class, true);
+        $this->container->set(RouteCollectionContract::class, RouteCollection::class, true);
+        $this->container->set(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class, true);
+        $this->container->set(RouteMatcherContract::class, RouteMatcher::class, true);
+        $this->container->set(RouteParserContract::class, RouteParser::class, true);
+        $this->container->set(RouterContract::class, Router::class, true);
 
         $this->container->set(RouteGroupContract::class, RouteGroup::class);
         $this->container->set(RouteContract::class, Route::class);
 
-        $this->container->share(RouteCollector::class, function () {
+        $this->container->factory(RouteCollector::class, function () {
             return new RouteCollector(new Std, new GroupCountBased);
-        });
+        }, true);
     }
 }

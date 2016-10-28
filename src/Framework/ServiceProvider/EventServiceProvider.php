@@ -18,6 +18,6 @@ class EventServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container->share(EventDispatcher::class, ContainerAwareEventDispatcher::class);
+        $this->container->set(EventDispatcher::class, ContainerAwareEventDispatcher::class, true);
     }
 }

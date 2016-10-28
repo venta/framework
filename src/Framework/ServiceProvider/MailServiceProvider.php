@@ -29,7 +29,7 @@ class MailServiceProvider extends AbstractServiceProvider
             ],
         ]);
 
-        $this->container->share(MailerContract::class, Mailer::class, ['mailer']);
+        $this->container->set(MailerContract::class, Mailer::class, true);
 
         $this->provideCommands(Mail::class);
     }
