@@ -13,12 +13,23 @@ interface Container extends ContainerInterface
 {
 
     /**
-     * Invoke a callable with resolving dependencies.
+     * Register method to be called after service instantiation.
      *
-     * @param $callable
+     * @param string $id
+     * @param string $method
      * @param array $arguments
+     * @return void
      */
-    public function call($callable, array $arguments = []);
+    public function addInflection(string $id, string $method, array $arguments = []);
+
+    /**
+     * Register class name definition.
+     *
+     * @param string $id Contract (interface) name.
+     * @param string $class Contract implementation class name.
+     * @param bool $shared
+     */
+    public function bindClass(string $id, string $class, $shared = false);
 
     /**
      * Register callable factory definition.
@@ -27,7 +38,23 @@ interface Container extends ContainerInterface
      * @param callable $callable
      * @param bool $shared
      */
-    public function factory(string $id, $callable, $shared = false);
+    public function bindFactory(string $id, $callable, $shared = false);
+
+    /**
+     * Register concrete object.
+     *
+     * @param string $id
+     * @param object $instance
+     */
+    public function bindInstance(string $id, $instance);
+
+    /**
+     * Invoke a callable with resolving dependencies.
+     *
+     * @param $callable
+     * @param array $arguments
+     */
+    public function call($callable, array $arguments = []);
 
     /**
      * {@inheritDoc}
@@ -36,37 +63,10 @@ interface Container extends ContainerInterface
     public function get($id, array $arguments = []);
 
     /**
-     * Register method to be called after service instantiation.
-     *
-     * @param string $id
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    public function inflect(string $id, string $method, array $arguments = []);
-
-    /**
-     * Register concrete object.
-     *
-     * @param string $id
-     * @param object $instance
-     */
-    public function instance(string $id, $instance);
-
-    /**
      * Defines, if passed in item is callable by container.
      *
      * @param  mixed $callable
      * @return bool
      */
     public function isCallable($callable): bool;
-
-    /**
-     * Register class name definition.
-     *
-     * @param string $id Container service identifier.
-     * @param string $service Container service definition.
-     * @param bool $shared
-     */
-    public function set(string $id, string $service, $shared = false);
 }

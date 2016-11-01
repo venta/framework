@@ -180,14 +180,14 @@ abstract class AbstractKernel implements Kernel
         /** @var Container $container */
         $container = new $this->containerClass;
 
-        $container->instance(Container::class, $container);
-        $container->instance(Kernel::class, $this);
+        $container->bindInstance(Container::class, $container);
+        $container->bindInstance(Kernel::class, $this);
 
-        $container->set(ConfigFactoryContract::class, ConfigFactory::class, true);
+        $container->bindClass(ConfigFactoryContract::class, ConfigFactory::class, true);
 
         // Register default inflections.
-        $container->inflect(ContainerAware::class, 'setContainer', ['container' => $container]);
-        $container->inflect(LoggerAwareInterface::class, 'setLogger');
+        $container->addInflection(ContainerAware::class, 'setContainer', ['container' => $container]);
+        $container->addInflection(LoggerAwareInterface::class, 'setLogger');
 
         return $container;
     }

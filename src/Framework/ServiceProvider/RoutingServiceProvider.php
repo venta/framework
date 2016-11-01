@@ -40,19 +40,20 @@ class RoutingServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container->set(FastrouteDispatcherFactory::class, GroupCountBasedDispatcherFactory::class, true);
-        $this->container->set(RequestRouteCollectionFactoryContract::class, RequestRouteCollectionFactory::class, true);
-        $this->container->set(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class, true);
-        $this->container->set(RouteCollectionContract::class, RouteCollection::class, true);
-        $this->container->set(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class, true);
-        $this->container->set(RouteMatcherContract::class, RouteMatcher::class, true);
-        $this->container->set(RouteParserContract::class, RouteParser::class, true);
-        $this->container->set(RouterContract::class, Router::class, true);
+        $this->container->bindClass(FastrouteDispatcherFactory::class, GroupCountBasedDispatcherFactory::class, true);
+        $this->container->bindClass(RequestRouteCollectionFactoryContract::class, RequestRouteCollectionFactory::class,
+            true);
+        $this->container->bindClass(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class, true);
+        $this->container->bindClass(RouteCollectionContract::class, RouteCollection::class, true);
+        $this->container->bindClass(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class, true);
+        $this->container->bindClass(RouteMatcherContract::class, RouteMatcher::class, true);
+        $this->container->bindClass(RouteParserContract::class, RouteParser::class, true);
+        $this->container->bindClass(RouterContract::class, Router::class, true);
 
-        $this->container->set(RouteGroupContract::class, RouteGroup::class);
-        $this->container->set(RouteContract::class, Route::class);
+        $this->container->bindClass(RouteGroupContract::class, RouteGroup::class);
+        $this->container->bindClass(RouteContract::class, Route::class);
 
-        $this->container->factory(RouteCollector::class, function () {
+        $this->container->bindFactory(RouteCollector::class, function () {
             return new RouteCollector(new Std, new GroupCountBased);
         }, true);
     }

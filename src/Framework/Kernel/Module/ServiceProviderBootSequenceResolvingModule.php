@@ -18,7 +18,7 @@ class ServiceProviderBootSequenceResolvingModule extends AbstractKernelModule
      */
     public function init()
     {
-        $this->container->instance(ServiceProviderDependencyResolver::class, new ServiceProviderDependencyResolver);
+        $this->container->bindInstance(ServiceProviderDependencyResolver::class, new ServiceProviderDependencyResolver);
     }
 
 

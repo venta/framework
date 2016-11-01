@@ -23,11 +23,11 @@ class HttpServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container->set(ResponseFactoryContract::class, ResponseFactory::class, true);
-        $this->container->set(ResponseEmitterContract::class, ResponseEmitter::class, true);
+        $this->container->bindClass(ResponseFactoryContract::class, ResponseFactory::class, true);
+        $this->container->bindClass(ResponseEmitterContract::class, ResponseEmitter::class, true);
 
         // todo: bind to factory interface (if possible)
-        $this->container->factory(
+        $this->container->bindFactory(
             Request::class,
             [RequestFactory::class, 'createServerRequestFromGlobals'],
             true

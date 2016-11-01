@@ -24,6 +24,6 @@ class ConfigurationLoadingModule extends AbstractKernelModule
         // todo: implement arbitrary config files loading.
         $config = $configFactory->createFromFile($this->kernel->getRootPath() . '/config/app.php');
 
-        $this->container->instance(Config::class, $config);
+        $this->container->bindInstance(Config::class, $config);
     }
 }

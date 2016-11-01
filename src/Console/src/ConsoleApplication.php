@@ -72,7 +72,7 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
         | Rebind input instance, if passed as argument
         */
         if ($input) {
-            $this->container->set(InputInterface::class, $input);
+            $this->container->bindInstance(InputInterface::class, $input);
         }
 
         /*
@@ -83,7 +83,7 @@ class ConsoleApplication extends Application implements ConsoleApplicationContra
         | Rebind output instance, if passed as argument
         */
         if ($output) {
-            $this->container->set(OutputInterface::class, $output);
+            $this->container->bindInstance(OutputInterface::class, $output);
         }
 
         /*

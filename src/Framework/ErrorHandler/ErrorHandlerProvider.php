@@ -25,6 +25,14 @@ use Whoops\RunInterface;
 class ErrorHandlerProvider extends AbstractServiceProvider
 {
     /**
+     * @inheritdoc
+     */
+    public function boot()
+    {
+        // TODO: Implement boot() method.
+    }
+
+    /**
      * Pushing default error handlers
      *
      * @param RunInterface $run
@@ -81,7 +89,7 @@ class ErrorHandlerProvider extends AbstractServiceProvider
         /**
          * Bind error handler
          */
-        $container->set(RunInterface::class, $whoops, ['error_handler']);
+        $container->bindClass(RunInterface::class, $whoops, ['error_handler']);
 
         /*
          * Bind PSR-3 logger
@@ -119,13 +127,5 @@ class ErrorHandlerProvider extends AbstractServiceProvider
 
             return $logger;
         }, ['logger', LoggerInterface::class]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function boot()
-    {
-        // TODO: Implement boot() method.
     }
 }
