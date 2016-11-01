@@ -3,15 +3,14 @@
 namespace Venta\Framework\Kernel;
 
 use Venta\Contracts\Container\Container;
-use Venta\Contracts\Kernel\Kernel as KernelContract;
-use Venta\Contracts\Kernel\KernelModule;
+use Venta\Contracts\Kernel\Kernel;
 
 /**
- * Class AbstractModule
+ * Class AbstractKernelBootstrap
  *
  * @package Venta\Framework\Kernel
  */
-abstract class AbstractKernelModule implements KernelModule
+abstract class AbstractKernelBootstrap
 {
     /**
      * @var Container
@@ -19,25 +18,26 @@ abstract class AbstractKernelModule implements KernelModule
     protected $container;
 
     /**
-     * @var KernelContract
+     * @var Kernel
      */
     protected $kernel;
 
     /**
-     * AbstractKernelModule constructor.
+     * AbstractKernelBootstrap constructor.
      *
      * @param Container $container
-     * @param KernelContract $kernel
+     * @param Kernel $kernel
      */
-    public function __construct(Container $container, KernelContract $kernel)
+    public function __construct(Container $container, Kernel $kernel)
     {
         $this->container = $container;
         $this->kernel = $kernel;
     }
 
-
     /**
-     * @inheritDoc
+     * Bootstrap.
+     *
+     * @return void
      */
-    abstract public function init();
+    abstract public function boot();
 }

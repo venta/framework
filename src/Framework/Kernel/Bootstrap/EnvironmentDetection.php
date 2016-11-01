@@ -1,22 +1,22 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Kernel\Module;
+namespace Venta\Framework\Kernel\Bootstrap;
 
 use Dotenv\Loader;
 use Symfony\Component\Console\Input\InputInterface;
-use Venta\Framework\Kernel\AbstractKernelModule;
+use Venta\Framework\Kernel\AbstractKernelBootstrap;
 
 /**
- * Class EnvironmentDetectionModule
+ * Class EnvironmentDetection
  *
- * @package Venta\Framework\Kernel\Module
+ * @package Venta\Framework\Kernel\Bootstrap
  */
-class EnvironmentDetectionModule extends AbstractKernelModule
+class EnvironmentDetection extends AbstractKernelBootstrap
 {
     /**
      * @inheritDoc
      */
-    public function init()
+    public function boot()
     {
         $filePath = rtrim($this->kernel->getRootPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.env';
 

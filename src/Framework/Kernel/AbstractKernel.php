@@ -11,9 +11,9 @@ use Venta\Contracts\Container\Container;
 use Venta\Contracts\Container\ContainerAware;
 use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\ServiceProvider\ServiceProvider;
-use Venta\Framework\Kernel\Module\ConfigurationLoadingModule;
-use Venta\Framework\Kernel\Module\EnvironmentDetectionModule;
-use Venta\Framework\Kernel\Module\ErrorHandlingModule;
+use Venta\Framework\Kernel\Bootstrap\ConfigurationLoading;
+use Venta\Framework\Kernel\Bootstrap\EnvironmentDetection;
+use Venta\Framework\Kernel\Bootstrap\ErrorHandling;
 use Venta\Framework\Kernel\Resolver\ServiceProviderDependencyResolver;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
@@ -127,17 +127,17 @@ abstract class AbstractKernel implements Kernel
      */
     protected function initKernelModule(string $kernelModuleClass, Container $container)
     {
-        if (!is_subclass_of($kernelModuleClass, AbstractKernelModule::class)) {
+        if (!is_subclass_of($kernelModuleClass, AbstractKernelBootstrap::class)) {
             throw new InvalidArgumentException(
                 sprintf('Class "%s" must be a subclass of "%s".',
-                    $kernelModuleClass, AbstractKernelModule::class
+                    $kernelModuleClass, AbstractKernelBootstrap::class
                 )
             );
         }
 
-        /** @var AbstractKernelModule $module */
+        /** @var AbstractKernelBootstrap $module */
         $module = new $kernelModuleClass($container, $this);
-        $module->init();
+        $module->boot();
 
         // todo: dispatch event
     }
@@ -152,9 +152,9 @@ abstract class AbstractKernel implements Kernel
     protected function registerKernelModules(): array
     {
         $modules = [
-            EnvironmentDetectionModule::class,
-            ConfigurationLoadingModule::class,
-            ErrorHandlingModule::class,
+            EnvironmentDetection::class,
+            ConfigurationLoading::class,
+            ErrorHandling::class,
         ];
 
         // Here we can add environment dependant modules

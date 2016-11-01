@@ -1,25 +1,24 @@
 <?php declare(strict_types = 1);
 
-namespace Kernel\Module;
+namespace Kernel\Bootstrap;
 
-use Venta\Framework\Kernel\AbstractKernelModule;
+use Venta\Framework\Kernel\AbstractKernelBootstrap;
 use Venta\Framework\Kernel\Resolver\ServiceProviderDependencyResolver;
 
 /**
- * Class ServiceProviderResolverModule
+ * Class ServiceProviderBootSequenceResolving
  *
- * @package Kernel\Module
+ * @package Kernel\Bootstrap
  */
-class ServiceProviderBootSequenceResolvingModule extends AbstractKernelModule
+class ServiceProviderBootSequenceResolving extends AbstractKernelBootstrap
 {
 
     /**
      * @inheritDoc
      */
-    public function init()
+    public function boot()
     {
         $this->container->bindInstance(ServiceProviderDependencyResolver::class, new ServiceProviderDependencyResolver);
     }
-
 
 }

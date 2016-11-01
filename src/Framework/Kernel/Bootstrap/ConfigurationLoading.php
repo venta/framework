@@ -1,22 +1,22 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Framework\Kernel\Module;
+namespace Venta\Framework\Kernel\Bootstrap;
 
 use Venta\Contracts\Config\Config;
 use Venta\Contracts\Config\ConfigFactory;
-use Venta\Framework\Kernel\AbstractKernelModule;
+use Venta\Framework\Kernel\AbstractKernelBootstrap;
 
 /**
- * Class ConfigurationLoadingModule
+ * Class ConfigurationLoading
  *
- * @package Venta\Framework\Kernel\Module
+ * @package Venta\Framework\Kernel\Bootstrap
  */
-class ConfigurationLoadingModule extends AbstractKernelModule
+class ConfigurationLoading extends AbstractKernelBootstrap
 {
     /**
      * @inheritDoc
      */
-    public function init()
+    public function boot()
     {
         /** @var ConfigFactory $configFactory */
         $configFactory = $this->container->get(ConfigFactory::class);
