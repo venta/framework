@@ -1,0 +1,4 @@
+suites:
+    adr_suite:
+        namespace: Venta\Adr
+        psr4_prefix: Venta\Adr

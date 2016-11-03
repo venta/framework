@@ -1,0 +1,25 @@
+{
+    "name": "venta/adr",
+    "description": "Venta ADR package",
+    "authors": [
+        {
+            "name": "Venta team",
+            "email": "venta@scandiweb.com",
+            "link": "https://github.com/venta/adr/contributors"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Venta\\Adr\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpspec/phpspec": "^3.1"
+    },
+    "require": {
+        "php": "^7.0",
+        "venta/contracts": "dev-master",
+        "venta/routing": "dev-master"
+    }
+}

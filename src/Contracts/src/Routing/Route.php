@@ -9,16 +9,20 @@ namespace Venta\Contracts\Routing;
  */
 interface Route
 {
-
     /**
-     * @return string|callable
+     * @return string
      */
-    public function getHandler();
+    public function getDomain():string;
 
     /**
      * @return string
      */
     public function getHost(): string;
+
+    /**
+     * @return string
+     */
+    public function getInput(): string;
 
     /**
      * @return string[]
@@ -43,6 +47,11 @@ interface Route
     /**
      * @return string
      */
+    public function getResponder(): string;
+
+    /**
+     * @return string
+     */
     public function getScheme(): string;
 
     /**
@@ -51,10 +60,22 @@ interface Route
     public function getVariables(): array;
 
     /**
+     * @param string $domainClass
+     * @return Route
+     */
+    public function withDomain(string $domainClass): Route;
+
+    /**
      * @param string $host
      * @return Route
      */
     public function withHost(string $host): Route;
+
+    /**
+     * @param string $inputClass
+     * @return Route
+     */
+    public function withInput(string $inputClass): Route;
 
     /**
      * @param string $middleware

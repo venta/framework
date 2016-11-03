@@ -1,4 +1,9 @@
 suites:
+    adr_suite:
+        namespace: Venta\Adr
+        psr4_prefix: Venta\Adr
+        src_path: src/Adr/src
+        spec_path: src/Adr
     routing_suite:
         namespace: Venta\Routing
         psr4_prefix: Venta\Routing

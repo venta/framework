@@ -2,24 +2,18 @@
 
 namespace Venta\Http\Factory;
 
-use Venta\Contracts\Http\JsonResponseFactory as JsonResponseFactoryContract;
-use Venta\Contracts\Http\RedirectResponseFactory as RedirectResponseFactoryContract;
 use Venta\Contracts\Http\Response as ResponseContract;
 use Venta\Contracts\Http\ResponseFactory as ResponseFactoryContract;
 use Venta\Http\JsonResponse;
 use Venta\Http\RedirectResponse;
 use Venta\Http\Response;
-use Zend\Diactoros\Response\JsonResponse as BaseJsonResponse;
 
 /**
  * Class ResponseFactory
  *
  * @package Venta\Http\Factory
  */
-class ResponseFactory implements
-    ResponseFactoryContract,
-    RedirectResponseFactoryContract,
-    JsonResponseFactoryContract
+class ResponseFactory implements ResponseFactoryContract
 {
     /**
      * {@inheritdoc}
@@ -28,10 +22,10 @@ class ResponseFactory implements
         $data,
         $status = 200,
         array $headers = [],
-        $encodingOptions = BaseJsonResponse::DEFAULT_JSON_FLAGS
+        $jsonFlag = ResponseFactoryContract::JSON_FLAG
     ): ResponseContract
     {
-        return new JsonResponse($data, $status, $headers, $encodingOptions);
+        return new JsonResponse($data, $status, $headers, $jsonFlag);
     }
 
     /**

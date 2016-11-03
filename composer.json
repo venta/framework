@@ -17,6 +17,7 @@
     ],
     "autoload": {
         "psr-4": {
+            "Venta\\Adr\\": "src/Adr/src/",
             "Venta\\Cache\\": "src/Cache/src/",
             "Venta\\Config\\": "src/Config/src/",
             "Venta\\Console\\": "src/Console/src/",

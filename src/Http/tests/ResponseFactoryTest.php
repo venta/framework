@@ -78,22 +78,6 @@ class ResponseFactoryTest extends TestCase
     /**
      * @test
      */
-    public function implementsJsonResponseFactoryContract()
-    {
-        $this->assertInstanceOf(\Venta\Contracts\Http\JsonResponseFactory::class, $this->factory);
-    }
-
-    /**
-     * @test
-     */
-    public function implementsRedirectResponseFactoryContract()
-    {
-        $this->assertInstanceOf(\Venta\Contracts\Http\RedirectResponseFactory::class, $this->factory);
-    }
-
-    /**
-     * @test
-     */
     public function implementsResponseFactoryContract()
     {
         $this->assertInstanceOf(\Venta\Contracts\Http\ResponseFactory::class, $this->factory);
