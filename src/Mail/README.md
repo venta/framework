@@ -1,4 +1,5 @@
 ##Available configuration fields:
+default
 transport [ smtp | mail | sendmail | gmail ]
 host
 port

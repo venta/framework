@@ -11,9 +11,14 @@ use Venta\Contracts\ExtensionProvider\CommandProvider;
 use Venta\Contracts\ExtensionProvider\ConfigProvider;
 use Venta\Contracts\ExtensionProvider\ServiceProvider;
 use Venta\Contracts\Mail\Mailer as MailerContract;
+use Venta\Mail\Mailer;
+use Venta\Contracts\Mail\TransportFactory as TransportFactoryContract;
+use Venta\Mail\TransportFactory;
+use Swift_Mailer;
 
 /**
- * Class MailExtensionProvider  */
+ * Class MailExtensionProvider
+ */
 class MailExtensionProvider implements
     ServiceProvider,
     CommandProvider,
@@ -34,12 +39,13 @@ class MailExtensionProvider implements
     {
         $mailConfig = [
             'mailer' => [
-                'transport' => 'mail',
-                'spool' => [
-                    'type' => 'file',
-                    'path' => 'storage/spool',
+                'localhost' => [
+                    'transport' => 'smtp',
+                    'host' => 'localhost',
+                    'port' => '1234',
+                    'username' => 'user',
                 ],
-            ]
+            ],
         ];
 
         return new Config($mailConfig);
@@ -50,6 +56,10 @@ class MailExtensionProvider implements
      */
     public function setServices(ContainerContract $container)
     {
-        $container->share(MailerContract::class, \Venta\Mail\Mailer::class, ['mailer']);
+        $container->share(TransportFactoryContract::class, TransportFactory::class);
+        $container->set(Swift_Mailer::class, function (TransportFactoryContract $factory) {
+            return new Swift_Mailer($factory->getTransport());
+        });
+        $container->share(MailerContract::class, Mailer::class, ['mailer']);
     }
 }

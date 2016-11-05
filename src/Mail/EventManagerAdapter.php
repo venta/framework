@@ -6,11 +6,11 @@ use Swift_Events_EventObject;
 use Venta\Contracts\Event\EventManager as EventManagerContract;
 
 /**
- * Class EventDispatcher
+ * Class EventManagerAdapter
  *
  * @package Venta\Mail\Events
  */
-class EventDispatcherAdapter extends \Swift_Events_SimpleEventDispatcher
+class EventManagerAdapter extends \Swift_Events_SimpleEventDispatcher
 {
     /**
      * EventDispatcher constructor.
