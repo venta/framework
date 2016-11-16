@@ -4,9 +4,9 @@ namespace Venta\Http\Factory;
 
 use Venta\Contracts\Http\Response as ResponseContract;
 use Venta\Contracts\Http\ResponseFactory as ResponseFactoryContract;
-use Venta\Http\JsonResponse;
-use Venta\Http\RedirectResponse;
 use Venta\Http\Response;
+use Zend\Diactoros\Response\JsonResponse;
+use Zend\Diactoros\Response\RedirectResponse;
 
 /**
  * Class ResponseFactory
@@ -20,27 +20,27 @@ class ResponseFactory implements ResponseFactoryContract
      */
     public function createJsonResponse(
         $data,
-        $status = 200,
+        int $status = 200,
         array $headers = [],
-        $jsonFlag = ResponseFactoryContract::JSON_FLAG
+        int $jsonFlag = ResponseFactoryContract::JSON_FLAG
     ): ResponseContract
     {
-        return new JsonResponse($data, $status, $headers, $jsonFlag);
+        return new Response(new JsonResponse($data, $status, $headers, $jsonFlag));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createRedirectResponse($uri, $status = 302, array $headers = []): ResponseContract
+    public function createRedirectResponse($uri, int $status = 302, array $headers = []): ResponseContract
     {
-        return new RedirectResponse($uri, $status, $headers);
+        return new Response(new RedirectResponse($uri, $status, $headers));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createResponse($code = 200): ResponseContract
+    public function createResponse(int $code = 200): ResponseContract
     {
-        return (new Response)->withStatus($code);
+        return new Response(new \Zend\Diactoros\Response('php://memory', $code));
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Venta\Contracts\Http\Response;
 
 class ResponseFactoryTest extends TestCase
 {
@@ -21,8 +22,8 @@ class ResponseFactoryTest extends TestCase
     {
         $data = ['foo' => 'bar'];
         $response = $this->factory->createJsonResponse($data);
-        $this->assertInstanceOf(\Venta\Http\JsonResponse::class, $response);
-        $this->assertJsonStringEqualsJsonString(json_encode($data), $response->getBody()->__toString());
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertJsonStringEqualsJsonString(json_encode($data), $response->getContent());
     }
 
     /**
@@ -31,7 +32,7 @@ class ResponseFactoryTest extends TestCase
     public function canCreateRedirectResponse()
     {
         $response = $this->factory->createRedirectResponse('/foo.bar');
-        $this->assertInstanceOf(\Venta\Http\RedirectResponse::class, $response);
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('/foo.bar', $response->getHeaderLine('Location'));
         $this->assertSame($response->getStatusCode(), 302);
     }

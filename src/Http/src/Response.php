@@ -2,91 +2,161 @@
 
 namespace Venta\Http;
 
-use Venta\Contracts\Http\Cookie as CookieContract;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use Venta\Contracts\Http\Response as ResponseContract;
-use Zend\Diactoros\Response as BaseResponse;
 
 /**
  * Class Response
  *
  * @package Venta\Http
  */
-class Response extends BaseResponse implements ResponseContract
+class Response implements ResponseContract
 {
-    use ResponseTrait;
-
-    public function addCookie(CookieContract $cookie)
-    {
-        return $this->addCookieToHeader($cookie);
-    }
 
     /**
-     * @param $cookies Cookie[]
-     * @return ResponseContract|RequestContract;
-     * @throws \InvalidArgumentException
+     * @var ResponseInterface
      */
-
-    public function addCookies($cookies)
-    {
-        if (!is_array($cookies) && !$cookies instanceof \Traversable) {
-            throw new \InvalidArgumentException('Array elements must implement Cookie contract');
-        }
-
-        /** @var $response Response * $this is immutable */
-        $response = clone $this;
-        /** @var $cookie Cookie */
-        foreach ($cookies as $cookie) {
-            $response = $response->addCookieToHeader($cookie);
-        }
-
-        return $response;
-    }
+    private $psrResponse;
 
     /**
-     * Get a single cookie by name
+     * Response constructor.
      *
-     * @param string $name
-     * @param bool $returnObject
-     * @return null|string[]
+     * @param ResponseInterface $psrResponse
      */
-    public function getCookie(string $name, bool $returnObject = false)
+    public function __construct(ResponseInterface $psrResponse)
     {
-        if (!$cookies = $this->getCookies()) {
-            return null;
-        }
-        $pattern = '/(^' . $name . '=.*)/';
-        $cookie = implode(preg_grep($pattern, $cookies));
-        if ($cookie == '') {
-            return null;
-        }
-
-        return $returnObject ? Cookie::createFromString($cookie) : $cookie;
+        $this->psrResponse = $psrResponse;
     }
 
     /**
-     * Get all cookies set to response
-     *
-     * @param $returnObject bool
-     * @return null|string[]|Cookie[]
+     * @inheritDoc
      */
-    public function getCookies(bool $returnObject = false)
+    public function append(string $body): ResponseContract
     {
-        if (!$this->getHeader('set-cookie')) {
-            return null;
-        }
-        if (false === $returnObject) {
-            return $this->getHeader('set-cookie');
-        }
-        $cookieObjects = [];
-        foreach ($this->getHeader('set-cookie') as $cookie) {
-            $cookieObjects[] = Cookie::createFromString($cookie);
-        }
+        $this->psrResponse->getBody()->write($body);
 
-        return $cookieObjects;
+        return $this;
     }
 
-    protected function addCookieToHeader(Cookie $cookie)
+    /**
+     * @inheritDoc
+     */
+    public function getBody()
     {
-        return $this->withAddedHeader('Set-Cookie', $cookie->asPlainText());
+        return $this->psrResponse->getBody();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getContent(): string
+    {
+        return (string)$this->psrResponse->getBody();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getHeader($name)
+    {
+        return $this->psrResponse->getHeader($name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getHeaderLine($name)
+    {
+        return $this->psrResponse->getHeaderLine($name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getHeaders()
+    {
+        return $this->psrResponse->getHeaders();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getProtocolVersion()
+    {
+        return $this->psrResponse->getProtocolVersion();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getReasonPhrase()
+    {
+        return $this->psrResponse->getReasonPhrase();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getStatusCode()
+    {
+        return $this->psrResponse->getStatusCode();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasHeader($name)
+    {
+        return $this->psrResponse->hasHeader($name);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withAddedHeader($name, $value)
+    {
+        return new self($this->psrResponse->withAddedHeader($name, $value));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withBody(StreamInterface $body)
+    {
+        return new self($this->psrResponse->withBody($body));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withHeader($name, $value)
+    {
+        return new self($this->psrResponse->withHeader($name, $value));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withProtocolVersion($version)
+    {
+        return new self($this->psrResponse->withProtocolVersion($version));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withStatus($code, $reasonPhrase = '')
+    {
+        return new self($this->psrResponse->withStatus($code));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withoutHeader($name)
+    {
+        return new self($this->psrResponse->withoutHeader($name));
+    }
+
 }

@@ -1,7 +1,10 @@
 <?php
 
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Venta\Http\Cookie;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
+use Venta\Http\Response;
 
 /**
  * Class ResponseTest
@@ -9,164 +12,54 @@ use Venta\Http\Cookie;
 class ResponseTest extends TestCase
 {
     /**
+     * @var StreamInterface|MockInterface
+     */
+    private $body;
+
+    /**
+     * @var ResponseInterface|MockInterface
+     */
+    private $psr;
+
+    /**
+     * @var Response
+     */
+    private $response;
+
+    public function setUp()
+    {
+        $this->body = Mockery::spy(StreamInterface::class);
+        $this->psr = Mockery::spy(ResponseInterface::class, ['getBody' => $this->body]);
+        $this->response = new Response($this->psr);
+    }
+
+    public function tearDown()
+    {
+        Mockery::close();
+    }
+
+    /**
      * @test
      */
     public function canAppendStringToBody()
     {
-        $response = new \Venta\Http\Response();
-        $this->assertEmpty($response->getBody()->__toString());
-        $result = $response->append('abc');
+        $result = $this->response->append('abc');
+
         $this->assertInstanceOf(\Venta\Contracts\Http\Response::class, $result);
-        $this->assertSame($response, $result);
-        $this->assertSame($response->getBody(), $result->getBody());
-        $this->assertContains('abc', $response->getBody()->__toString());
-        $this->assertContains('abc', $result->getBody()->__toString());
+        $this->assertSame($this->response, $result);
+        $this->body->shouldHaveReceived('write')->with('abc');
     }
 
     /**
-     * @test
+     * @return @test
      */
-    public function canGetBodyContent()
+    public function canBeInitialized()
     {
-        $response = new \Venta\Http\Response();
-        $this->assertEmpty($response->getContent());
-        $string = "Let's test";
-        $response->append($string);
-        $this->assertSame($response->getContent(), $response->getBody()->__toString());
-        $this->assertSame($response->getContent(), $string);
-    }
+        $this->body->shouldReceive('__toString')->andReturn('');
 
-    /**
-     * @test
-     */
-    public function canSetMultipleCookies()
-    {
-        $response = new \Venta\Http\Response();
-        $this->assertEmpty($response->getHeader('Set-Cookie'));
-        $cookie = new \Venta\Http\Cookie('name', 'value');
-        $cookie2 = new \Venta\Http\Cookie('name2', 'value2');
-        $response = $response->addCookies([$cookie, $cookie2]);
-        $this->assertCount(2, $response->getHeader('Set-Cookie'));
-    }
+        $this->assertEmpty($this->response->getContent());
 
-    /**
-     * @test
-     */
-    public function canSetMultipleCookiesFromObj()
-    {
-        $response = new \Venta\Http\Response();
-        $arrayIterator = new class() extends \ArrayIterator
-        {
-        };
-        $response->addCookies($arrayIterator);
-    }
-
-    /**
-     * @test
-     */
-    public function canSetSingleCookie()
-    {
-        $response = new \Venta\Http\Response();
-        $this->assertEmpty($response->getHeader('Set-Cookie'));
-        $cookie = new \Venta\Http\Cookie('name', 'value');
-        $response = $response->addCookie($cookie);
-        $this->assertCount(1, $response->getHeader('Set-Cookie'));
-    }
-
-    /**
-     * @test
-     */
-    public function failMultipleCookiesAdding()
-    {
-        $response = new \Venta\Http\Response();
-        $this->expectException("InvalidArgumentException");
-        $response = $response->addCookies('cookie');
-    }
-
-    /**
-     * @test
-     */
-    public function getCookieFromEmptyContainer()
-    {
-        $response = new \Venta\Http\Response();
-        $cookies = $response->getCookies();
-        $this->assertNull($cookies);
-    }
-
-    /**
-     * @test
-     */
-    public function getCookiesAsObjects()
-    {
-        $response = new \Venta\Http\Response();
-        $cookies = [
-            new Cookie('name', 'value'),
-            new Cookie('cookie', 'cookievalue'),
-        ];
-        $response = $response->addCookies($cookies);
-        $attachedCookies = $response->getCookies(true);
-        foreach ($attachedCookies as $cookie) {
-            $this->assertInstanceOf(Cookie::class, $cookie);
-        }
-    }
-
-    /**
-     * @test
-     */
-    public function getNonExistingCookieByName()
-    {
-        $response = new \Venta\Http\Response();
-        $cookies = [
-            new Cookie('name', 'value'),
-            new Cookie('cookie', 'cookievalue'),
-        ];
-        $response = $response->addCookies($cookies);
-        $cookie = $response->getCookie('notexisting');
-        $this->assertNull($cookie);
-    }
-
-    /**
-     * @test
-     */
-    public function getPlainCookieByName()
-    {
-        $response = new \Venta\Http\Response();
-        $cookies = [
-            new Cookie('name', 'value'),
-            new Cookie('cookie', 'cookievalue'),
-        ];
-        $response = $response->addCookies($cookies);
-        $cookie = $response->getCookie('cookie');
-        $this->assertSame((string)$cookies[1], $cookie);
-    }
-
-    /**
-     * @test
-     */
-    public function getPlainTextCookies()
-    {
-        $response = new \Venta\Http\Response();
-        $cookies = [
-            new Cookie('name', 'value'),
-            new Cookie('cookie', 'cookievalue'),
-        ];
-        $response = $response->addCookies($cookies);
-        $attachedCookies = $response->getCookies();
-        $this->assertCount(count($cookies), $attachedCookies);
-        for ($i = 0; $i < count($cookies); $i++) {
-            $this->assertSame((string)$cookies[$i], $attachedCookies[$i]);
-        }
-    }
-
-    /**
-     * @test
-     */
-    public function getSingleCookieWhenNoCookieWasSet()
-    {
-        $response = new \Venta\Http\Response();
-        $this->assertNull($response->getCookies());
-        $cookie = $response->getCookie('notexisting');
-        $this->assertNull($cookie);
+        $this->body->shouldHaveReceived('__toString')->withNoArgs();
     }
 
     /**
@@ -174,6 +67,6 @@ class ResponseTest extends TestCase
      */
     public function implementsResponseContract()
     {
-        $this->assertInstanceOf(\Venta\Contracts\Http\Response::class, new \Venta\Http\Response);
+        $this->assertInstanceOf(\Venta\Contracts\Http\Response::class, $this->response);
     }
 }

@@ -25,7 +25,7 @@ interface Response extends ResponseInterface
      *
      * @return string
      */
-    public function getContent();
+    public function getContent(): string;
 
     /**
      * {@inheritdoc}

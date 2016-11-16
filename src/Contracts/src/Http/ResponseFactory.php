@@ -27,9 +27,9 @@ interface ResponseFactory
      */
     public function createJsonResponse(
         $data,
-        $status = 200,
+        int $status = 200,
         array $headers = [],
-        $jsonFlag = ResponseFactory::JSON_FLAG
+        int $jsonFlag = ResponseFactory::JSON_FLAG
     ): Response;
 
     /**
@@ -40,13 +40,13 @@ interface ResponseFactory
      * @param array $headers
      * @return Response
      */
-    public function createRedirectResponse($uri, $status = 302, array $headers = []): Response;
+    public function createRedirectResponse($uri, int $status = 302, array $headers = []): Response;
 
     /**
      * Create a new response.
      *
-     * @param integer $code HTTP status code
+     * @param int $code HTTP status code
      * @return Response
      */
-    public function createResponse($code = 200): Response;
+    public function createResponse(int $code = 200): Response;
 }   
