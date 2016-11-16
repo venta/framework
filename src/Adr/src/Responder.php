@@ -6,7 +6,6 @@ use Psr\Http\Message\UriInterface;
 use Venta\Contracts\Adr\Responder as ResponderContract;
 use Venta\Contracts\Http\Response;
 use Venta\Contracts\Http\ResponseFactory;
-use Venta\Contracts\Http\ResponseFactoryAware;
 use Zend\Diactoros\Response\JsonResponse;
 
 /**
@@ -14,7 +13,7 @@ use Zend\Diactoros\Response\JsonResponse;
  *
  * @package Venta\Adr
  */
-abstract class Responder implements ResponderContract, ResponseFactoryAware
+abstract class Responder implements ResponderContract
 {
 
     /**
@@ -23,11 +22,13 @@ abstract class Responder implements ResponderContract, ResponseFactoryAware
     private $responseFactory;
 
     /**
-     * @inheritDoc
+     * Responder constructor.
+     *
+     * @param ResponseFactory $responseFactory
      */
-    public function setResponseFactory(ResponseFactory $factory)
+    public function __construct(ResponseFactory $responseFactory)
     {
-        $this->responseFactory = $factory;
+        $this->responseFactory = $responseFactory;
     }
 
     /**
@@ -41,9 +42,9 @@ abstract class Responder implements ResponderContract, ResponseFactoryAware
      */
     protected function json(
         $data,
-        $status = 200,
+        int $status = 200,
         array $headers = [],
-        $encodingOptions = JsonResponse::DEFAULT_JSON_FLAGS
+        int $encodingOptions = JsonResponse::DEFAULT_JSON_FLAGS
     ): Response
     {
         return $this->responseFactory->createJsonResponse($data, $status, $headers, $encodingOptions);
@@ -66,11 +67,12 @@ abstract class Responder implements ResponderContract, ResponseFactoryAware
      * Creates http response.
      *
      * @param int $code
+     * @param string $bodyStream Stream to use as response body.
      * @return Response
      */
-    protected function response($code = 200): Response
+    protected function response(int $code = 200, $bodyStream = 'php://memory'): Response
     {
-        return $this->responseFactory->createResponse($code);
+        return $this->responseFactory->createResponse($code, $bodyStream);
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace Venta\Contracts\Http;
 
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -46,7 +47,8 @@ interface ResponseFactory
      * Create a new response.
      *
      * @param int $code HTTP status code
+     * @param string|resource|StreamInterface $bodyStream Stream to use as body.
      * @return Response
      */
-    public function createResponse(int $code = 200): Response;
+    public function createResponse(int $code = 200, $bodyStream = 'php://memory'): Response;
 }   

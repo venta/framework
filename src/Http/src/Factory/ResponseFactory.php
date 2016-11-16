@@ -39,8 +39,8 @@ class ResponseFactory implements ResponseFactoryContract
     /**
      * {@inheritdoc}
      */
-    public function createResponse(int $code = 200): ResponseContract
+    public function createResponse(int $code = 200, $bodyStream = 'php://memory'): ResponseContract
     {
-        return new Response(new \Zend\Diactoros\Response('php://memory', $code));
+        return new Response(new \Zend\Diactoros\Response($bodyStream, $code));
     }
 }
