@@ -10,7 +10,7 @@ use Venta\Contracts\Adr\Input as InputContract;
  *
  * @package Venta\Adr
  */
-class Input implements InputContract
+final class Input implements InputContract
 {
     /**
      * @inheritDoc
