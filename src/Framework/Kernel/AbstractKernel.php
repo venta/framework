@@ -14,6 +14,7 @@ use Venta\Contracts\ServiceProvider\ServiceProvider;
 use Venta\Framework\Kernel\Bootstrap\ConfigurationLoading;
 use Venta\Framework\Kernel\Bootstrap\EnvironmentDetection;
 use Venta\Framework\Kernel\Bootstrap\ErrorHandling;
+use Venta\Framework\Kernel\Bootstrap\Logging;
 use Venta\Framework\Kernel\Resolver\ServiceProviderDependencyResolver;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
@@ -154,6 +155,7 @@ abstract class AbstractKernel implements Kernel
         $modules = [
             EnvironmentDetection::class,
             ConfigurationLoading::class,
+            Logging::class,
             ErrorHandling::class,
         ];
 
