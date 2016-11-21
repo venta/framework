@@ -62,7 +62,7 @@ class RouteMatchTest extends TestCase
 
         // Defining mock methods
         $requestFactory->shouldReceive('createServerRequest')->andReturn($request);
-        $matcher->shouldReceive('match')->with($request, $collector)->andThrow(new NotFoundException());
+        $matcher->shouldReceive('match')->with($request, $collector)->andThrow(new NotFoundException('GET', '/'));
 
         // Creating and running command
         $command = new RouteMatch($collector, $matcher, $requestFactory);
