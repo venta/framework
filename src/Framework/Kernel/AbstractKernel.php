@@ -9,6 +9,7 @@ use Venta\Contracts\Config\Config;
 use Venta\Contracts\Config\ConfigFactory as ConfigFactoryContract;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Container\ContainerAware;
+use Venta\Contracts\Http\ResponseFactoryAware;
 use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\ServiceProvider\ServiceProvider;
 use Venta\Framework\Kernel\Bootstrap\ConfigurationLoading;
@@ -190,6 +191,7 @@ abstract class AbstractKernel implements Kernel
         // Register default inflections.
         $container->addInflection(ContainerAware::class, 'setContainer', ['container' => $container]);
         $container->addInflection(LoggerAwareInterface::class, 'setLogger');
+        $container->addInflection(ResponseFactoryAware::class, 'setResponseFactory');
 
         return $container;
     }
