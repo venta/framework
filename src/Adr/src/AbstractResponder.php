@@ -10,11 +10,11 @@ use Venta\Contracts\Http\ResponseFactoryAware;
 use Zend\Diactoros\Response\JsonResponse;
 
 /**
- * Class Responder
+ * Class AbstractResponder
  *
  * @package Venta\Adr
  */
-abstract class Responder implements ResponderContract, ResponseFactoryAware
+abstract class AbstractResponder implements ResponderContract, ResponseFactoryAware
 {
 
     /**
