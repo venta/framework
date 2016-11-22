@@ -6,6 +6,7 @@ use Psr\Http\Message\UriInterface;
 use Venta\Contracts\Adr\Responder as ResponderContract;
 use Venta\Contracts\Http\Response;
 use Venta\Contracts\Http\ResponseFactory;
+use Venta\Contracts\Http\ResponseFactoryAware;
 use Zend\Diactoros\Response\JsonResponse;
 
 /**
@@ -15,20 +16,17 @@ use Zend\Diactoros\Response\JsonResponse;
  */
 abstract class AbstractResponder implements ResponderContract, ResponseFactoryAware
 {
-
     /**
      * @var ResponseFactory
      */
     private $responseFactory;
 
     /**
-     * Responder constructor.
-     *
-     * @param ResponseFactory $responseFactory
+     * @inheritDoc
      */
-    public function __construct(ResponseFactory $responseFactory)
+    public function setResponseFactory(ResponseFactory $factory)
     {
-        $this->responseFactory = $responseFactory;
+        $this->responseFactory = $factory;
     }
 
     /**
