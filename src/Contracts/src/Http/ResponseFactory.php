@@ -2,6 +2,7 @@
 
 namespace Venta\Contracts\Http;
 
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 /**
@@ -17,7 +18,17 @@ interface ResponseFactory
     const JSON_FLAG = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES;
 
     /**
-     * Create a new JSON response.
+     * Creates a new html response with text/html content-type header.
+     *
+     * @param string $html
+     * @param int $code
+     * @param array $headers
+     * @return Response
+     */
+    public function createHtmlResponse(string $html, int $code = 200, array $headers = []): Response;
+
+    /**
+     * Creates a new JSON response.
      *
      * @param mixed $data Data to convert to JSON.
      * @param int $status Integer status code for the response; 200 by default.
@@ -27,26 +38,28 @@ interface ResponseFactory
      */
     public function createJsonResponse(
         $data,
-        $status = 200,
+        int $status = 200,
         array $headers = [],
-        $jsonFlag = ResponseFactory::JSON_FLAG
+        int $jsonFlag = ResponseFactory::JSON_FLAG
     ): Response;
 
     /**
-     * Create a new redirect response.
+     * Creates a new redirect response.
      *
      * @param string|UriInterface $uri
      * @param int $status
      * @param array $headers
      * @return Response
      */
-    public function createRedirectResponse($uri, $status = 302, array $headers = []): Response;
+    public function createRedirectResponse($uri, int $status = 302, array $headers = []): Response;
 
     /**
-     * Create a new response.
+     * Creates a new response.
      *
-     * @param integer $code HTTP status code
+     * @param string|resource|StreamInterface $bodyStream Stream to use as body.
+     * @param int $code HTTP status code
+     * @param array $headers
      * @return Response
      */
-    public function createResponse($code = 200): Response;
+    public function createResponse($bodyStream = 'php://memory', int $code = 200, array $headers = []): Response;
 }   

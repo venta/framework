@@ -6,7 +6,6 @@ use Psr\Http\Message\UriInterface;
 use Venta\Contracts\Adr\Responder as ResponderContract;
 use Venta\Contracts\Http\Response;
 use Venta\Contracts\Http\ResponseFactory;
-use Venta\Contracts\Http\ResponseFactoryAware;
 use Zend\Diactoros\Response\JsonResponse;
 
 /**
@@ -23,11 +22,26 @@ abstract class AbstractResponder implements ResponderContract, ResponseFactoryAw
     private $responseFactory;
 
     /**
-     * @inheritDoc
+     * Responder constructor.
+     *
+     * @param ResponseFactory $responseFactory
      */
-    public function setResponseFactory(ResponseFactory $factory)
+    public function __construct(ResponseFactory $responseFactory)
     {
-        $this->responseFactory = $factory;
+        $this->responseFactory = $responseFactory;
+    }
+
+    /**
+     * Creates html response.
+     *
+     * @param string $html
+     * @param int $code
+     * @param array $headers
+     * @return Response
+     */
+    protected function html(string $html, int $code, array $headers = [])
+    {
+        return $this->responseFactory->createHtmlResponse($html, $code, $headers);
     }
 
     /**
@@ -41,9 +55,9 @@ abstract class AbstractResponder implements ResponderContract, ResponseFactoryAw
      */
     protected function json(
         $data,
-        $status = 200,
+        int $status = 200,
         array $headers = [],
-        $encodingOptions = JsonResponse::DEFAULT_JSON_FLAGS
+        int $encodingOptions = JsonResponse::DEFAULT_JSON_FLAGS
     ): Response
     {
         return $this->responseFactory->createJsonResponse($data, $status, $headers, $encodingOptions);
@@ -65,12 +79,14 @@ abstract class AbstractResponder implements ResponderContract, ResponseFactoryAw
     /**
      * Creates http response.
      *
+     * @param string $bodyStream Stream to use as response body.
      * @param int $code
+     * @param array $headers
      * @return Response
      */
-    protected function response($code = 200): Response
+    protected function response($bodyStream = 'php://memory', int $code = 200, array $headers = []): Response
     {
-        return $this->responseFactory->createResponse($code);
+        return $this->responseFactory->createResponse($bodyStream, $code, $headers);
     }
 
 }
