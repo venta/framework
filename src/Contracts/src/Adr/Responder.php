@@ -2,8 +2,8 @@
 
 namespace Venta\Contracts\Adr;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Venta\Contracts\Http\Request;
+use Venta\Contracts\Http\Response;
 
 /**
  * Interface Responder
@@ -14,10 +14,10 @@ interface Responder
 {
 
     /**
-     * @param ServerRequestInterface $request
-     * @param Payload $payload
-     * @return ResponseInterface
+     * @param Request $request
+     * @param Payload|null $payload
+     * @return Response
      */
-    public function run(ServerRequestInterface $request, Payload $payload = null): ResponseInterface;
+    public function run(Request $request, Payload $payload = null): Response;
 
 }
