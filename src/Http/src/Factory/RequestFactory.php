@@ -2,11 +2,11 @@
 
 namespace Venta\Http\Factory;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Venta\Contracts\Http\Request as RequestContract;
 use Venta\Contracts\Http\RequestFactory as RequestFactoryContract;
 use Venta\Http\Request;
+use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\ServerRequestFactory;
 
 /**
@@ -26,12 +26,7 @@ class RequestFactory extends ServerRequestFactory implements RequestFactoryContr
      */
     public function createServerRequest($method, $uri): RequestContract
     {
-        if ($uri instanceof UriInterface) {
-            return (new Request([], [], null, $method))
-                ->withUri($uri);
-        }
-
-        return new Request([], [], $uri, $method);
+        return new Request(new ServerRequest([], [], $uri, $method));
     }
 
     /**
@@ -41,28 +36,6 @@ class RequestFactory extends ServerRequestFactory implements RequestFactoryContr
      */
     public function createServerRequestFromGlobals(): RequestContract
     {
-        return $this->createFromBase(parent::fromGlobals());
-    }
-
-    /**
-     * Create new \Venta\Http\Request form Psr\Http\Message\ServerRequestInterface
-     *
-     * @param ServerRequestInterface $request
-     * @return RequestContract
-     */
-    protected function createFromBase(ServerRequestInterface $request): RequestContract
-    {
-        return new Request(
-            $request->getServerParams(),
-            $request->getUploadedFiles(),
-            $request->getUri(),
-            $request->getMethod(),
-            $request->getBody(),
-            $request->getHeaders(),
-            $request->getCookieParams(),
-            $request->getQueryParams(),
-            $request->getParsedBody(),
-            $request->getProtocolVersion()
-        );
+        return new Request(parent::fromGlobals());
     }
 }
