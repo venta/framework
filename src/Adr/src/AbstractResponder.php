@@ -37,7 +37,7 @@ abstract class AbstractResponder implements ResponderContract, ResponseFactoryAw
      * @param array $headers
      * @return Response
      */
-    protected function html(string $html, int $code, array $headers = [])
+    protected function html(string $html, int $code = 200, array $headers = [])
     {
         return $this->responseFactory->createHtmlResponse($html, $code, $headers);
     }
