@@ -5,7 +5,6 @@ namespace Venta\Framework\Http;
 use Psr\Http\Message\ServerRequestInterface;
 use Venta\Contracts\Config\Config;
 use Venta\Contracts\Container\Container;
-use Venta\Contracts\Http\HttpApplication as HttpApplicationContract;
 use Venta\Contracts\Http\ResponseEmitter as EmitterContract;
 use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\Routing\MiddlewarePipelineFactory;
@@ -17,7 +16,7 @@ use Venta\Contracts\Routing\Router;
  *
  * @package Venta\Framework\Http
  */
-final class HttpApplication implements HttpApplicationContract
+final class HttpApplication
 {
 
     /**
