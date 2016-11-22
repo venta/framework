@@ -35,6 +35,16 @@ final class HttpApplication
     }
 
     /**
+     * Returns service container instance.
+     *
+     * @return Container
+     */
+    public function getContainer(): Container
+    {
+        return $this->container;
+    }
+
+    /**
      * @inheritDoc
      */
     public function run(ServerRequestInterface $request)
