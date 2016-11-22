@@ -2,7 +2,9 @@
 
 namespace Venta\Framework\ServiceProvider;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Venta\Contracts\Http\Request;
+use Venta\Contracts\Http\RequestFactory as RequestFactoryContract;
 use Venta\Contracts\Http\ResponseEmitter as ResponseEmitterContract;
 use Venta\Contracts\Http\ResponseFactory as ResponseFactoryContract;
 use Venta\Http\Factory\RequestFactory;
@@ -25,12 +27,14 @@ class HttpServiceProvider extends AbstractServiceProvider
     {
         $this->container->bindClass(ResponseFactoryContract::class, ResponseFactory::class, true);
         $this->container->bindClass(ResponseEmitterContract::class, ResponseEmitter::class, true);
+        $this->container->bindClass(RequestFactoryContract::class, RequestFactory::class, true);
 
-        // todo: bind to factory interface (if possible)
         $this->container->bindFactory(
             Request::class,
-            [RequestFactory::class, 'createServerRequestFromGlobals'],
+            [RequestFactoryContract::class, 'createServerRequestFromGlobals'],
             true
         );
+
+        $this->container->bindClass(ServerRequestInterface::class, Request::class);
     }
 }
