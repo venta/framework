@@ -18,7 +18,17 @@ interface ResponseFactory
     const JSON_FLAG = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES;
 
     /**
-     * Create a new JSON response.
+     * Creates a new html response with text/html content-type header.
+     *
+     * @param string $html
+     * @param int $code
+     * @param array $headers
+     * @return Response
+     */
+    public function createHtmlResponse(string $html, int $code = 200, array $headers = []): Response;
+
+    /**
+     * Creates a new JSON response.
      *
      * @param mixed $data Data to convert to JSON.
      * @param int $status Integer status code for the response; 200 by default.
@@ -34,7 +44,7 @@ interface ResponseFactory
     ): Response;
 
     /**
-     * Create a new redirect response.
+     * Creates a new redirect response.
      *
      * @param string|UriInterface $uri
      * @param int $status
@@ -44,11 +54,12 @@ interface ResponseFactory
     public function createRedirectResponse($uri, int $status = 302, array $headers = []): Response;
 
     /**
-     * Create a new response.
+     * Creates a new response.
      *
-     * @param int $code HTTP status code
      * @param string|resource|StreamInterface $bodyStream Stream to use as body.
+     * @param int $code HTTP status code
+     * @param array $headers
      * @return Response
      */
-    public function createResponse(int $code = 200, $bodyStream = 'php://memory'): Response;
+    public function createResponse($bodyStream = 'php://memory', int $code = 200, array $headers = []): Response;
 }   

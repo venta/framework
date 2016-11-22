@@ -32,6 +32,19 @@ abstract class Responder implements ResponderContract
     }
 
     /**
+     * Creates html response.
+     *
+     * @param string $html
+     * @param int $code
+     * @param array $headers
+     * @return Response
+     */
+    protected function html(string $html, int $code, array $headers = [])
+    {
+        return $this->responseFactory->createHtmlResponse($html, $code, $headers);
+    }
+
+    /**
      * Creates http response with JSON content type header and JSON encoded $data.
      *
      * @param $data
@@ -66,13 +79,14 @@ abstract class Responder implements ResponderContract
     /**
      * Creates http response.
      *
-     * @param int $code
      * @param string $bodyStream Stream to use as response body.
+     * @param int $code
+     * @param array $headers
      * @return Response
      */
-    protected function response(int $code = 200, $bodyStream = 'php://memory'): Response
+    protected function response($bodyStream = 'php://memory', int $code = 200, array $headers = []): Response
     {
-        return $this->responseFactory->createResponse($code, $bodyStream);
+        return $this->responseFactory->createResponse($bodyStream, $code, $headers);
     }
 
 }
