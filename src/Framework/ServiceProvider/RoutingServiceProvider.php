@@ -4,7 +4,7 @@ namespace Venta\Framework\ServiceProvider;
 
 use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteCollector;
-use FastRoute\RouteParser\Std;
+use FastRoute\RouteParser as FastRouteRouteParser;
 use Venta\Contracts\Routing\FastrouteDispatcherFactory;
 use Venta\Contracts\Routing\MiddlewarePipelineFactory as MiddlewarePipelineFactoryContract;
 use Venta\Contracts\Routing\RequestRouteCollectionFactory as RequestRouteCollectionFactoryContract;
@@ -14,6 +14,7 @@ use Venta\Contracts\Routing\RouteDispatcherFactory as RouteDispatcherFactoryCont
 use Venta\Contracts\Routing\RouteGroup as RouteGroupContract;
 use Venta\Contracts\Routing\RouteMatcher as RouteMatcherContract;
 use Venta\Contracts\Routing\RouteParser as RouteParserContract;
+use Venta\Contracts\Routing\RoutePathParser as RoutePathParserContract;
 use Venta\Contracts\Routing\Router as RouterContract;
 use Venta\Routing\Factory\GroupCountBasedDispatcherFactory;
 use Venta\Routing\Factory\MiddlewarePipelineFactory;
@@ -24,6 +25,7 @@ use Venta\Routing\RouteCollection;
 use Venta\Routing\RouteGroup;
 use Venta\Routing\RouteMatcher;
 use Venta\Routing\RouteParser;
+use Venta\Routing\RoutePathParser;
 use Venta\Routing\Router;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
@@ -53,8 +55,12 @@ class RoutingServiceProvider extends AbstractServiceProvider
         $this->container->bindClass(RouteGroupContract::class, RouteGroup::class);
         $this->container->bindClass(RouteContract::class, Route::class);
 
-        $this->container->bindFactory(RouteCollector::class, function () {
-            return new RouteCollector(new Std, new GroupCountBased);
+        // Bind custom route path parser implementation to allow regex aliases in route definitions.
+        $this->container->bindClass(RoutePathParserContract::class, RoutePathParser::class, true);
+        $this->container->bindClass(FastRouteRouteParser::class, RoutePathParserContract::class);
+
+        $this->container->bindFactory(RouteCollector::class, function (FastRouteRouteParser $routePathParser) {
+            return new RouteCollector($routePathParser, new GroupCountBased);
         }, true);
     }
 }
