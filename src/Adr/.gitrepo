@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:venta/adr.git
+	branch = master
+	commit = c65a5d8b2b9809b58094219ccd99f9d5fbb24f0a
+	parent = f27f871e85d62c95df799697c755154674ff7a49
+	cmdver = 0.3.0
