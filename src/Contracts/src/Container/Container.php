@@ -57,6 +57,14 @@ interface Container extends ContainerInterface
     public function call($callable, array $arguments = []);
 
     /**
+     * Decorates previous implementation.
+     *
+     * @param $id
+     * @param callable $callback
+     */
+    public function decorate($id, callable $callback);
+
+    /**
      * {@inheritDoc}
      * @param array $arguments
      */
