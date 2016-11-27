@@ -4,6 +4,11 @@ suites:
         psr4_prefix: Venta\Adr
         src_path: src/Adr/src
         spec_path: src/Adr
+    config_suite:
+        namespace: Venta\Config
+        psr4_prefix: Venta\Config
+        src_path: src/Config/src
+        spec_path: src/Config
     routing_suite:
         namespace: Venta\Routing
         psr4_prefix: Venta\Routing
