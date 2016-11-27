@@ -14,3 +14,8 @@ suites:
         psr4_prefix: Venta\Routing
         src_path: src/Routing/src
         spec_path: src/Routing
+    event_suite:
+        namespace: Venta\Event
+        psr4_prefix: Venta\Event
+        src_path: src/Event/src
+        spec_path: src/Event
