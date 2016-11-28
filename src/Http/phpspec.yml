@@ -1,0 +1,4 @@
+suites:
+    http_suite:
+        namespace: Venta\Http
+        psr4_prefix: Venta\Http

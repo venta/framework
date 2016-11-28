@@ -1,0 +1,4 @@
+suites:
+    cache_suite:
+        namespace: Venta\Cache
+        psr4_prefix: Venta\Cache

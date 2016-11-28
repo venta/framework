@@ -4,18 +4,39 @@ suites:
         psr4_prefix: Venta\Adr
         src_path: src/Adr/src
         spec_path: src/Adr
+
+    cache_suite:
+        namespace: Venta\Cache
+        psr4_prefix: Venta\Cache
+        src_path: src/Cache/src
+        spec_path: src/Cache
+
     config_suite:
         namespace: Venta\Config
         psr4_prefix: Venta\Config
         src_path: src/Config/src
         spec_path: src/Config
+
+    container_suite:
+        namespace: Venta\Container
+        psr4_prefix: Venta\Container
+        src_path: src/Container/src
+        spec_path: src/Container
+
     routing_suite:
         namespace: Venta\Routing
         psr4_prefix: Venta\Routing
         src_path: src/Routing/src
         spec_path: src/Routing
+
     event_suite:
         namespace: Venta\Event
         psr4_prefix: Venta\Event
         src_path: src/Event/src
         spec_path: src/Event
+
+    http_suite:
+        namespace: Venta\Http
+        psr4_prefix: Venta\Http
+        src_path: src/Http/src
+        spec_path: src/Http
