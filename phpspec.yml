@@ -1,4 +1,8 @@
 suites:
+    framework_suite:
+        namespace: Venta\Framework
+        psr4_prefix: Venta
+
     adr_suite:
         namespace: Venta\Adr
         psr4_prefix: Venta\Adr
