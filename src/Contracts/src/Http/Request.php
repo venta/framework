@@ -3,6 +3,7 @@
 namespace Venta\Contracts\Http;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Venta\Contracts\Routing\Route;
 
 /**
  * Interface Request
@@ -11,4 +12,20 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 interface Request extends ServerRequestInterface
 {
+
+    /**
+     * Get current route.
+     *
+     * @return Route
+     */
+    public function getRoute(): Route;
+
+    /**
+     * Add route to the request.
+     *
+     * @param Route $route
+     * @return Request
+     */
+    public function withRoute(Route $route): Request;
+
 }

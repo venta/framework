@@ -6,6 +6,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use Venta\Contracts\Http\Request as RequestContract;
+use Venta\Contracts\Routing\Route;
 
 /**
  * Class Request
@@ -14,7 +15,6 @@ use Venta\Contracts\Http\Request as RequestContract;
  */
 class Request implements RequestContract
 {
-
     /**
      * @var ServerRequestInterface
      */
@@ -33,33 +33,33 @@ class Request implements RequestContract
     /**
      * @inheritDoc
      */
-    public function getProtocolVersion()
+    public function getAttribute($name, $default = null)
     {
-        return $this->psrRequest->getProtocolVersion();
+        return $this->psrRequest->getAttribute($name, $default);
     }
 
     /**
      * @inheritDoc
      */
-    public function withProtocolVersion($version)
+    public function getAttributes()
     {
-        return new self($this->psrRequest->withProtocolVersion($version));
+        return $this->psrRequest->getAttributes();
     }
 
     /**
      * @inheritDoc
      */
-    public function getHeaders()
+    public function getBody()
     {
-        return $this->psrRequest->getHeaders();
+        return $this->psrRequest->getBody();
     }
 
     /**
      * @inheritDoc
      */
-    public function hasHeader($name)
+    public function getCookieParams()
     {
-        return $this->psrRequest->hasHeader($name);
+        return $this->psrRequest->getCookieParams();
     }
 
     /**
@@ -81,57 +81,9 @@ class Request implements RequestContract
     /**
      * @inheritDoc
      */
-    public function withHeader($name, $value)
+    public function getHeaders()
     {
-        return new self($this->psrRequest->withHeader($name, $value));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withAddedHeader($name, $value)
-    {
-        return new self($this->psrRequest->withAddedHeader($name, $value));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withoutHeader($name)
-    {
-        return new self($this->psrRequest->withoutHeader($name));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getBody()
-    {
-        return $this->psrRequest->getBody();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withBody(StreamInterface $body)
-    {
-        return new self($this->psrRequest->withBody($body));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRequestTarget()
-    {
-        return $this->psrRequest->getRequestTarget();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withRequestTarget($requestTarget)
-    {
-        return new self($this->psrRequest->withRequestTarget($requestTarget));
+        return $this->psrRequest->getHeaders();
     }
 
     /**
@@ -145,49 +97,17 @@ class Request implements RequestContract
     /**
      * @inheritDoc
      */
-    public function withMethod($method)
+    public function getParsedBody()
     {
-        return new self($this->psrRequest->withMethod($method));
+        return $this->psrRequest->getParsedBody();
     }
 
     /**
      * @inheritDoc
      */
-    public function getUri()
+    public function getProtocolVersion()
     {
-        return $this->psrRequest->getUri();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withUri(UriInterface $uri, $preserveHost = false)
-    {
-        return new self($this->psrRequest->withUri($uri, $preserveHost));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getServerParams()
-    {
-        return $this->psrRequest->getServerParams();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCookieParams()
-    {
-        return $this->psrRequest->getCookieParams();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withCookieParams(array $cookies)
-    {
-        return new self($this->psrRequest->withCookieParams($cookies));
+        return $this->psrRequest->getProtocolVersion();
     }
 
     /**
@@ -201,9 +121,25 @@ class Request implements RequestContract
     /**
      * @inheritDoc
      */
-    public function withQueryParams(array $query)
+    public function getRequestTarget()
     {
-        return new self($this->psrRequest->withQueryParams($query));
+        return $this->psrRequest->getRequestTarget();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoute(): Route
+    {
+        return $this->getAttribute('route');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getServerParams()
+    {
+        return $this->psrRequest->getServerParams();
     }
 
     /**
@@ -217,41 +153,25 @@ class Request implements RequestContract
     /**
      * @inheritDoc
      */
-    public function withUploadedFiles(array $uploadedFiles)
+    public function getUri()
     {
-        return new self($this->psrRequest->withUploadedFiles($uploadedFiles));
+        return $this->psrRequest->getUri();
     }
 
     /**
      * @inheritDoc
      */
-    public function getParsedBody()
+    public function hasHeader($name)
     {
-        return $this->psrRequest->getParsedBody();
+        return $this->psrRequest->hasHeader($name);
     }
 
     /**
      * @inheritDoc
      */
-    public function withParsedBody($data)
+    public function withAddedHeader($name, $value)
     {
-        return new self($this->psrRequest->withParsedBody($data));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getAttributes()
-    {
-        return $this->psrRequest->getAttributes();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getAttribute($name, $default = null)
-    {
-        return $this->psrRequest->getAttribute($name, $default);
+        return new self($this->psrRequest->withAddedHeader($name, $value));
     }
 
     /**
@@ -265,9 +185,105 @@ class Request implements RequestContract
     /**
      * @inheritDoc
      */
+    public function withBody(StreamInterface $body)
+    {
+        return new self($this->psrRequest->withBody($body));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withCookieParams(array $cookies)
+    {
+        return new self($this->psrRequest->withCookieParams($cookies));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withHeader($name, $value)
+    {
+        return new self($this->psrRequest->withHeader($name, $value));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withMethod($method)
+    {
+        return new self($this->psrRequest->withMethod($method));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withParsedBody($data)
+    {
+        return new self($this->psrRequest->withParsedBody($data));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withProtocolVersion($version)
+    {
+        return new self($this->psrRequest->withProtocolVersion($version));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withQueryParams(array $query)
+    {
+        return new self($this->psrRequest->withQueryParams($query));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withRequestTarget($requestTarget)
+    {
+        return new self($this->psrRequest->withRequestTarget($requestTarget));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withRoute(Route $route): RequestContract
+    {
+        return $this->withAttribute('route', $route);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withUploadedFiles(array $uploadedFiles)
+    {
+        return new self($this->psrRequest->withUploadedFiles($uploadedFiles));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withUri(UriInterface $uri, $preserveHost = false)
+    {
+        return new self($this->psrRequest->withUri($uri, $preserveHost));
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function withoutAttribute($name)
     {
         return new self($this->psrRequest->withoutAttribute($name));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function withoutHeader($name)
+    {
+        return new self($this->psrRequest->withoutHeader($name));
     }
 
 }
