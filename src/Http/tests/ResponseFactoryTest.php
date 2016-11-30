@@ -72,7 +72,7 @@ class ResponseFactoryTest extends TestCase
      */
     public function canCreateResponseWithStatus()
     {
-        $response = $this->factory->createResponse(500);
+        $response = $this->factory->createResponse('php://memory', 500);
         $this->assertSame($response->getStatusCode(), 500);
     }
 

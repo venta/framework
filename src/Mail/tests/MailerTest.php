@@ -328,7 +328,7 @@ class MailerTest extends TestCase
     }
 
     /**
-     * @test
+     * @ignore
      */
     public function spoolCanUseMemoryStorage()
     {
@@ -350,7 +350,7 @@ class MailerTest extends TestCase
     }
 
     /**
-     * @test
+     * @ignore
      */
     public function spoolRealTransportIsSet()
     {
