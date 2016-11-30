@@ -2,14 +2,14 @@
 
 namespace Venta\Contracts\Routing;
 
-use FastRoute\RouteParser;
+use FastRoute\RouteParser as FastRouteRouteParser;
 
 /**
  * Interface RoutePathParser
  *
  * @package Venta\Contracts\Routing
  */
-interface RoutePathParser extends RouteParser
+interface RoutePathParser extends FastRouteRouteParser
 {
 
     /**
