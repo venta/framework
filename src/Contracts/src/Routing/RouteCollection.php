@@ -9,22 +9,13 @@ namespace Venta\Contracts\Routing;
  */
 interface RouteCollection
 {
-
     /**
-     * Adds route group.
+     * Finds a route by name.
      *
-     * @param RouteGroup $group
-     * @return RouteCollection
+     * @param string $routeName
+     * @return null|Route
      */
-    public function addGroup(RouteGroup $group): RouteCollection;
-
-    /**
-     * Adds route.
-     *
-     * @param Route $route
-     * @return RouteCollection
-     */
-    public function addRoute(Route $route): RouteCollection;
+    public function findByName(string $routeName);
 
     /**
      * Returns all routes.

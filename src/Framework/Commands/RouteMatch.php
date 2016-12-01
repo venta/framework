@@ -9,8 +9,8 @@ use Venta\Console\Command;
 use Venta\Contracts\Http\RequestFactory;
 use Venta\Contracts\Routing\RouteCollector;
 use Venta\Contracts\Routing\RouteMatcher;
-use Venta\Routing\Exception\NotAllowedException;
-use Venta\Routing\Exception\NotFoundException;
+use Venta\Routing\Exception\MethodNotAllowedException;
+use Venta\Routing\Exception\RouteNotFoundException;
 use Zend\Diactoros\Uri;
 
 /**
@@ -86,9 +86,9 @@ class RouteMatch extends Command
                 join(',', array_keys($route->getMiddlewares())),
             ]);
             $table->render();
-        } catch (NotFoundException $e) {
+        } catch (RouteNotFoundException $e) {
             $output->writeln('<error>Path cannot be matched against defined routes</error>');
-        } catch (NotAllowedException $e) {
+        } catch (MethodNotAllowedException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         }
     }

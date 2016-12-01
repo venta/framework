@@ -10,9 +10,17 @@ namespace Venta\Contracts\Routing;
 interface Route
 {
     /**
+     * Returns route path with placeholders substituted with variables.
+     *
+     * @param array $variables
      * @return string
      */
-    public function getDomain():string;
+    public function compilePath(array $variables = []): string;
+
+    /**
+     * @return string
+     */
+    public function getDomain(): string;
 
     /**
      * @return string
@@ -60,6 +68,13 @@ interface Route
     public function getVariables(): array;
 
     /**
+     * Set the HTTPS scheme.
+     *
+     * @return Route
+     */
+    public function secure(): Route;
+
+    /**
      * @param string $domainClass
      * @return Route
      */
@@ -98,14 +113,6 @@ interface Route
      * @return Route
      */
     public function withPathPrefix(string $prefix): Route;
-
-    /**
-     * Set the scheme.
-     *
-     * @param string $scheme
-     * @return Route
-     */
-    public function withScheme(string $scheme): Route;
 
     /**
      * Set route parameters.

@@ -7,7 +7,7 @@ namespace Venta\Contracts\Routing;
  *
  * @package Venta\Contracts\Routing
  */
-interface RouteGroup extends RouteCollection
+interface RouteGroup extends MutableRouteCollection
 {
 
     /**

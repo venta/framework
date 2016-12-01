@@ -38,7 +38,7 @@ class RoutesCommandTest extends PHPUnit_Framework_TestCase
             ->withMiddleware('middleware2', function () {
             })
             ->withName('named')
-            ->withScheme('http');
+            ->secure();
         $routeCollector->shouldReceive('getRoutes')->once()->andReturn([$route]);
 
         $command = new \Venta\Framework\Commands\Routes($routeCollector);
