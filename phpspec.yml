@@ -44,3 +44,18 @@ suites:
         psr4_prefix: Venta\Http
         src_path: src/Http/src
         spec_path: src/Http
+
+extensions:
+    PhpSpecCodeCoverage\CodeCoverageExtension:
+        show_uncovered_files: false
+        blacklist:
+            - spec
+            - tests
+            - stub
+            - 'src/*/spec/'
+            - 'src/*/tests/'
+            - 'src/*/stub/'
+        format:
+            - clover
+        output:
+            clover: phpspec_coverage.xml

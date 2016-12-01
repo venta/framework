@@ -40,7 +40,8 @@
     "require-dev": {
         "phpspec/phpspec": "^3.1",
         "phpunit/phpunit": "^5.4",
-        "mockery/mockery": "^0.9.5"
+        "mockery/mockery": "^0.9.5",
+        "henrikbjorn/phpspec-code-coverage": "^3.0"
     },
     "require": {
         "php": "~7.0",
