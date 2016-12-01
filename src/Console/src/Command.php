@@ -3,19 +3,18 @@
 namespace Venta\Console;
 
 use Symfony\Component\Console\Command\Command as BaseCommand;
-use Symfony\Component\Console\Input\{
-    InputArgument, InputInterface, InputOption
-};
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Venta\Console\Command\SignatureParser;
-use Venta\Contracts\Console\Command as CommandContract;
 
 /**
  * Class Command
  *
  * @package Venta\Console
  */
-abstract class Command extends BaseCommand implements CommandContract
+abstract class Command extends BaseCommand
 {
 
     /**
@@ -36,7 +35,7 @@ abstract class Command extends BaseCommand implements CommandContract
      * Helper method to get input argument
      *
      * @param string $name
-     * @return mixed
+     * @return string
      */
     public function arg(string $name)
     {
@@ -55,8 +54,12 @@ abstract class Command extends BaseCommand implements CommandContract
 
         if (is_array($signature['arguments']) && count($signature['arguments']) > 0) {
             foreach ($signature['arguments'] as $argument) {
-                $this->addArgument($argument['name'], $argument['type'], $argument['description'],
-                    $argument['default']);
+                $this->addArgument(
+                    $argument['name'],
+                    $argument['type'],
+                    $argument['description'],
+                    $argument['default']
+                );
             }
         } else {
             $this->getDefinition()->addArguments($this->returnArguments());
@@ -80,6 +83,15 @@ abstract class Command extends BaseCommand implements CommandContract
     }
 
     /**
+     * Main command function, which is executed on command run
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return null|int
+     */
+    abstract public function handle(InputInterface $input, OutputInterface $output);
+
+    /**
      * Helper method to get input option
      *
      * @param string $name
@@ -94,7 +106,7 @@ abstract class Command extends BaseCommand implements CommandContract
      * Returns command arguments array
      * Values must be instances of InputArgument
      *
-     * @return array|InputArgument[]
+     * @return InputArgument[]
      */
     public function returnArguments(): array
     {
@@ -105,7 +117,7 @@ abstract class Command extends BaseCommand implements CommandContract
      * Returns command options array
      * Values must be instances of InputOption
      *
-     * @return array|InputOption[]
+     * @return InputOption[]
      */
     public function returnOptions(): array
     {
@@ -121,6 +133,13 @@ abstract class Command extends BaseCommand implements CommandContract
     {
         return parent::run($input, $output);
     }
+
+    /**
+     * Should return string with command signature
+     *
+     * @return string
+     */
+    abstract public function signature(): string;
 
     /**
      * Helper method to write string to output

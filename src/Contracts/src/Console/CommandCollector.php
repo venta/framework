@@ -2,6 +2,8 @@
 
 namespace Venta\Contracts\Console;
 
+use Venta\Console\Command;
+
 /**
  * Interface CommandCollector
  *

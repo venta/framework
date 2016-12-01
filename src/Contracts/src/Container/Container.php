@@ -28,6 +28,7 @@ interface Container extends ContainerInterface
      * @param string $id Contract (interface) name.
      * @param string $class Contract implementation class name.
      * @param bool $shared
+     * @return void
      */
     public function bindClass(string $id, string $class, $shared = false);
 
@@ -37,6 +38,7 @@ interface Container extends ContainerInterface
      * @param string $id
      * @param callable $callable
      * @param bool $shared
+     * @return void
      */
     public function bindFactory(string $id, $callable, $shared = false);
 
@@ -45,6 +47,7 @@ interface Container extends ContainerInterface
      *
      * @param string $id
      * @param object $instance
+     * @return void
      */
     public function bindInstance(string $id, $instance);
 
@@ -53,6 +56,7 @@ interface Container extends ContainerInterface
      *
      * @param $callable
      * @param array $arguments
+     * @return mixed
      */
     public function call($callable, array $arguments = []);
 
@@ -61,6 +65,7 @@ interface Container extends ContainerInterface
      *
      * @param $id
      * @param callable $callback
+     * @return void
      */
     public function decorate($id, callable $callback);
 

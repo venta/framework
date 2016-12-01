@@ -53,7 +53,7 @@ interface Cookie
     /**
      * Method that transforms Class to a plain text to include it in Response header
      *
-     * @return mixed
+     * @return string
      */
     public function asPlainText();
 
@@ -73,7 +73,7 @@ interface Cookie
     public function getName();
 
     /**
-     * @return string;
+     * @return string|null
      */
     public function getValue();
 

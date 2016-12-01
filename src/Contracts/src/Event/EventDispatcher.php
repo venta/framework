@@ -15,6 +15,7 @@ interface EventDispatcher
      * @param  string $eventName
      * @param  callable $listener
      * @param  int    $priority
+     * @return void
      */
     public function addListener(string $eventName, $listener, int $priority = 0);
 
@@ -22,6 +23,7 @@ interface EventDispatcher
      * Trigger an event.
      *
      * @param  Event $event
+     * @return void
      */
     public function dispatch(Event $event);
 }

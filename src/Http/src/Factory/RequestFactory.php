@@ -36,6 +36,6 @@ class RequestFactory extends ServerRequestFactory implements RequestFactoryContr
      */
     public function createServerRequestFromGlobals(): RequestContract
     {
-        return new Request(parent::fromGlobals());
+        return new Request($this->fromGlobals());
     }
 }

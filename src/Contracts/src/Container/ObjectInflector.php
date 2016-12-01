@@ -15,6 +15,7 @@ interface ObjectInflector
      * @param string $id
      * @param string $method
      * @param array $arguments
+     * @return void
      */
     public function addInflection(string $id, string $method, array $arguments = []);
 

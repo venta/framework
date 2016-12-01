@@ -19,6 +19,6 @@ interface HandlerStack extends Iterator
      * @param ThrowableHandler $handler
      * @return HandlerStack
      */
-    public function push(ThrowableHandler $handler): self;
+    public function push(ThrowableHandler $handler): HandlerStack;
 
 }
