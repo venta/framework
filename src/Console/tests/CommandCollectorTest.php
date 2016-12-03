@@ -21,8 +21,7 @@ class CommandCollectorTest extends TestCase
         $mock = Mockery::mock(MockCommand::class);
         $container->shouldReceive('get')->with(MockCommand::class)->andReturn($mock)->once();
 
-        $collector = new CommandCollector();
-        $collector->setContainer($container);
+        $collector = new CommandCollector($container);
         $collector->addCommand(MockCommand::class);
         $result = $collector->getCommands();
 

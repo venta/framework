@@ -2,12 +2,17 @@
 
 namespace spec\Venta\Framework\Event;
 
-use Venta\Framework\Event\EventDispatcher;
 use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
+use Venta\Contracts\Container\Container;
+use Venta\Framework\Event\EventDispatcher;
 
 class EventDispatcherSpec extends ObjectBehavior
 {
+    function let(Container $container)
+    {
+        $this->beConstructedWith($container);
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType(EventDispatcher::class);

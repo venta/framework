@@ -2,8 +2,7 @@
 
 namespace Venta\Framework\Event;
 
-use Venta\Container\ContainerAwareTrait;
-use Venta\Contracts\Container\ContainerAware;
+use Venta\Contracts\Container\Container;
 use Venta\Contracts\Event\Event as EventContract;
 use Venta\Event\EventDispatcher as BaseEventDispatcher;
 
@@ -12,9 +11,22 @@ use Venta\Event\EventDispatcher as BaseEventDispatcher;
  *
  * @package Venta\Framework
  */
-class EventDispatcher extends BaseEventDispatcher implements ContainerAware
+class EventDispatcher extends BaseEventDispatcher
 {
-    use ContainerAwareTrait;
+    /**
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * CommandCollector constructor.
+     *
+     * @param Container $container
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * @inheritDoc
