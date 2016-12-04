@@ -13,16 +13,16 @@ interface MutableRouteCollection extends RouteCollection
      * Adds route group.
      *
      * @param RouteGroup $group
-     * @return RouteCollection
+     * @return MutableRouteCollection
      */
-    public function addGroup(RouteGroup $group): RouteCollection;
+    public function addGroup(RouteGroup $group): MutableRouteCollection;
 
     /**
      * Adds route.
      *
      * @param Route $route
-     * @return RouteCollection
+     * @return MutableRouteCollection
      */
-    public function addRoute(Route $route): RouteCollection;
+    public function addRoute(Route $route): MutableRouteCollection;
 
 }

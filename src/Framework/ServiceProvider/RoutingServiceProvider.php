@@ -7,6 +7,7 @@ use FastRoute\RouteCollector;
 use FastRoute\RouteParser as FastRouteRouteParser;
 use Venta\Contracts\Routing\FastrouteDispatcherFactory;
 use Venta\Contracts\Routing\MiddlewarePipelineFactory as MiddlewarePipelineFactoryContract;
+use Venta\Contracts\Routing\MutableRouteCollection as MutableRouteCollectionContract;
 use Venta\Contracts\Routing\RequestRouteCollectionFactory as RequestRouteCollectionFactoryContract;
 use Venta\Contracts\Routing\Route as RouteContract;
 use Venta\Contracts\Routing\RouteCollection as RouteCollectionContract;
@@ -14,8 +15,8 @@ use Venta\Contracts\Routing\RouteDispatcherFactory as RouteDispatcherFactoryCont
 use Venta\Contracts\Routing\RouteGroup as RouteGroupContract;
 use Venta\Contracts\Routing\RouteMatcher as RouteMatcherContract;
 use Venta\Contracts\Routing\RouteParser as RouteParserContract;
-use Venta\Contracts\Routing\RoutePathParser as RoutePathParserContract;
 use Venta\Contracts\Routing\Router as RouterContract;
+use Venta\Routing\AliasedPathPatternRouteCollection;
 use Venta\Routing\Factory\GroupCountBasedDispatcherFactory;
 use Venta\Routing\Factory\MiddlewarePipelineFactory;
 use Venta\Routing\Factory\RequestRouteCollectionFactory;
@@ -25,7 +26,6 @@ use Venta\Routing\RouteCollection;
 use Venta\Routing\RouteGroup;
 use Venta\Routing\RouteMatcher;
 use Venta\Routing\RouteParser;
-use Venta\Routing\RoutePathParser;
 use Venta\Routing\Router;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
@@ -43,10 +43,14 @@ class RoutingServiceProvider extends AbstractServiceProvider
     public function boot()
     {
         $this->container->bindClass(FastrouteDispatcherFactory::class, GroupCountBasedDispatcherFactory::class, true);
-        $this->container->bindClass(RequestRouteCollectionFactoryContract::class, RequestRouteCollectionFactory::class,
-            true);
+        $this->container->bindClass(
+            RequestRouteCollectionFactoryContract::class,
+            RequestRouteCollectionFactory::class,
+            true
+        );
         $this->container->bindClass(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class, true);
-        $this->container->bindClass(RouteCollectionContract::class, RouteCollection::class, true);
+        $this->container->bindClass(MutableRouteCollectionContract::class, RouteCollection::class, true);
+        $this->container->bindClass(RouteCollectionContract::class, MutableRouteCollectionContract::class, true);
         $this->container->bindClass(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class, true);
         $this->container->bindClass(RouteMatcherContract::class, RouteMatcher::class, true);
         $this->container->bindClass(RouteParserContract::class, RouteParser::class, true);
@@ -55,12 +59,12 @@ class RoutingServiceProvider extends AbstractServiceProvider
         $this->container->bindClass(RouteGroupContract::class, RouteGroup::class);
         $this->container->bindClass(RouteContract::class, Route::class);
 
-        // Bind custom route path parser implementation to allow regex aliases in route definitions.
-        $this->container->bindClass(RoutePathParserContract::class, RoutePathParser::class, true);
-        $this->container->bindClass(FastRouteRouteParser::class, RoutePathParserContract::class);
-
-        $this->container->bindFactory(RouteCollector::class, function (FastRouteRouteParser $routePathParser) {
-            return new RouteCollector($routePathParser, new GroupCountBased);
+        $this->container->bindFactory(RouteCollector::class, function () {
+            return new RouteCollector(new FastRouteRouteParser\Std(), new GroupCountBased);
         }, true);
+
+        $this->container->decorate(MutableRouteCollectionContract::class, function ($routes) {
+            return new AliasedPathPatternRouteCollection($routes);
+        });
     }
 }

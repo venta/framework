@@ -112,7 +112,7 @@ interface Route
      * @param string $prefix
      * @return Route
      */
-    public function withPathPrefix(string $prefix): Route;
+    public function withPath(string $prefix): Route;
 
     /**
      * Set route parameters.
