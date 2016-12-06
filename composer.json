@@ -33,6 +33,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "stub\\Venta\\Console\\": "src/Console/stub",
             "stub\\Venta\\Event\\": "src/Event/stub"
         }
     },

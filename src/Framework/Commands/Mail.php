@@ -1,20 +1,15 @@
 <?php declare(strict_types = 1);
-/**
- * Class Mail
- *
- * @package Venta\Commands
- */
 
 namespace Venta\Framework\Commands;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Console\Command;
+use Venta\Console\AbstractCommand;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Event\EventDispatcher;
 
 
-class Mail extends Command
+class Mail extends AbstractCommand
 {
     /**
      * @var Container

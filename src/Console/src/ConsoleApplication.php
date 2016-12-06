@@ -2,112 +2,101 @@
 
 namespace Venta\Console;
 
-use Exception;
-use Symfony\Component\Console\Application;
+use Error;
+use ErrorException;
+use Symfony\Component\Console\Application as SymfonyConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Contracts\Console\CommandCollector;
-use Venta\Contracts\Console\ConsoleApplication as ConsoleApplicationContract;
+use Throwable;
+use Venta\Contracts\Console\CommandCollection;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Kernel\Kernel;
-
 
 /**
  * Class ConsoleApplication
  *
- * @package Venta
+ * @package Venta\Console
  */
-class ConsoleApplication extends Application implements ConsoleApplicationContract
+final class ConsoleApplication
 {
+    /**
+     * @var SymfonyConsoleApplication
+     */
+    private $console;
 
     /**
      * @var Container
      */
-    protected $container;
-
+    private $container;
 
     /**
-     * HttpApplication constructor.
+     * ConsoleApplication constructor.
      *
      * @param Kernel $kernel
      */
     public function __construct(Kernel $kernel)
     {
         $this->container = $kernel->boot();
-
-        parent::__construct('Venta', $kernel->getVersion());
+        $this->initConsole('Venta Console', $kernel->getVersion());
     }
 
     /**
-     * Passes exception to error handler before rendering to output
+     * Runs Console Application.
      *
-     * @param Exception $e
+     * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int
      */
-    public function renderException(Exception $e, OutputInterface $output)
+    public function run(InputInterface $input, OutputInterface $output): int
     {
-        if ($this->container->has('error_handler')) {
-            /** @var \Whoops\RunInterface $run */
-            $run = $this->container->get('error_handler');
-            // from now on ConsoleApplication will render exception
-            $run->allowQuit(false);
-            $run->writeToOutput(false);
-            // Ignore the return string, parent call will render exception
-            $run->handleException($e);
+        try {
+            return $this->console->run($input, $output);
+        } catch (Throwable $e) {
+
+            // todo: call error reporters
+
+            if ($e instanceof Error) {
+                $e = new ErrorException(
+                    $e->getMessage(), 0, $e->getCode(), $e->getFile(), $e->getLine(), $e->getPrevious()
+                );
+            }
+
+            $this->console->renderException($e, $output);
+
+            return 1;
         }
-        parent::renderException($e, $output);
     }
 
     /**
-     * @inheritDoc
+     * Initiates Symfony Console Application.
+     *
+     * @param string $name
+     * @param string $version
      */
-    final public function run(InputInterface $input = null, OutputInterface $output = null)
+    private function initConsole(string $name, string $version)
     {
-        /*
-        |--------------------------------------------------------------------------
-        | Bind input
-        |--------------------------------------------------------------------------
-        |
-        | Rebind input instance, if passed as argument
-        */
-        if ($input) {
-            $this->container->bindInstance(InputInterface::class, $input);
+        $this->console = $this->container->get(SymfonyConsoleApplication::class);
+        $this->console->setName($name);
+        $this->console->setVersion($version);
+        $this->console->setCatchExceptions(false);
+        $this->console->setAutoExit(false);
+
+        /** @var CommandCollection $commands */
+        $commands = $this->container->get(CommandCollection::class);
+        foreach ($commands as $command) {
+            $this->console->add($this->resolveCommand($command));
         }
+    }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Bind output
-        |--------------------------------------------------------------------------
-        |
-        | Rebind output instance, if passed as argument
-        */
-        if ($output) {
-            $this->container->bindInstance(OutputInterface::class, $output);
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Add commands
-        |--------------------------------------------------------------------------
-        |
-        | Add collected commands to application
-        */
-        /** @var \Venta\Contracts\Console\CommandCollector $collector */
-        $collector = $this->container->get(CommandCollector::class);
-        $this->addCommands($collector->getCommands());
-
-        /*
-        |--------------------------------------------------------------------------
-        | Run application
-        |--------------------------------------------------------------------------
-        |
-        | Run console application using bound Input and Output instances
-        */
-        parent::run(
-            $this->container->get(InputInterface::class),
-            $this->container->get(OutputInterface::class)
-        );
+    /**
+     * Resolves command object from class name.
+     *
+     * @param string $commandClass
+     * @return mixed
+     */
+    private function resolveCommand(string $commandClass)
+    {
+        return $this->container->get($commandClass);
     }
 
 }

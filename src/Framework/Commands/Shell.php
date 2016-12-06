@@ -3,9 +3,7 @@
 namespace Venta\Framework\Commands;
 
 use Psy\Shell as BaseShell;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Console\Command;
+use Venta\Console\AbstractCommand;
 
 /**
  * Class Shell
@@ -13,31 +11,20 @@ use Venta\Console\Command;
  * @package Venta\Commands
  * @codeCoverageIgnore
  */
-class Shell extends Command
+class Shell extends AbstractCommand
 {
-    /**
-     * @inheritDoc
-     */
-    public function description(): string
-    {
-        return 'Interactive shell';
-    }
+    protected $description = 'Interactive shell';
+
+    protected $signature = 'shell {includes[]=:Array of files to include in shell}';
 
     /**
      * @inheritDoc
      */
-    public function handle(InputInterface $input, OutputInterface $output)
+    public function handle()
     {
         $shell = new BaseShell;
-        $shell->setIncludes($input->getArgument('includes'));
+        $shell->setIncludes($this->input->getArgument('includes'));
         $shell->run();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function signature(): string
-    {
-        return 'shell {includes[]=:Array of files to include in shell}';
-    }
 }

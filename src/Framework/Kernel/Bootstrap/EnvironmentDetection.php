@@ -3,7 +3,7 @@
 namespace Venta\Framework\Kernel\Bootstrap;
 
 use Dotenv\Loader;
-use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\ArgvInput;
 use Venta\Framework\Kernel\AbstractKernelBootstrap;
 
 /**
@@ -22,9 +22,8 @@ class EnvironmentDetection extends AbstractKernelBootstrap
 
         $envLoader = new Loader($filePath);
         if ($this->kernel->isCli()) {
-            /** @var InputInterface $consoleInput */
-            $consoleInput = $this->container->get(InputInterface::class);
-            $env = $consoleInput->getParameterOption(['--env', '-e']);
+            // todo: Load different env fire for each environment.
+            $env = (new ArgvInput)->getParameterOption(['--env', '-e']);
             if ($env) {
                 $envLoader->setEnvironmentVariable('APP_ENV', $env);
             }

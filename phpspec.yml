@@ -21,6 +21,12 @@ suites:
         src_path: src/Config/src
         spec_path: src/Config
 
+    console_suite:
+        namespace: Venta\Console
+        psr4_prefix: Venta\Console
+        src_path: src/Console/src
+        spec_path: src/Console
+
     container_suite:
         namespace: Venta\Container
         psr4_prefix: Venta\Container

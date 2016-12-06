@@ -5,7 +5,7 @@ namespace Venta\Framework\Commands;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Console\Command;
+use Venta\Console\AbstractCommand;
 use Venta\Contracts\Http\RequestFactory;
 use Venta\Contracts\Routing\RouteCollector;
 use Venta\Contracts\Routing\RouteMatcher;
@@ -18,7 +18,7 @@ use Zend\Diactoros\Uri;
  *
  * @package Venta\Commands
  */
-class RouteMatch extends Command
+class RouteMatch extends AbstractCommand
 {
 
     /**
@@ -64,7 +64,7 @@ class RouteMatch extends Command
      */
     public function handle(InputInterface $input, OutputInterface $output)
     {
-        $uri = new Uri($this->arg('path'));
+        $uri = new Uri($this->argument('path'));
         if ($input->getOption('host')) {
             $uri = $uri->withHost($input->getOption('host'));
         }

@@ -1,0 +1,4 @@
+suites:
+    console_suite:
+        namespace: Venta\Console
+        psr4_prefix: Venta\Console

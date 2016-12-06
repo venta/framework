@@ -2,12 +2,8 @@
 
 namespace Venta\Framework\ServiceProvider;
 
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Console\Command\CommandCollector;
-use Venta\Contracts\Console\CommandCollector as CommandCollectorContract;
+use Venta\Console\CommandCollection;
+use Venta\Contracts\Console\CommandCollection as CommandCollectionContract;
 use Venta\Framework\Commands\Shell;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
@@ -24,20 +20,10 @@ class ConsoleServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        // todo: refactor along with console package.
-        $this->container->bindFactory(InputInterface::class, function () {
-            return new ArgvInput;
-        }, true);
-
-        $this->container->bindFactory(OutputInterface::class, function () {
-            return new ConsoleOutput;
-        }, true);
-
-        $this->container->bindClass(CommandCollectorContract::class, CommandCollector::class, true);
+        $this->container->bindClass(CommandCollectionContract::class, CommandCollection::class, true);
 
         $this->provideCommands(
             Shell::class
         );
-
     }
 }

@@ -5,7 +5,7 @@ namespace Venta\Framework\Commands;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Venta\Console\Command;
+use Venta\Console\AbstractCommand;
 use Venta\Contracts\Routing\RouteCollector;
 
 /**
@@ -13,7 +13,7 @@ use Venta\Contracts\Routing\RouteCollector;
  *
  * @package Venta\Commands
  */
-class Routes extends Command
+class Routes extends AbstractCommand
 {
 
     /**

@@ -24,6 +24,11 @@
             "Venta\\Console\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "stub\\Venta\\Console\\": "stub"
+        }
+    },
     "minimum-stability": "stable",
     "require-dev": {
         "phpunit/phpunit": "^5.4",

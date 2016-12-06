@@ -3,18 +3,19 @@
 namespace Venta\Framework\ErrorHandler;
 
 use ErrorException;
-use Venta\Contracts\ErrorHandler\Runner as RunnerContract;
+use Throwable;
+use Venta\Contracts\ErrorHandler\ErrorHandler as ErrorHandlerContract;
 
 /**
- * Class Runner
+ * Class ErrorHandler
  *
  * @package Venta\Framework\ErrorHandler
  */
-class Runner implements RunnerContract
+class ErrorHandler implements ErrorHandlerContract
 {
 
     /**
-     * PHP is shutdown flag
+     * PHP is shutdown flag.
      *
      * @var bool
      */
@@ -42,15 +43,15 @@ class Runner implements RunnerContract
      * @inheritdoc
      * @throws ErrorException
      */
-    public function handleError($errno, $errstr, $errfile, $errline): bool
+    public function handleError(int $severity, string $message, string $filename, int $lineNumber): bool
     {
         // Check if we should handle this error or ignore it.
-        if (!(error_reporting() & $errno)) {
+        if (!(error_reporting() & $severity)) {
             // Pass error to the next handler.
             return false;
         }
 
-        $exception = new ErrorException($errstr, 0, $errno, $errfile, $errline);
+        $exception = new ErrorException($message, 0, $severity, $filename, $lineNumber);
         if ($this->shutdown) {
             // PHP is shutdown, we can't throw exceptions at this time.
             $this->handleThrowable($exception);
@@ -78,7 +79,7 @@ class Runner implements RunnerContract
     /**
      * {@inheritDoc}
      */
-    public function handleThrowable(\Throwable $throwable)
+    public function handleThrowable(Throwable $throwable)
     {
         foreach ($this->stack as $handler) {
             $handler->handle($throwable);
