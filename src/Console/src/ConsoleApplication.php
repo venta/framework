@@ -8,7 +8,7 @@ use Symfony\Component\Console\Application as SymfonyConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
-use Venta\Contracts\Console\CommandCollection;
+use Venta\Contracts\Console\CommandCollection as CommandCollectionContract;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Kernel\Kernel;
 
@@ -81,8 +81,8 @@ final class ConsoleApplication
         $this->console->setCatchExceptions(false);
         $this->console->setAutoExit(false);
 
-        /** @var CommandCollection $commands */
-        $commands = $this->container->get(CommandCollection::class);
+        /** @var CommandCollectionContract $commands */
+        $commands = $this->container->get(CommandCollectionContract::class);
         foreach ($commands as $command) {
             $this->console->add($this->resolveCommand($command));
         }
