@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Venta\Framework\Http;
+namespace spec\Venta\Http;
 
 use PhpSpec\ObjectBehavior;
 use Psr\Http\Message\ResponseInterface;
@@ -12,7 +12,7 @@ use Venta\Contracts\Routing\Delegate;
 use Venta\Contracts\Routing\MiddlewarePipeline;
 use Venta\Contracts\Routing\MiddlewarePipelineFactory;
 use Venta\Contracts\Routing\Router;
-use Venta\Framework\Http\HttpApplication;
+use Venta\Http\HttpApplication;
 
 class HttpApplicationSpec extends ObjectBehavior
 {

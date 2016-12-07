@@ -30,7 +30,7 @@ class HttpApplicationTest extends TestCase
     {
         $kernel = Mockery::spy(Kernel::class, ['boot' => Mockery::mock(Container::class)]);
 
-        $app = new \Venta\Framework\Http\HttpApplication($kernel);
+        $app = new \Venta\Http\HttpApplication($kernel);
 
         $kernel->shouldHaveReceived('boot')->withNoArgs()->once();
     }
@@ -77,7 +77,7 @@ class HttpApplicationTest extends TestCase
         $kernel->shouldReceive('boot')->withNoArgs()->andReturn($container)->once();
 
         // Create and run application
-        $app = new \Venta\Framework\Http\HttpApplication($kernel);
+        $app = new \Venta\Http\HttpApplication($kernel);
         $app->run();
     }
 
