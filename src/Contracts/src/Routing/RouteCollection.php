@@ -7,21 +7,22 @@ namespace Venta\Contracts\Routing;
  *
  * @package Venta\Contracts\Routing
  */
-interface RouteCollection
+interface RouteCollection extends ImmutableRouteCollection
 {
     /**
-     * Finds a route by name.
+     * Adds route group.
      *
-     * @param string $routeName
-     * @return null|Route
+     * @param RouteGroup $group
+     * @return RouteCollection
      */
-    public function findByName(string $routeName);
+    public function addGroup(RouteGroup $group): RouteCollection;
 
     /**
-     * Returns all routes.
+     * Adds route.
      *
-     * @return Route[]
+     * @param Route $route
+     * @return RouteCollection
      */
-    public function getRoutes(): array;
+    public function addRoute(Route $route): RouteCollection;
 
 }

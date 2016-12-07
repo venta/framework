@@ -15,10 +15,13 @@ interface RequestRouteCollectionFactory
     /**
      * Creates request aware route collection.
      *
-     * @param RouteCollection $routeCollection
+     * @param ImmutableRouteCollection $routeCollection
      * @param ServerRequestInterface $request
-     * @return RouteCollection
+     * @return ImmutableRouteCollection
      */
-    public function create(RouteCollection $routeCollection, ServerRequestInterface $request): RouteCollection;
+    public function create(
+        ImmutableRouteCollection $routeCollection,
+        ServerRequestInterface $request
+    ): ImmutableRouteCollection;
 
 }

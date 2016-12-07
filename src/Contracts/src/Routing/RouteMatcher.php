@@ -16,9 +16,9 @@ interface RouteMatcher
      * Matches route collection against provided request.
      *
      * @param ServerRequestInterface $request
-     * @param RouteCollection $routeCollection
+     * @param ImmutableRouteCollection $routeCollection
      * @return Route
      */
-    public function match(ServerRequestInterface $request, RouteCollection $routeCollection): Route;
+    public function match(ServerRequestInterface $request, ImmutableRouteCollection $routeCollection): Route;
 
 }

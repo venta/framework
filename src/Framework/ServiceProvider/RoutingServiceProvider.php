@@ -7,8 +7,8 @@ use FastRoute\RouteCollector;
 use FastRoute\RouteParser as FastRouteRouteParser;
 use Psr\Http\Message\UriInterface;
 use Venta\Contracts\Routing\FastrouteDispatcherFactory;
+use Venta\Contracts\Routing\ImmutableRouteCollection as ImmutableRouteCollectionContract;
 use Venta\Contracts\Routing\MiddlewarePipelineFactory as MiddlewarePipelineFactoryContract;
-use Venta\Contracts\Routing\MutableRouteCollection as MutableRouteCollectionContract;
 use Venta\Contracts\Routing\RequestRouteCollectionFactory as RequestRouteCollectionFactoryContract;
 use Venta\Contracts\Routing\Route as RouteContract;
 use Venta\Contracts\Routing\RouteCollection as RouteCollectionContract;
@@ -53,8 +53,8 @@ class RoutingServiceProvider extends AbstractServiceProvider
             true
         );
         $this->container->bindClass(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class, true);
-        $this->container->bindClass(MutableRouteCollectionContract::class, RouteCollection::class, true);
-        $this->container->bindClass(RouteCollectionContract::class, MutableRouteCollectionContract::class, true);
+        $this->container->bindClass(RouteCollectionContract::class, RouteCollection::class, true);
+        $this->container->bindClass(ImmutableRouteCollectionContract::class, RouteCollectionContract::class, true);
         $this->container->bindClass(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class, true);
         $this->container->bindClass(RouteMatcherContract::class, RouteMatcher::class, true);
         $this->container->bindClass(RouteParserContract::class, RouteParser::class, true);
@@ -70,7 +70,7 @@ class RoutingServiceProvider extends AbstractServiceProvider
             return new RouteCollector(new FastRouteRouteParser\Std(), new GroupCountBased);
         }, true);
 
-        $this->container->decorate(MutableRouteCollectionContract::class, function ($routes) {
+        $this->container->decorate(RouteCollectionContract::class, function ($routes) {
             return new AliasedPathPatternRouteCollection($routes);
         });
     }
