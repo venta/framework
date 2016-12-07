@@ -16,18 +16,21 @@ use Venta\Contracts\Routing\RouteDispatcherFactory as RouteDispatcherFactoryCont
 use Venta\Contracts\Routing\RouteGroup as RouteGroupContract;
 use Venta\Contracts\Routing\RouteMatcher as RouteMatcherContract;
 use Venta\Contracts\Routing\RouteParser as RouteParserContract;
+use Venta\Contracts\Routing\RouteProcessor;
+use Venta\Contracts\Routing\RouteProcessor as RouteProcessorContract;
 use Venta\Contracts\Routing\Router as RouterContract;
 use Venta\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
-use Venta\Routing\AliasedPathPatternRouteCollection;
 use Venta\Routing\Factory\GroupCountBasedDispatcherFactory;
 use Venta\Routing\Factory\MiddlewarePipelineFactory;
 use Venta\Routing\Factory\RequestRouteCollectionFactory;
 use Venta\Routing\Factory\RouteDispatcherFactory;
+use Venta\Routing\ProcessingRouteCollection;
 use Venta\Routing\Route;
 use Venta\Routing\RouteCollection;
 use Venta\Routing\RouteGroup;
 use Venta\Routing\RouteMatcher;
 use Venta\Routing\RouteParser;
+use Venta\Routing\RoutePathProcessor;
 use Venta\Routing\Router;
 use Venta\Routing\UrlGenerator;
 use Venta\ServiceProvider\AbstractServiceProvider;
@@ -59,6 +62,7 @@ class RoutingServiceProvider extends AbstractServiceProvider
         $this->container->bindClass(RouteMatcherContract::class, RouteMatcher::class, true);
         $this->container->bindClass(RouteParserContract::class, RouteParser::class, true);
         $this->container->bindClass(RouterContract::class, Router::class, true);
+        $this->container->bindClass(RouteProcessorContract::class, RoutePathProcessor::class, true);
 
         $this->container->bindClass(UriInterface::class, Uri::class, true);
         $this->container->bindClass(UrlGeneratorContract::class, UrlGenerator::class, true);
@@ -70,8 +74,9 @@ class RoutingServiceProvider extends AbstractServiceProvider
             return new RouteCollector(new FastRouteRouteParser\Std(), new GroupCountBased);
         }, true);
 
-        $this->container->decorate(RouteCollectionContract::class, function ($routes) {
-            return new AliasedPathPatternRouteCollection($routes);
+        $this->container->decorate(RouteCollectionContract::class,
+            function ($routes, RouteProcessor $processor) {
+                return new ProcessingRouteCollection($routes, $processor);
         });
     }
 }
