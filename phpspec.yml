@@ -33,6 +33,12 @@ suites:
         src_path: src/Container/src
         spec_path: src/Container
 
+    debug_suite:
+        namespace: Venta\Debug
+        psr4_prefix: Venta\Debug
+        src_path: src/Debug/src
+        spec_path: src/Debug
+
     routing_suite:
         namespace: Venta\Routing
         psr4_prefix: Venta\Routing

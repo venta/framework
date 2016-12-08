@@ -2,6 +2,15 @@
 
 namespace Venta\Framework\Kernel\Bootstrap;
 
+use ProxyManager\Factory\LazyLoadingValueHolderFactory;
+use ProxyManager\Proxy\LazyLoadingInterface;
+use Venta\Contracts\Debug\ErrorHandler as ErrorHandlerContract;
+use Venta\Contracts\Debug\ErrorRenderer as ErrorRendererContract;
+use Venta\Contracts\Debug\ErrorReporterStack as ErrorReporterStackContract;
+use Venta\Debug\ErrorHandler;
+use Venta\Debug\ErrorReporterStack;
+use Venta\Debug\Renderer\ConsoleErrorRenderer;
+use Venta\Debug\Reporter\ErrorLogReporter;
 use Venta\Framework\Kernel\AbstractKernelBootstrap;
 
 /**
@@ -16,7 +25,45 @@ class ErrorHandling extends AbstractKernelBootstrap
      */
     public function boot()
     {
+        $this->container->bindClass(ErrorRendererContract::class, ConsoleErrorRenderer::class, true);
+        $this->container->bindClass(ErrorReporterStackContract::class, ErrorReporterStack::class, true);
+        $this->container->bindClass(ErrorHandlerContract::class, ErrorHandler::class, true);
 
+        $this->setErrorReporters();
+
+        $errorHandler = $this->getErrorHandler();
+        register_shutdown_function([$errorHandler, 'handleShutdown']);
+        set_exception_handler([$errorHandler, 'handleThrowable']);
+        set_error_handler([$errorHandler, 'handleError'], error_reporting());
     }
 
+    /**
+     * Returns error handler contract implementation.
+     *
+     * @return ErrorHandlerContract
+     */
+    private function getErrorHandler(): ErrorHandlerContract
+    {
+        $factory = new LazyLoadingValueHolderFactory;
+        $initializer = function (
+            &$wrappedObject, LazyLoadingInterface $proxy, $method, array $parameters, &$initializer
+        ) {
+            $initializer = null; // disable initialization.
+            $wrappedObject = $this->container->get(ErrorHandler::class);
+
+            return true; // confirm that initialization occurred correctly.
+        };
+
+        return $factory->createProxy(ErrorHandlerContract::class, $initializer);
+    }
+
+    /**
+     * Sets base error reporters.
+     */
+    private function setErrorReporters()
+    {
+        /** @var \Venta\Contracts\Debug\ErrorReporterStack $reporterStack */
+        $reporterStack = $this->container->get(ErrorReporterStackContract::class);
+        $reporterStack->push($this->container->get(ErrorLogReporter::class));
+    }
 }

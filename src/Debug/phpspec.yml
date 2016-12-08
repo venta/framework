@@ -1,0 +1,4 @@
+suites:
+    debug_suite:
+        namespace: Venta\Debug
+        psr4_prefix: Venta\Debug

@@ -2,12 +2,9 @@
 
 namespace Venta\Console;
 
-use Error;
-use ErrorException;
 use Symfony\Component\Console\Application as SymfonyConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Throwable;
 use Venta\Contracts\Console\CommandCollection as CommandCollectionContract;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Kernel\Kernel;
@@ -49,22 +46,7 @@ final class ConsoleApplication
      */
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        try {
-            return $this->console->run($input, $output);
-        } catch (Throwable $e) {
-
-            // todo: call error reporters
-
-            if ($e instanceof Error) {
-                $e = new ErrorException(
-                    $e->getMessage(), 0, $e->getCode(), $e->getFile(), $e->getLine(), $e->getPrevious()
-                );
-            }
-
-            $this->console->renderException($e, $output);
-
-            return 1;
-        }
+        return $this->console->run($input, $output);
     }
 
     /**
