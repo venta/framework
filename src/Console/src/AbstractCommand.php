@@ -56,7 +56,7 @@ abstract class AbstractCommand extends SymfonyCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    final protected function configure()
     {
         $signature = (new SignatureParser())->parse($this->signature);
 
