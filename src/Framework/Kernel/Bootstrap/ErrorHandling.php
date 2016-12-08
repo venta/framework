@@ -4,12 +4,14 @@ namespace Venta\Framework\Kernel\Bootstrap;
 
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use ProxyManager\Proxy\LazyLoadingInterface;
+use Venta\Contracts\Container\Container;
 use Venta\Contracts\Debug\ErrorHandler as ErrorHandlerContract;
 use Venta\Contracts\Debug\ErrorRenderer as ErrorRendererContract;
 use Venta\Contracts\Debug\ErrorReporterStack as ErrorReporterStackContract;
 use Venta\Debug\ErrorHandler;
 use Venta\Debug\ErrorReporterStack;
 use Venta\Debug\Renderer\ConsoleErrorRenderer;
+use Venta\Debug\Renderer\HttpErrorRenderer;
 use Venta\Debug\Reporter\ErrorLogReporter;
 use Venta\Framework\Kernel\AbstractKernelBootstrap;
 
@@ -25,11 +27,10 @@ class ErrorHandling extends AbstractKernelBootstrap
      */
     public function boot()
     {
-        $this->container->bindClass(ErrorRendererContract::class, ConsoleErrorRenderer::class, true);
-        $this->container->bindClass(ErrorReporterStackContract::class, ErrorReporterStack::class, true);
         $this->container->bindClass(ErrorHandlerContract::class, ErrorHandler::class, true);
 
-        $this->setErrorReporters();
+        $this->registerErrorRenderer();
+        $this->registerErrorReporters();
 
         $errorHandler = $this->getErrorHandler();
         register_shutdown_function([$errorHandler, 'handleShutdown']);
@@ -58,12 +59,28 @@ class ErrorHandling extends AbstractKernelBootstrap
     }
 
     /**
-     * Sets base error reporters.
+     * Registers default error reporters.
      */
-    private function setErrorReporters()
+    private function registerErrorReporters()
     {
-        /** @var \Venta\Contracts\Debug\ErrorReporterStack $reporterStack */
-        $reporterStack = $this->container->get(ErrorReporterStackContract::class);
-        $reporterStack->push($this->container->get(ErrorLogReporter::class));
+        $this->container->bindFactory(ErrorReporterStackContract::class, function(Container $container) {
+            $reporters = new ErrorReporterStack($container);
+            $reporters->push(ErrorLogReporter::class);
+
+            return $reporters;
+        }, true);
     }
+
+    /**
+     * Registers the default error renderer.
+     */
+    private function registerErrorRenderer()
+    {
+        if ($this->kernel->isCli()) {
+            $this->container->bindClass(ErrorRendererContract::class, ConsoleErrorRenderer::class, true);
+        } else {
+            $this->container->bindClass(ErrorRendererContract::class, HttpErrorRenderer::class, true);
+        }
+    }
+
 }
