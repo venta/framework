@@ -42,7 +42,7 @@ final class HttpErrorRenderer implements ErrorRenderer
     public function render(Throwable $e)
     {
         //todo: implement properly formatted response.
-        $response = $this->responseFactory->createHtmlResponse($e->getMessage());
+        $response = $this->responseFactory->createHtmlResponse($e->getMessage(), 500);
         $this->responseEmitter->emit($response);
     }
 
