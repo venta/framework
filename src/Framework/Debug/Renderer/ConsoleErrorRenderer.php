@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Debug\Renderer;
+namespace Venta\Framework\Debug\Renderer;
 
 use Error;
 use ErrorException;
@@ -28,7 +28,6 @@ final class ConsoleErrorRenderer implements ErrorRenderer
             );
         }
 
-        // todo: code against contract
         (new Application())->renderException($e, new ConsoleOutput());
     }
 

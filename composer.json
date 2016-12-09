@@ -62,8 +62,7 @@
         "cache/namespaced-cache": "^0.1",
         "psy/psysh": "@stable",
         "php-ds/php-ds": "^1.1",
-        "swiftmailer/swiftmailer": "^5.4.2",
-        "ocramius/proxy-manager": "^2.0"
+        "swiftmailer/swiftmailer": "^5.4.2"
     },
     "replace": {
         "venta/contracts": "self.version",
