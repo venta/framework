@@ -14,7 +14,7 @@ class ErrorHandling extends AbstractKernelBootstrap
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function __invoke()
     {
 
     }

@@ -16,7 +16,7 @@ class EnvironmentDetection extends AbstractKernelBootstrap
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function __invoke()
     {
         $filePath = rtrim($this->kernel->getRootPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.env';
 

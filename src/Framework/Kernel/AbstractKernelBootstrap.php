@@ -35,9 +35,9 @@ abstract class AbstractKernelBootstrap
     }
 
     /**
-     * Bootstrap.
+     * Runs the Bootstrap.
      *
      * @return void
      */
-    abstract public function boot();
+    abstract public function __invoke();
 }

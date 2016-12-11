@@ -16,7 +16,7 @@ class ConfigurationLoading extends AbstractKernelBootstrap
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function __invoke()
     {
         /** @var ConfigFactory $configFactory */
         $configFactory = $this->container->get(ConfigFactory::class);
