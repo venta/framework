@@ -11,11 +11,11 @@ interface ConfigFactory
 {
 
     /**
-     * Creates config instance from file
+     * Creates config instance.
      *
-     * @param $filename
+     * @param array $data
      * @return Config
      */
-    public function createFromFile($filename): Config;
+    public function create(array $data): Config;
 
 }

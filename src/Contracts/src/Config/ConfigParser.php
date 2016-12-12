@@ -3,19 +3,18 @@
 namespace Venta\Contracts\Config;
 
 /**
- * Interface Parser
+ * Interface ConfigParser
  *
  * @package Venta\Contracts\Config
  */
-interface Parser
+interface ConfigParser
 {
-
     /**
-     * Parses configuration string into Config object
+     * Parses configuration string.
      *
      * @param string $configuration
-     * @return Config
+     * @return array
      */
-    public function parse(string $configuration): Config;
+    public function fromString(string $configuration): array;
 
 }
