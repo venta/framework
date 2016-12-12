@@ -4,7 +4,6 @@ namespace Venta\Framework\Kernel;
 
 use InvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
-use RuntimeException;
 use Venta\Config\ConfigFactory;
 use Venta\Contracts\Config\Config;
 use Venta\Contracts\Config\ConfigFactory as ConfigFactoryContract;
@@ -157,6 +156,31 @@ abstract class AbstractKernel implements Kernel
     abstract protected function registerServiceProviders(): array;
 
     /**
+     * Adds default service inflections.
+     *
+     * @param Container $container
+     */
+    private function addDefaultInflections(Container $container)
+    {
+        $container->addInflection(ContainerAware::class, 'setContainer', ['container' => $container]);
+        $container->addInflection(LoggerAwareInterface::class, 'setLogger');
+        $container->addInflection(ResponseFactoryAware::class, 'setResponseFactory');
+    }
+
+    /**
+     * Binds default services to container.
+     *
+     * @param Container $container
+     */
+    private function bindDefaultServices(Container $container)
+    {
+        $container->bindInstance(Container::class, $container);
+        $container->bindInstance(Kernel::class, $this);
+
+        $container->bindClass(ConfigFactoryContract::class, ConfigFactory::class, true);
+    }
+
+    /**
      * Ensures bootstrap class extends abstract kernel bootstrap.
      *
      * @param string $bootstrapClass
@@ -193,21 +217,9 @@ abstract class AbstractKernel implements Kernel
     {
         /** @var Container $container */
         $container = new $this->containerClass;
-        if (!$container instanceof Container) {
-            throw new RuntimeException(
-                sprintf('Service container class "%s" must implement Container contact.', $this->containerClass)
-            );
-        }
 
-        $container->bindInstance(Container::class, $container);
-        $container->bindInstance(Kernel::class, $this);
-
-        $container->bindClass(ConfigFactoryContract::class, ConfigFactory::class, true);
-
-        // Register default inflections.
-        $container->addInflection(ContainerAware::class, 'setContainer', ['container' => $container]);
-        $container->addInflection(LoggerAwareInterface::class, 'setLogger');
-        $container->addInflection(ResponseFactoryAware::class, 'setResponseFactory');
+        $this->bindDefaultServices($container);
+        $this->addDefaultInflections($container);
 
         return $container;
     }
