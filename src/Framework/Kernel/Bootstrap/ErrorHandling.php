@@ -22,7 +22,7 @@ class ErrorHandling extends AbstractKernelBootstrap
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function __invoke()
     {
         $this->container->bindClass(ErrorHandlerContract::class, ErrorHandler::class, true);
 

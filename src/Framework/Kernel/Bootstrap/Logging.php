@@ -20,7 +20,7 @@ class Logging extends AbstractKernelBootstrap
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function __invoke()
     {
         // todo: implement multi-channel configuration.
         $this->container->bindFactory(LoggerInterface::class, function (Config $config) {

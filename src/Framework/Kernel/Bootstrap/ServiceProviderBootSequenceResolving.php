@@ -16,7 +16,7 @@ class ServiceProviderBootSequenceResolving extends AbstractKernelBootstrap
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function __invoke()
     {
         $this->container->bindInstance(ServiceProviderDependencyResolver::class, new ServiceProviderDependencyResolver);
     }
