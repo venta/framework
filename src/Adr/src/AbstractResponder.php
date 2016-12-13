@@ -53,7 +53,7 @@ abstract class AbstractResponder implements ResponderContract, ResponseFactoryAw
      * @param mixed $data Data to convert to JSON.
      * @param int $status Integer status code for the response; 200 by default.
      * @param array $headers Array of headers to use at initialization.
-     * @param int $jsonFlag JSON encoding options to use.
+     * @param int $encodingOptions
      * @return ResponseInterface
      */
     protected function json(
