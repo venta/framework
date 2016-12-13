@@ -2,6 +2,7 @@
 
 namespace Venta\Debug;
 
+use IteratorAggregate;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Debug\ErrorReporterStack as ErrorReporterStackContract;
 
@@ -10,7 +11,7 @@ use Venta\Contracts\Debug\ErrorReporterStack as ErrorReporterStackContract;
  *
  * @package Venta\Debug
  */
-final class ErrorReporterStack implements ErrorReporterStackContract
+final class ErrorReporterStack implements IteratorAggregate, ErrorReporterStackContract
 {
     /**
      * @var Container

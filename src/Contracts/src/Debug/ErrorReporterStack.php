@@ -3,8 +3,6 @@
 
 namespace Venta\Contracts\Debug;
 
-use Iterator;
-use IteratorAggregate;
 use Traversable;
 
 /**
@@ -12,13 +10,8 @@ use Traversable;
  *
  * @package Venta\Contracts\Debug
  */
-interface ErrorReporterStack extends IteratorAggregate
+interface ErrorReporterStack extends Traversable
 {
-    /**
-     * @return Traversable|Iterator|ErrorReporter[]
-     */
-    public function getIterator();
-
     /**
      * Adds error reporter class to the stack.
      *

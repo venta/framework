@@ -2,7 +2,6 @@
 
 namespace Venta\Framework\Kernel\Bootstrap;
 
-use Venta\Contracts\Container\Container;
 use Venta\Contracts\Debug\ErrorHandler as ErrorHandlerContract;
 use Venta\Contracts\Debug\ErrorRenderer as ErrorRendererContract;
 use Venta\Contracts\Debug\ErrorReporterStack as ErrorReporterStackContract;
@@ -55,12 +54,14 @@ class ErrorHandling extends AbstractKernelBootstrap
     private function registerErrorReporters()
     {
         $this->container->bindFactory(
-            ErrorReporterStackContract::class, function (Container $container) {
-            $reporters = new ErrorReporterStack($container);
-            $reporters->push(ErrorLogReporter::class);
+            ErrorReporterStackContract::class,
+            function () {
+                $reporters = new ErrorReporterStack($this->container);
+                $reporters->push(ErrorLogReporter::class);
 
-            return $reporters;
-        }, true
+                return $reporters;
+            },
+            true
         );
     }
 
