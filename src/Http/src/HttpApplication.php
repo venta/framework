@@ -60,7 +60,8 @@ final class HttpApplication implements Delegate
     {
         /** @var MiddlewarePipelineFactory $factory */
         $factory = $this->container->get(MiddlewarePipelineFactory::class);
-        $pipeline = $factory->create($this->container->get(Config::class)->get('middlewares', []));
+        $middlewares = $this->container->get(Config::class)->get('middlewares');
+        $pipeline = $factory->create($middlewares ? $middlewares->toArray() : []);
         /** @var Router $router */
         $router = $this->container->get(Router::class);
 
