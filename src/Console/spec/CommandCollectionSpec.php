@@ -12,7 +12,7 @@ class CommandCollectionSpec extends ObjectBehavior
 {
     public function it_checks_command_type()
     {
-        $this->shouldThrow(InvalidArgumentException::class)->during('addCommand', [stdClass::class]);
+        $this->shouldThrow(InvalidArgumentException::class)->during('add', [stdClass::class]);
     }
 
     public function it_collects_commands()
