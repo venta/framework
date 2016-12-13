@@ -50,8 +50,9 @@ abstract class AbstractKernel implements Kernel
         $config = $container->get(Config::class);
 
         // Here we boot service providers on by one. The correct order is ensured by resolver.
+        /** @var ServiceProviderDependencyResolver $resolver */
         $resolver = $container->get(ServiceProviderDependencyResolver::class);
-        foreach ($resolver->resolve($this->registerServiceProviders()) as $providerClass) {
+        foreach ($resolver($this->registerServiceProviders()) as $providerClass) {
             $this->bootServiceProvider($providerClass, $container, $config);
         }
 

@@ -29,14 +29,14 @@ class ServiceProviderDependencyResolver
      * @param array $providers
      * @return array
      */
-    public function resolve(array $providers): array
+    public function __invoke(array $providers): array
     {
         foreach ($providers as $provider) {
             $this->detectCircularDependency($provider);
             $this->resolving[$provider] = $provider;
             $dependencies = $provider::getDependencies();
             if (!empty($dependencies)) {
-                $this->resolve($dependencies);
+                $this->__invoke($dependencies);
             }
 
             if (!in_array($provider, $this->sequence)) {
