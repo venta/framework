@@ -22,7 +22,7 @@ class ConfigurationLoading extends AbstractKernelBootstrap
         $configFactory = $this->container->get(ConfigFactory::class);
 
         // todo: implement arbitrary config files loading.
-        $config = $configFactory->createFromFile($this->kernel->getRootPath() . '/config/app.php');
+        $config = $configFactory->createFromFile($this->kernel->rootPath() . '/config/app.php');
 
         $this->container->bindInstance(Config::class, $config);
     }

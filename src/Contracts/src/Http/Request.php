@@ -18,7 +18,7 @@ interface Request extends ServerRequestInterface
      *
      * @return Route
      */
-    public function getRoute(): Route;
+    public function route(): Route;
 
     /**
      * Add route to the request.

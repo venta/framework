@@ -67,7 +67,7 @@ abstract class AbstractKernel implements Kernel
     /**
      * @inheritDoc
      */
-    public function getEnvironment(): string
+    public function environment(): string
     {
         return getenv('APP_ENV') ?: 'local';
     }
@@ -75,12 +75,12 @@ abstract class AbstractKernel implements Kernel
     /**
      * @return string
      */
-    abstract public function getRootPath(): string;
+    abstract public function rootPath(): string;
 
     /**
      * @inheritDoc
      */
-    public function getVersion(): string
+    public function version(): string
     {
         return self::VERSION;
     }

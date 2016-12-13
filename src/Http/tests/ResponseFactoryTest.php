@@ -23,7 +23,7 @@ class ResponseFactoryTest extends TestCase
         $data = ['foo' => 'bar'];
         $response = $this->factory->createJsonResponse($data);
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertJsonStringEqualsJsonString(json_encode($data), $response->getContent());
+        $this->assertJsonStringEqualsJsonString(json_encode($data), $response->content());
     }
 
     /**

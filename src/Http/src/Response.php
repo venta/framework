@@ -50,7 +50,7 @@ class Response implements ResponseContract
     /**
      * @inheritDoc
      */
-    public function getContent(): string
+    public function content(): string
     {
         return (string)$this->psrResponse->getBody();
     }

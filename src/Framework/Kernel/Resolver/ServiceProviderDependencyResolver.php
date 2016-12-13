@@ -34,7 +34,7 @@ class ServiceProviderDependencyResolver
         foreach ($providers as $provider) {
             $this->detectCircularDependency($provider);
             $this->resolving[$provider] = $provider;
-            $dependencies = $provider::getDependencies();
+            $dependencies = $provider::dependencies();
             if (!empty($dependencies)) {
                 $this->__invoke($dependencies);
             }

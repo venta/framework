@@ -26,7 +26,7 @@ class Logging extends AbstractKernelBootstrap
         $this->container->bindFactory(LoggerInterface::class, function (Config $config) {
 
             $handler = new StreamHandler(
-                $this->kernel->getRootPath() . '/storage/logs/venta.log',
+                $this->kernel->rootPath() . '/storage/logs/venta.log',
                 $config->log_level ?? Logger::DEBUG
             );
 

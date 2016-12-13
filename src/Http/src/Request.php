@@ -129,7 +129,7 @@ class Request implements RequestContract
     /**
      * @inheritDoc
      */
-    public function getRoute(): Route
+    public function route(): Route
     {
         return $this->getAttribute('route');
     }

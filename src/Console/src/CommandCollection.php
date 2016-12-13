@@ -22,7 +22,7 @@ class CommandCollection implements CommandCollectionContract
     /**
      * @inheritDoc
      */
-    public function addCommand(string $commandClass)
+    public function add(string $commandClass)
     {
         if (!is_subclass_of($commandClass, Command::class)) {
             throw new InvalidArgumentException(
@@ -35,7 +35,7 @@ class CommandCollection implements CommandCollectionContract
     /**
      * @inheritDoc
      */
-    public function getCommands(): array
+    public function all(): array
     {
         return array_unique($this->commands);
     }
@@ -45,6 +45,6 @@ class CommandCollection implements CommandCollectionContract
      */
     public function getIterator()
     {
-        return new ArrayIterator($this->getCommands());
+        return new ArrayIterator($this->all());
     }
 }

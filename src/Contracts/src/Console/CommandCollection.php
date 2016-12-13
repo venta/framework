@@ -18,13 +18,13 @@ interface CommandCollection extends IteratorAggregate
      * @param string $commandClass
      * @return void
      */
-    public function addCommand(string $commandClass);
+    public function add(string $commandClass);
 
     /**
      * Returns all commands.
      *
      * @return string[]
      */
-    public function getCommands(): array;
+    public function all(): array;
 
 }

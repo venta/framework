@@ -18,7 +18,7 @@ class EnvironmentDetection extends AbstractKernelBootstrap
      */
     public function __invoke()
     {
-        $filePath = rtrim($this->kernel->getRootPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.env';
+        $filePath = rtrim($this->kernel->rootPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.env';
 
         $envLoader = new Loader($filePath);
         if ($this->kernel->isCli()) {

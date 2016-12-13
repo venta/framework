@@ -57,7 +57,7 @@ class ResponseTest extends TestCase
     {
         $this->body->shouldReceive('__toString')->andReturn('');
 
-        $this->assertEmpty($this->response->getContent());
+        $this->assertEmpty($this->response->content());
 
         $this->body->shouldHaveReceived('__toString')->withNoArgs();
     }

@@ -34,7 +34,7 @@ final class ConsoleApplication
     public function __construct(Kernel $kernel)
     {
         $this->container = $kernel->boot();
-        $this->initConsole('Venta Console', $kernel->getVersion());
+        $this->initConsole('Venta Console', $kernel->version());
     }
 
     /**

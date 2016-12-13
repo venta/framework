@@ -17,8 +17,8 @@ class CommandCollectionSpec extends ObjectBehavior
 
     public function it_collects_commands()
     {
-        $this->addCommand(StubCommand::class);
-        $this->getCommands()->shouldContain(StubCommand::class);
+        $this->add(StubCommand::class);
+        $this->all()->shouldContain(StubCommand::class);
     }
 
     function it_is_initializable()

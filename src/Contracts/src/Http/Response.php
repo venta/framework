@@ -24,6 +24,6 @@ interface Response extends ResponseInterface
      *
      * @return string
      */
-    public function getContent(): string;
+    public function content(): string;
 
 }

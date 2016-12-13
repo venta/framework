@@ -20,52 +20,52 @@ interface Route
     /**
      * @return string
      */
-    public function getDomain(): string;
+    public function domain(): string;
 
     /**
      * @return string
      */
-    public function getHost(): string;
+    public function host(): string;
 
     /**
      * @return string
      */
-    public function getInput(): string;
+    public function input(): string;
 
     /**
      * @return string[]
      */
-    public function getMethods(): array;
+    public function methods(): array;
 
     /**
      * @return string[]
      */
-    public function getMiddlewares(): array;
+    public function middlewares(): array;
 
     /**
      * @return string
      */
-    public function getName(): string;
+    public function name(): string;
 
     /**
      * @return string
      */
-    public function getPath(): string;
+    public function path(): string;
 
     /**
      * @return string
      */
-    public function getResponder(): string;
+    public function responder(): string;
 
     /**
      * @return string
      */
-    public function getScheme(): string;
+    public function scheme(): string;
 
     /**
      * @return string[]
      */
-    public function getVariables(): array;
+    public function variables(): array;
 
     /**
      * Set the HTTPS scheme.
