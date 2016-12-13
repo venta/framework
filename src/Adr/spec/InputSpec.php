@@ -3,11 +3,13 @@
 namespace spec\Venta\Adr;
 
 use PhpSpec\ObjectBehavior;
-use Venta\Contracts\Http\Request;
+use Psr\Http\Message\ServerRequestInterface;
+use Venta\Contracts\Adr\Input;
+
 
 class InputSpec extends ObjectBehavior
 {
-    function let(Request $request)
+    function let(ServerRequestInterface $request)
     {
         $request->getQueryParams()->willReturn(['query' => 'value']);
         $request->getParsedBody()->willReturn(['body' => 'value']);
@@ -31,13 +33,13 @@ class InputSpec extends ObjectBehavior
         ];
     }
 
-    function it_converts_server_request_to_array(Request $request)
+    function it_converts_server_request_to_array(ServerRequestInterface $request)
     {
         $this->process($request)->shouldContainKeys('query', 'body', 'files', 'cookie', 'attribute');
     }
 
     function it_is_initializable()
     {
-        $this->shouldImplement(\Venta\Contracts\Adr\Input::class);
+        $this->shouldImplement(Input::class);
     }
 }

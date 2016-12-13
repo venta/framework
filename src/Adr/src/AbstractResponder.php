@@ -2,9 +2,9 @@
 
 namespace Venta\Adr;
 
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Venta\Contracts\Adr\Responder as ResponderContract;
-use Venta\Contracts\Http\Response;
 use Venta\Contracts\Http\ResponseFactory;
 use Venta\Contracts\Http\ResponseFactoryAware;
 use Zend\Diactoros\Response\JsonResponse;
@@ -29,62 +29,65 @@ abstract class AbstractResponder implements ResponderContract, ResponseFactoryAw
         $this->responseFactory = $factory;
     }
 
+    protected function empty($status = 204, array $headers = [])
+    {
+        return $this->responseFactory->createEmptyResponse($status, $headers);
+    }
+
     /**
      * Creates html response.
      *
      * @param string $html
-     * @param int $code
+     * @param int $status
      * @param array $headers
-     * @return Response
+     * @return ResponseInterface
      */
-    protected function html(string $html, int $code = 200, array $headers = [])
+    protected function html(string $html, int $status = 200, array $headers = []): ResponseInterface
     {
-        return $this->responseFactory->createHtmlResponse($html, $code, $headers);
+        return $this->responseFactory->createHtmlResponse($html, $status, $headers);
     }
 
     /**
-     * Creates http response with JSON content type header and JSON encoded $data.
+     * Creates HTTP response with JSON content type header and JSON encoded $data.
      *
-     * @param $data
-     * @param int $status
-     * @param array $headers
-     * @param int $encodingOptions
-     * @return Response
+     * @param mixed $data Data to convert to JSON.
+     * @param int $status Integer status code for the response; 200 by default.
+     * @param array $headers Array of headers to use at initialization.
+     * @param int $jsonFlag JSON encoding options to use.
+     * @return ResponseInterface
      */
     protected function json(
         $data,
         int $status = 200,
         array $headers = [],
         int $encodingOptions = JsonResponse::DEFAULT_JSON_FLAGS
-    ): Response
-    {
+    ): ResponseInterface {
         return $this->responseFactory->createJsonResponse($data, $status, $headers, $encodingOptions);
     }
 
     /**
-     * Creates redirect http response with $uri used as Location header.
+     * Creates HTTP redirect response with $uri used as Location header.
      *
      * @param string|UriInterface $uri
      * @param int $status
      * @param array $headers
-     * @return Response
+     * @return ResponseInterface
      */
-    protected function redirect($uri, $status = 302, array $headers = []): Response
+    protected function redirect($uri, $status = 302, array $headers = []): ResponseInterface
     {
         return $this->responseFactory->createRedirectResponse($uri, $status, $headers);
     }
 
     /**
-     * Creates http response.
+     * Creates HTTP response.
      *
      * @param string $bodyStream Stream to use as response body.
-     * @param int $code
+     * @param int $status
      * @param array $headers
-     * @return Response
+     * @return ResponseInterface
      */
-    protected function response($bodyStream = 'php://memory', int $code = 200, array $headers = []): Response
+    protected function response($bodyStream = 'php://memory', int $status = 200, array $headers = []): ResponseInterface
     {
-        return $this->responseFactory->createResponse($bodyStream, $code, $headers);
+        return $this->responseFactory->createResponse($bodyStream, $status, $headers);
     }
-
 }

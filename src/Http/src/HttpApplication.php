@@ -40,7 +40,7 @@ final class HttpApplication implements Delegate
      *
      * @return Container
      */
-    public function getContainer(): Container
+    public function container(): Container
     {
         return $this->container;
     }
