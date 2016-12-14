@@ -13,7 +13,7 @@ use Venta\Contracts\Http\CookieJar as CookieJarContract;
  *
  * @package Venta\Http
  */
-class CookieJar implements CookieJarContract
+final class CookieJar implements CookieJarContract
 {
 
     /**

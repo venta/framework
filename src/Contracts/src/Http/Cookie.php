@@ -28,7 +28,7 @@ interface Cookie
     /**
      * @return DateTimeImmutable|null
      */
-    public function expires();
+    public function expiration();
 
     /**
      * @return Cookie
@@ -74,10 +74,10 @@ interface Cookie
     public function withDomain(string $domain): Cookie;
 
     /**
-     * @param DateTimeInterface $expires
+     * @param DateTimeInterface $expiration
      * @return Cookie
      */
-    public function withExpires(DateTimeInterface $expires): Cookie;
+    public function withExpiration(DateTimeInterface $expiration): Cookie;
 
     /**
      * @param string $path

@@ -13,7 +13,7 @@ use Venta\Contracts\Http\Cookie as CookieContract;
  *
  * @package Venta\Http
  */
-class Cookie implements CookieContract
+final class Cookie implements CookieContract
 {
 
     /**
@@ -24,7 +24,7 @@ class Cookie implements CookieContract
     /**
      * @var DateTimeInterface|null
      */
-    private $expires = null;
+    private $expiration = null;
 
     /**
      * @var bool
@@ -56,7 +56,7 @@ class Cookie implements CookieContract
      *
      * @param string $name
      * @param string $value
-     * @param DateTimeInterface|null $expires
+     * @param DateTimeInterface|null $expiration
      * @param string $path
      * @param string $domain
      * @param bool $secure
@@ -65,8 +65,8 @@ class Cookie implements CookieContract
      */
     public function __construct(
         string $name,
-        string $value = null,
-        DateTimeInterface $expires = null,
+        string $value = '',
+        DateTimeInterface $expiration = null,
         string $path = '',
         string $domain = '',
         bool $secure = false,
@@ -83,7 +83,7 @@ class Cookie implements CookieContract
         $this->name = $name;
         $this->value = $value;
         $this->domain = $domain;
-        $this->expires = $expires ? $this->lockExpires($expires) : null;
+        $this->expiration = $expiration ? $this->freezeExpiration($expiration) : null;
         $this->path = $path;
         $this->secure = $secure;
         $this->httpOnly = $httpOnly;
@@ -108,8 +108,8 @@ class Cookie implements CookieContract
         $cookieCrumb = "$name=$value";
 
         // Add cookie attributes.
-        if ($this->expires) {
-            $attributes[] = 'expires=' . $this->expires->format(DateTime::COOKIE);
+        if ($this->expiration) {
+            $attributes[] = 'expires=' . $this->expiration->format(DateTime::COOKIE);
         }
         if ($this->path) {
             $attributes[] = "path={$this->path}";
@@ -143,9 +143,9 @@ class Cookie implements CookieContract
     /**
      * @inheritDoc
      */
-    public function expires()
+    public function expiration()
     {
-        return $this->expires;
+        return $this->expiration;
     }
 
     /**
@@ -224,10 +224,10 @@ class Cookie implements CookieContract
     /**
      * @inheritDoc
      */
-    public function withExpires(DateTimeInterface $expires = null): CookieContract
+    public function withExpiration(DateTimeInterface $expiration = null): CookieContract
     {
         $cookie = clone $this;
-        $cookie->expires = $expires ? $cookie->lockExpires($expires) : null;
+        $cookie->expiration = $expiration ? $cookie->freezeExpiration($expiration) : null;
 
         return $cookie;
     }
@@ -255,12 +255,12 @@ class Cookie implements CookieContract
     }
 
     /**
-     * Creates immutable date time instance from provided one.
+     * Creates immutable date time instance from the provided one.
      *
      * @param DateTimeInterface $expires
      * @return DateTimeImmutable
      */
-    private function lockExpires(DateTimeInterface $expires): DateTimeImmutable
+    private function freezeExpiration(DateTimeInterface $expires): DateTimeImmutable
     {
         if (!$expires instanceof DateTimeImmutable) {
             $expires = new DateTimeImmutable($expires->format(DateTime::ISO8601), $expires->getTimezone());
