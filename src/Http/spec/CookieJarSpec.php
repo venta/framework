@@ -3,38 +3,75 @@
 namespace spec\Venta\Http;
 
 use DateTime;
+use PhpSpec\Exception\Example\FailureException;
 use PhpSpec\ObjectBehavior;
 use Venta\Contracts\Http\Cookie;
 use Venta\Contracts\Http\CookieJar;
 
 class CookieJarSpec extends ObjectBehavior
 {
+    public function getMatchers()
+    {
+        $dateFormat = 'Y-m-d H:i:s';
+
+        return [
+            'beOlder' => function ($subject, DateTime $dateTime) use ($dateFormat) {
+                if ($subject >= $dateTime) {
+                    throw new FailureException(
+                        sprintf(
+                            'The provided datetime ("%s") expected to be older than "%s", but it is not.',
+                            $subject->format($dateFormat), $dateTime->format($dateFormat)
+                        )
+                    );
+                }
+
+                return true;
+            },
+
+            'beNewer' => function ($subject, DateTime $dateTime) use ($dateFormat) {
+                if ($subject <= $dateTime) {
+                    throw new FailureException(
+                        sprintf(
+                            'The provided datetime ("%s") expected to be newer than "%s", but it is not.',
+                            $subject->format($dateFormat), $dateTime->format($dateFormat)
+                        )
+                    );
+                }
+
+                return true;
+            },
+        ];
+    }
+
     function it_adds_cookie()
     {
         $this->findByName('name')->shouldBeNull();
         $this->add('name', 'value', new DateTime())->shouldBeNull();
-        $this->findByName('name')->shouldBeAnInstanceOf(Cookie::class);
+        $this->findByName('name')->shouldImplement(Cookie::class);
     }
 
     function it_can_expire_forgotten_cookies()
     {
         $this->forget('expired');
-        $this->findByName('expired')->shouldBeAnInstanceOf(Cookie::class);
-        // todo: add expire check
+        $cookie = $this->findByName('expired');
+        $cookie->shouldImplement(Cookie::class);
+        $cookie->expiration()->shouldBeOlder(new DateTime);
     }
 
     function it_can_put_forever_cookie()
     {
         $this->forever('forever', 'value');
-        $this->findByName('forever')->shouldBeAnInstanceOf(Cookie::class);
-        // todo: add expire check
+        $cookie = $this->findByName('forever');
+        $cookie->shouldImplement(Cookie::class);
+        $cookie->expiration()->shouldBeNewer(new DateTime('+5 years'));
     }
 
     function it_can_put_session_cookie()
     {
         $this->session('session', 'value');
-        $this->findByName('session')->shouldBeAnInstanceOf(Cookie::class);
-        // todo: add expire check
+        $cookie = $this->findByName('session');
+        $cookie->shouldImplement(Cookie::class);
+        $cookie->expiration()->shouldBeNull();
     }
 
     function it_is_initializable()
