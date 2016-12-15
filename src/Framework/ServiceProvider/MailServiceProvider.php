@@ -12,14 +12,15 @@ use Venta\ServiceProvider\AbstractServiceProvider;
  *
  * @package Venta\Framework\ServiceProvider
  */
-class MailServiceProvider extends AbstractServiceProvider
+final class MailServiceProvider extends AbstractServiceProvider
 {
     /**
      * @inheritdoc
      */
     public function boot()
     {
-        $this->container->get('config')->push([
+        $this->container()->get('config')->push(
+            [
             'mailer' => [
                 'transport' => 'mail',
                 'spool' => [
@@ -29,7 +30,7 @@ class MailServiceProvider extends AbstractServiceProvider
             ],
         ]);
 
-        $this->container->bindClass(MailerContract::class, Mailer::class, true);
+        $this->container()->bindClass(MailerContract::class, Mailer::class, true);
 
         $this->provideCommands(Mail::class);
     }

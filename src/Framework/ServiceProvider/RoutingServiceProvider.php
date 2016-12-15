@@ -41,7 +41,7 @@ use Zend\Diactoros\Uri;
  *
  * @package Venta\Framework\ServiceProvider
  */
-class RoutingServiceProvider extends AbstractServiceProvider
+final class RoutingServiceProvider extends AbstractServiceProvider
 {
 
     /**
@@ -49,32 +49,34 @@ class RoutingServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container->bindClass(FastrouteDispatcherFactory::class, GroupCountBasedDispatcherFactory::class, true);
-        $this->container->bindClass(
+        $this->container()->bindClass(FastrouteDispatcherFactory::class, GroupCountBasedDispatcherFactory::class, true);
+        $this->container()->bindClass(
             RequestRouteCollectionFactoryContract::class,
             RequestRouteCollectionFactory::class,
             true
         );
-        $this->container->bindClass(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class, true);
-        $this->container->bindClass(RouteCollectionContract::class, RouteCollection::class, true);
-        $this->container->bindClass(ImmutableRouteCollectionContract::class, RouteCollectionContract::class, true);
-        $this->container->bindClass(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class, true);
-        $this->container->bindClass(RouteMatcherContract::class, RouteMatcher::class, true);
-        $this->container->bindClass(RouteParserContract::class, RouteParser::class, true);
-        $this->container->bindClass(RouterContract::class, Router::class, true);
-        $this->container->bindClass(RouteProcessorContract::class, RoutePathProcessor::class, true);
+        $this->container()->bindClass(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class, true);
+        $this->container()->bindClass(RouteCollectionContract::class, RouteCollection::class, true);
+        $this->container()->bindClass(ImmutableRouteCollectionContract::class, RouteCollectionContract::class, true);
+        $this->container()->bindClass(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class, true);
+        $this->container()->bindClass(RouteMatcherContract::class, RouteMatcher::class, true);
+        $this->container()->bindClass(RouteParserContract::class, RouteParser::class, true);
+        $this->container()->bindClass(RouterContract::class, Router::class, true);
+        $this->container()->bindClass(RouteProcessorContract::class, RoutePathProcessor::class, true);
 
-        $this->container->bindClass(UriInterface::class, Uri::class, true);
-        $this->container->bindClass(UrlGeneratorContract::class, UrlGenerator::class, true);
+        $this->container()->bindClass(UriInterface::class, Uri::class, true);
+        $this->container()->bindClass(UrlGeneratorContract::class, UrlGenerator::class, true);
 
-        $this->container->bindClass(RouteGroupContract::class, RouteGroup::class);
-        $this->container->bindClass(RouteContract::class, Route::class);
+        $this->container()->bindClass(RouteGroupContract::class, RouteGroup::class);
+        $this->container()->bindClass(RouteContract::class, Route::class);
 
-        $this->container->bindFactory(RouteCollector::class, function () {
+        $this->container()->bindFactory(
+            RouteCollector::class, function () {
             return new RouteCollector(new FastRouteRouteParser\Std(), new GroupCountBased);
         }, true);
 
-        $this->container->decorate(RouteCollectionContract::class,
+        $this->container()->decorate(
+            RouteCollectionContract::class,
             function ($routes, RouteProcessor $processor) {
                 return new ProcessingRouteCollection($routes, $processor);
         });

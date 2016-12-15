@@ -15,7 +15,7 @@ use Venta\Framework\Kernel\AbstractKernelBootstrap;
  *
  * @package Venta\Framework\Kernel\Bootstrap
  */
-class Logging extends AbstractKernelBootstrap
+final class Logging extends AbstractKernelBootstrap
 {
     /**
      * @inheritDoc
@@ -23,16 +23,17 @@ class Logging extends AbstractKernelBootstrap
     public function __invoke()
     {
         // todo: implement multi-channel configuration.
-        $this->container->bindFactory(LoggerInterface::class, function (Config $config) {
+        $this->container()->bindFactory(
+            LoggerInterface::class, function (Config $config) {
 
             $handler = new StreamHandler(
-                $this->kernel->rootPath() . '/storage/logs/venta.log',
+                $this->kernel()->rootPath() . '/storage/logs/venta.log',
                 $config->log_level ?? Logger::DEBUG
             );
 
             $handler->pushProcessor(new PsrLogMessageProcessor);
 
-            if (!$this->kernel->isCli()) {
+            if (!$this->kernel()->isCli()) {
                 $handler->pushProcessor(new WebProcessor(null, [ // todo: make list configurable?
                     'url' => 'REQUEST_URI',
                     'ip' => 'REMOTE_ADDR',

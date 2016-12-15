@@ -13,7 +13,7 @@ use Venta\Contracts\Routing\Middleware;
  *
  * @package Middleware
  */
-class AddCookieToResponse implements Middleware
+final class AddCookieToResponse implements Middleware
 {
 
     /**
@@ -37,7 +37,7 @@ class AddCookieToResponse implements Middleware
     public function process(ServerRequestInterface $request, Delegate $delegate): ResponseInterface
     {
         $response = $delegate->next($request);
-        foreach ($this->cookies->all() as $cookie) {
+        foreach ($this->cookies as $cookie) {
             $response = $response->withAddedHeader('set-cookie', (string)$cookie);
         }
 

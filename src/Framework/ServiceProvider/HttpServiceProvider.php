@@ -17,7 +17,7 @@ use Zend\Diactoros\ServerRequestFactory;
  *
  * @package Venta\Framework\ServiceProvider
  */
-class HttpServiceProvider extends AbstractServiceProvider
+final class HttpServiceProvider extends AbstractServiceProvider
 {
 
     /**
@@ -25,11 +25,11 @@ class HttpServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container->bindClass(ResponseFactoryContract::class, ResponseFactory::class, true);
-        $this->container->bindClass(ResponseEmitterContract::class, ResponseEmitter::class, true);
-        $this->container->bindClass(CookieJarContract::class, CookieJar::class, true);
+        $this->container()->bindClass(ResponseFactoryContract::class, ResponseFactory::class, true);
+        $this->container()->bindClass(ResponseEmitterContract::class, ResponseEmitter::class, true);
+        $this->container()->bindClass(CookieJarContract::class, CookieJar::class, true);
 
-        $this->container->bindFactory(
+        $this->container()->bindFactory(
             ServerRequestInterface::class,
             [ServerRequestFactory::class, 'fromGlobals'],
             true

@@ -16,7 +16,7 @@ use Zend\Diactoros\Response\TextResponse;
  *
  * @package Venta\Http
  */
-class ResponseFactory implements ResponseFactoryContract
+final class ResponseFactory implements ResponseFactoryContract
 {
     /**
      * @inheritDoc

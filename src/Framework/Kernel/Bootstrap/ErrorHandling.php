@@ -17,19 +17,19 @@ use Venta\Framework\Kernel\AbstractKernelBootstrap;
  *
  * @package Venta\Framework\Kernel\Bootstrap
  */
-class ErrorHandling extends AbstractKernelBootstrap
+final class ErrorHandling extends AbstractKernelBootstrap
 {
     /**
      * @inheritDoc
      */
     public function __invoke()
     {
-        $this->container->bindClass(ErrorHandlerContract::class, ErrorHandler::class, true);
+        $this->container()->bindClass(ErrorHandlerContract::class, ErrorHandler::class, true);
 
         $this->registerErrorRenderer();
         $this->registerErrorReporters();
 
-        $errorHandler = $this->container->get(ErrorHandler::class);
+        $errorHandler = $this->container()->get(ErrorHandler::class);
 
         register_shutdown_function([$errorHandler, 'handleShutdown']);
         set_exception_handler([$errorHandler, 'handleThrowable']);
@@ -41,10 +41,10 @@ class ErrorHandling extends AbstractKernelBootstrap
      */
     private function registerErrorRenderer()
     {
-        if ($this->kernel->isCli()) {
-            $this->container->bindClass(ErrorRendererContract::class, ConsoleErrorRenderer::class, true);
+        if ($this->kernel()->isCli()) {
+            $this->container()->bindClass(ErrorRendererContract::class, ConsoleErrorRenderer::class, true);
         } else {
-            $this->container->bindClass(ErrorRendererContract::class, HttpErrorRenderer::class, true);
+            $this->container()->bindClass(ErrorRendererContract::class, HttpErrorRenderer::class, true);
         }
     }
 
@@ -53,10 +53,10 @@ class ErrorHandling extends AbstractKernelBootstrap
      */
     private function registerErrorReporters()
     {
-        $this->container->bindFactory(
+        $this->container()->bindFactory(
             ErrorReporterStackContract::class,
             function () {
-                $reporters = new ErrorReporterStack($this->container);
+                $reporters = new ErrorReporterStack($this->container());
                 $reporters->push(ErrorLogReporter::class);
 
                 return $reporters;

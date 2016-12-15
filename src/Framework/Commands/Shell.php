@@ -23,7 +23,7 @@ class Shell extends AbstractCommand
     public function handle()
     {
         $shell = new BaseShell;
-        $shell->setIncludes($this->input->getArgument('includes'));
+        $shell->setIncludes($this->input()->getArgument('includes'));
         $shell->run();
     }
 

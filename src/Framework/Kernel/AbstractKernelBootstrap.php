@@ -15,12 +15,12 @@ abstract class AbstractKernelBootstrap
     /**
      * @var Container
      */
-    protected $container;
+    private $container;
 
     /**
      * @var Kernel
      */
-    protected $kernel;
+    private $kernel;
 
     /**
      * AbstractKernelBootstrap constructor.
@@ -40,4 +40,20 @@ abstract class AbstractKernelBootstrap
      * @return void
      */
     abstract public function __invoke();
+
+    /**
+     * @return Container
+     */
+    protected function container(): Container
+    {
+        return $this->container;
+    }
+
+    /**
+     * @return Kernel
+     */
+    protected function kernel(): Kernel
+    {
+        return $this->kernel;
+    }
 }

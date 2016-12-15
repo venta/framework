@@ -13,7 +13,7 @@ use Venta\Contracts\Debug\ErrorReporterStack;
  *
  * @package Venta\Debug
  */
-class ErrorHandler implements ErrorHandlerContract
+final class ErrorHandler implements ErrorHandlerContract
 {
     /**
      * Controls whether error handler can throw exceptions.

@@ -17,7 +17,7 @@ final class Cache implements CacheContract
     /**
      * @var CacheItemPoolInterface
      */
-    protected $pool;
+    private $pool;
 
     /**
      * Repository constructor.

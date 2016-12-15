@@ -9,21 +9,21 @@ use LogicException;
  *
  * @package Venta\Framework\Kernel\Resolver
  */
-class ServiceProviderDependencyResolver
+final class ServiceProviderDependencyResolver
 {
     /**
      * Array of service provider classes currently being resolved.
      *
      * @var array
      */
-    protected $resolving = [];
+    private $resolving = [];
 
     /**
      * Array of service provider classes ordered in respecting their dependencies.
      *
      * @var array
      */
-    protected $sequence = [];
+    private $sequence = [];
 
     /**
      * @param array $providers
@@ -59,11 +59,13 @@ class ServiceProviderDependencyResolver
     {
         if (isset($this->resolving[$provider])) {
             $this->resolving[] = $provider;
-            throw new LogicException(sprintf(
-                'Circular reference detected for service provider "%s", path: "%s".',
-                $provider,
-                implode(' -> ', $this->resolving)
-            ));
+            throw new LogicException(
+                sprintf(
+                    'Circular reference detected for service provider "%s", path: "%s".',
+                    $provider,
+                    implode(' -> ', $this->resolving)
+                )
+            );
         }
     }
 }

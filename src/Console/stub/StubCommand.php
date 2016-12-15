@@ -13,7 +13,7 @@ class StubCommand extends AbstractCommand
      */
     protected function handle()
     {
-        $this->output->write($this->input->getArgument('argument') . $this->input->getOption('option'));
+        $this->output()->write($this->input()->getArgument('argument') . $this->input()->getOption('option'));
 
         return 42;
     }

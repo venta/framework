@@ -11,7 +11,7 @@ use Venta\Framework\Kernel\AbstractKernelBootstrap;
  *
  * @package Venta\Framework\Kernel\Bootstrap
  */
-class ConfigurationLoading extends AbstractKernelBootstrap
+final class ConfigurationLoading extends AbstractKernelBootstrap
 {
     /**
      * @inheritDoc
@@ -19,11 +19,11 @@ class ConfigurationLoading extends AbstractKernelBootstrap
     public function __invoke()
     {
         /** @var ConfigFactory $configFactory */
-        $configFactory = $this->container->get(ConfigFactory::class);
+        $configFactory = $this->container()->get(ConfigFactory::class);
 
         // todo: implement arbitrary config files loading.
-        $config = $configFactory->createFromFile($this->kernel->rootPath() . '/config/app.php');
+        $config = $configFactory->createFromFile($this->kernel()->rootPath() . '/config/app.php');
 
-        $this->container->bindInstance(Config::class, $config);
+        $this->container()->bindInstance(Config::class, $config);
     }
 }

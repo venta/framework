@@ -12,12 +12,12 @@ use Venta\Contracts\Console\CommandCollection as CommandCollectionContract;
  *
  * @package Venta\Console
  */
-class CommandCollection implements CommandCollectionContract
+final class CommandCollection implements CommandCollectionContract
 {
     /**
      * @var string[]
      */
-    protected $commands = [];
+    private $commands = [];
 
     /**
      * @inheritDoc
