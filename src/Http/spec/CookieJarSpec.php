@@ -2,9 +2,12 @@
 
 namespace spec\Venta\Http;
 
+use DateInterval;
 use DateTime;
+use InvalidArgumentException;
 use PhpSpec\Exception\Example\FailureException;
 use PhpSpec\ObjectBehavior;
+use stdClass;
 use Venta\Contracts\Http\Cookie;
 use Venta\Contracts\Http\CookieJar;
 
@@ -45,9 +48,32 @@ class CookieJarSpec extends ObjectBehavior
 
     function it_adds_cookie()
     {
-        $this->findByName('name')->shouldBeNull();
-        $this->add('name', 'value', new DateTime())->shouldBeNull();
-        $this->findByName('name')->shouldImplement(Cookie::class);
+        $dateTime = new DateTime;
+        $dateInterval = new DateInterval('P10D');
+        $timestamp = time();
+        $relative = '+10 days';
+
+        $this->add('dateTime', 'value', $dateTime)->shouldBeNull();
+        $this->add('dateInterval', 'value', $dateInterval);
+        $this->add('timestamp', 'value', $timestamp);
+        $this->add('relative', 'value', $relative);
+
+
+        $dateTimeCookie = $this->findByName('dateTime');
+        $dateTimeCookie->shouldImplement(Cookie::class);
+        $dateTimeCookie->expiration()->shouldBeLike($dateTime);
+
+        $dateIntervalCookie = $this->findByName('dateInterval');
+        $dateIntervalCookie->shouldImplement(Cookie::class);
+        $dateIntervalCookie->expiration()->shouldBeLike((new DateTime())->add($dateInterval));
+
+        $timestampCookie = $this->findByName('timestamp');
+        $timestampCookie->shouldImplement(Cookie::class);
+        $timestampCookie->expiration()->shouldBeLike(new DateTime("@$timestamp"));
+
+        $relativeCookie = $this->findByName('relative');
+        $relativeCookie->shouldImplement(Cookie::class);
+        $relativeCookie->expiration()->shouldBeLike(new DateTime($relative));
     }
 
     function it_can_expire_forgotten_cookies()
@@ -72,6 +98,13 @@ class CookieJarSpec extends ObjectBehavior
         $cookie = $this->findByName('session');
         $cookie->shouldImplement(Cookie::class);
         $cookie->expiration()->shouldBeNull();
+    }
+
+    function it_fails_to_add_cookie_with_invalid_expiration_type()
+    {
+        $this->shouldThrow(InvalidArgumentException::class)->during('add', ['name', 'value', new stdClass]);
+        $this->shouldThrow(InvalidArgumentException::class)->during('add', ['name', 'value', []]);
+        $this->shouldThrow()->during('add', ['name', 'value', 'string']);
     }
 
     function it_is_initializable()

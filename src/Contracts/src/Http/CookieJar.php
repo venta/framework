@@ -2,6 +2,7 @@
 
 namespace Venta\Contracts\Http;
 
+use DateInterval;
 use DateTimeInterface;
 
 
@@ -18,7 +19,7 @@ interface CookieJar
      *
      * @param string $name
      * @param string $value
-     * @param DateTimeInterface $expires
+     * @param DateTimeInterface|DateInterval|string $expiration
      * @param string $path
      * @param string $domain
      * @param bool $secure
@@ -28,7 +29,7 @@ interface CookieJar
     public function add(
         string $name,
         string $value,
-        DateTimeInterface $expires,
+        $expiration,
         string $path = '',
         string $domain = '',
         bool $secure = false,

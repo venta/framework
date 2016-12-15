@@ -4,7 +4,9 @@ namespace Venta\Http;
 
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
+use InvalidArgumentException;
 use Venta\Contracts\Http\Cookie as CookieContract;
 use Venta\Contracts\Http\CookieJar as CookieJarContract;
 
@@ -27,13 +29,14 @@ final class CookieJar implements CookieJarContract
     public function add(
         string $name,
         string $value,
-        DateTimeInterface $expires,
+        $expiration,
         string $path = '',
         string $domain = '',
         bool $secure = false,
         bool $httpOnly = false
     ) {
-        $this->put(new Cookie($name, $value, $expires, $path, $domain, $secure, $httpOnly));
+        $expiration = $this->expirationToDateTime($expiration);
+        $this->put(new Cookie($name, $value, $expiration, $path, $domain, $secure, $httpOnly));
     }
 
     /**
@@ -96,5 +99,28 @@ final class CookieJar implements CookieJarContract
         $this->put(new Cookie($name, $value, null, $path, $domain, $secure, $httpOnly));
     }
 
+    /**
+     * Parses expiration time and returns valid DateTimeInterface implementation.
+     *
+     * @param DateTime|DateInterval|string $expires
+     * @return DateTimeInterface
+     * @throws InvalidArgumentException
+     */
+    private function expirationToDateTime($expires): DateTimeInterface
+    {
+        if ($expires instanceof DateInterval) {
+            $expires = (new DateTime)->add($expires);
+        } elseif (is_string($expires) || is_int($expires)) {
+            $expires = new DateTime(is_numeric($expires) ? "@$expires" : $expires);
+        }
+
+        if (!$expires instanceof DateTimeInterface) {
+            throw new InvalidArgumentException(
+                "Invalid cookie expiration time. Cannot be converted to DateTimeInterface."
+            );
+        }
+
+        return DateTimeImmutable::createFromMutable($expires);
+    }
 
 }

@@ -73,12 +73,13 @@ class CookieSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->beConstructedWith('name', 'value', null, '/path', 'example.com', false, false);
+        $now = new DateTime();
+        $this->beConstructedWith('name', 'value', $now, '/path', 'example.com', false, false);
 
         $this->shouldImplement(CookieContract::class);
         $this->name()->shouldBe('name');
         $this->value()->shouldBe('value');
-        $this->expiration()->shouldBeNull();
+        $this->expiration()->shouldBeLike($now);
         $this->path()->shouldBe('/path');
         $this->domain()->shouldBe('example.com');
         $this->shouldNotBeSecure();
