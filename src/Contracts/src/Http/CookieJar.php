@@ -4,6 +4,7 @@ namespace Venta\Contracts\Http;
 
 use DateInterval;
 use DateTimeInterface;
+use Traversable;
 
 
 /**
@@ -11,7 +12,7 @@ use DateTimeInterface;
  *
  * @package Http
  */
-interface CookieJar
+interface CookieJar extends Traversable
 {
 
     /**

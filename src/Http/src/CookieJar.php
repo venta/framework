@@ -2,11 +2,13 @@
 
 namespace Venta\Http;
 
+use ArrayIterator;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
+use IteratorAggregate;
 use Venta\Contracts\Http\Cookie as CookieContract;
 use Venta\Contracts\Http\CookieJar as CookieJarContract;
 
@@ -15,7 +17,7 @@ use Venta\Contracts\Http\CookieJar as CookieJarContract;
  *
  * @package Venta\Http
  */
-final class CookieJar implements CookieJarContract
+final class CookieJar implements IteratorAggregate, CookieJarContract
 {
 
     /**
@@ -75,6 +77,14 @@ final class CookieJar implements CookieJarContract
     public function forget(string $name)
     {
         $this->add($name, '', (new DateTime())->setTimestamp(1));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->all());
     }
 
     /**

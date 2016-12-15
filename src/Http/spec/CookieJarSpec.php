@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use PhpSpec\Exception\Example\FailureException;
 use PhpSpec\ObjectBehavior;
 use stdClass;
+use Traversable;
 use Venta\Contracts\Http\Cookie;
 use Venta\Contracts\Http\CookieJar;
 
@@ -116,6 +117,11 @@ class CookieJarSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldImplement(CookieJar::class);
+    }
+
+    function it_is_traversable()
+    {
+        $this->getIterator()->shouldImplement(Traversable::class);
     }
 
     function it_puts_cookie(Cookie $cookie)
