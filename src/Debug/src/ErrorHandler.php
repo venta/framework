@@ -77,7 +77,7 @@ final class ErrorHandler implements ErrorHandlerContract
     {
         $this->canThrowException = false;
         $error = error_get_last();
-        if ($error && ($error['type'] & self::FATAL)) {
+        if (!empty($error) && ($error['type'] & self::FATAL)) {
             // Fatal error is not passed to handleError, we need to pass it manually.
             $this->handleError($error['type'], $error['message'], $error['file'], $error['line']);
         }
@@ -101,9 +101,9 @@ final class ErrorHandler implements ErrorHandlerContract
      * @param int $severity
      * @return bool
      */
-    private function isSevereEnough(int $severity)
+    private function isSevereEnough(int $severity): bool
     {
-        return error_reporting() & $severity;
+        return boolval(error_reporting() & $severity);
     }
 
 }

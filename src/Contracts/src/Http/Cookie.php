@@ -63,7 +63,7 @@ interface Cookie
     public function secured(): Cookie;
 
     /**
-     * @return string;
+     * @return string
      */
     public function value(): string;
 
