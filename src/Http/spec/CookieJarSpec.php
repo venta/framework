@@ -4,6 +4,7 @@ namespace spec\Venta\Http;
 
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use InvalidArgumentException;
 use PhpSpec\Exception\Example\FailureException;
 use PhpSpec\ObjectBehavior;
@@ -49,19 +50,24 @@ class CookieJarSpec extends ObjectBehavior
     function it_adds_cookie()
     {
         $dateTime = new DateTime;
+        $immutableDateTime = new DateTimeImmutable;
         $dateInterval = new DateInterval('P10D');
         $timestamp = time();
         $relative = '+10 days';
 
         $this->add('dateTime', 'value', $dateTime)->shouldBeNull();
-        $this->add('dateInterval', 'value', $dateInterval);
-        $this->add('timestamp', 'value', $timestamp);
-        $this->add('relative', 'value', $relative);
-
+        $this->add('immutableDateTime', 'value', $dateTime)->shouldBeNull();
+        $this->add('dateInterval', 'value', $dateInterval)->shouldBeNull();
+        $this->add('timestamp', 'value', $timestamp)->shouldBeNull();
+        $this->add('relative', 'value', $relative)->shouldBeNull();
 
         $dateTimeCookie = $this->findByName('dateTime');
         $dateTimeCookie->shouldImplement(Cookie::class);
         $dateTimeCookie->expiration()->shouldBeLike($dateTime);
+
+        $dateTimeCookie = $this->findByName('immutableDateTime');
+        $dateTimeCookie->shouldImplement(Cookie::class);
+        $dateTimeCookie->expiration()->shouldBeLike($immutableDateTime);
 
         $dateIntervalCookie = $this->findByName('dateInterval');
         $dateIntervalCookie->shouldImplement(Cookie::class);

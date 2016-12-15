@@ -102,12 +102,16 @@ final class CookieJar implements CookieJarContract
     /**
      * Parses expiration time and returns valid DateTimeInterface implementation.
      *
-     * @param DateTime|DateInterval|string $expires
+     * @param DateTimeInterface|DateInterval|string $expires
      * @return DateTimeInterface
      * @throws InvalidArgumentException
      */
     private function expirationToDateTime($expires): DateTimeInterface
     {
+        if ($expires instanceof DateTimeImmutable) {
+            return $expires;
+        }
+
         if ($expires instanceof DateInterval) {
             $expires = (new DateTime)->add($expires);
         } elseif (is_string($expires) || is_int($expires)) {
@@ -120,7 +124,7 @@ final class CookieJar implements CookieJarContract
             );
         }
 
-        return DateTimeImmutable::createFromMutable($expires);
+        return new DateTimeImmutable($expires->format(DateTime::ISO8601), $expires->getTimezone());
     }
 
 }
