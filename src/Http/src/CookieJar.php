@@ -115,12 +115,12 @@ final class CookieJar implements CookieJarContract
         if ($expires instanceof DateInterval) {
             $expires = (new DateTime)->add($expires);
         } elseif (is_string($expires) || is_int($expires)) {
-            $expires = new DateTime(is_numeric($expires) ? "@$expires" : $expires);
+            $expires = new DateTime(is_numeric($expires) ? '@' . $expires : $expires);
         }
 
         if (!$expires instanceof DateTimeInterface) {
             throw new InvalidArgumentException(
-                "Invalid cookie expiration time. Cannot be converted to DateTimeInterface."
+                'Invalid cookie expiration time. Cannot be converted to DateTimeInterface.'
             );
         }
 
