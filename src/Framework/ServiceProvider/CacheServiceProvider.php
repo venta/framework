@@ -94,7 +94,10 @@ class CacheServiceProvider extends AbstractServiceProvider
         return function () {
             $adapter = new \League\Flysystem\Adapter\Local($this->container()->get(Kernel::class)->rootPath());
 
-            return new \Cache\Adapter\Filesystem\FilesystemCachePool($adapter, 'storage/cache');
+            return new \Cache\Adapter\Filesystem\FilesystemCachePool(
+                new \League\Flysystem\Filesystem($adapter),
+                'storage/cache'
+            );
         };
     }
 
