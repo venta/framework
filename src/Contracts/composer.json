@@ -1,34 +1,33 @@
 {
     "name": "venta/contracts",
-    "description": "The Venta Contracts package",
+    "description": "The Venta Contracts package.",
+    "keywords": [
+        "venta",
+        "contracts"
+    ],
     "authors": [
         {
-            "name": "Konstantins Zukovs",
-            "email": "kz@scandiweb.com"
+            "name": "Venta Core Team",
+            "email": "team@venta.io"
         },
         {
-            "name": "Alexey Rehov",
-            "email": "aleksejs@scandiweb.com"
-        },
-        {
-            "name": "Vsevolods Mihailovs",
-            "email": "vsevolods@scandiweb.com"
-        },
-        {
-            "name": "Ilja Lapkovskis",
-            "email": "ilja@scandiweb.com"
+            "name": "Venta Community",
+            "homepage": "https://github.com/venta/contracts/contributors"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "Venta\\Contracts\\": "src/"
-        }
+    "support": {
+        "issues": "https://github.com/venta/framework/issues"
     },
-    "minimum-stability": "stable",
     "require": {
         "php": "^7.0",
         "psr/http-message": "^1.0",
         "psr/cache": "^1.0",
         "container-interop/container-interop": "^1.1"
-    }
+    },
+    "autoload": {
+        "psr-4": {
+            "Venta\\Contracts\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
 }

@@ -1,25 +1,35 @@
 {
     "name": "venta/adr",
-    "description": "Venta ADR package",
+    "description": "The Venta ADR package.",
+    "keywords": [
+        "venta",
+        "ard"
+    ],
     "authors": [
         {
-            "name": "Venta team",
-            "email": "venta@scandiweb.com",
-            "link": "https://github.com/venta/adr/contributors"
+            "name": "Venta Core Team",
+            "email": "team@venta.io"
+        },
+        {
+            "name": "Venta Community",
+            "homepage": "https://github.com/venta/adr/contributors"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "Venta\\Adr\\": "src/"
-        }
-    },
-    "minimum-stability": "dev",
-    "require-dev": {
-        "phpspec/phpspec": "^3.1"
+    "support": {
+        "issues": "https://github.com/venta/framework/issues"
     },
     "require": {
         "php": "^7.0",
         "venta/contracts": "dev-master",
         "venta/routing": "dev-master"
-    }
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Venta\\Adr\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
 }
