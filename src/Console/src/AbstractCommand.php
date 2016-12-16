@@ -22,25 +22,25 @@ abstract class AbstractCommand extends SymfonyCommand
     protected $description = '';
 
     /**
+     * The command signature.
+     *
+     * @var string
+     */
+    protected $signature = '';
+
+    /**
      * The Input implementation.
      *
      * @var InputInterface
      */
-    protected $input;
+    private $input;
 
     /**
      * The Output implementation.
      *
      * @var OutputInterface
      */
-    protected $output;
-
-    /**
-     * The command signature.
-     *
-     * @var string
-     */
-    protected $signature = '';
+    private $output;
 
     /**
      * {@inheritdoc}
@@ -91,4 +91,24 @@ abstract class AbstractCommand extends SymfonyCommand
      * @return int Exit code.
      */
     abstract protected function handle();
+
+    /**
+     * Returns input.
+     *
+     * @return InputInterface
+     */
+    protected function input(): InputInterface
+    {
+        return $this->input;
+    }
+
+    /**
+     * Returns output.
+     *
+     * @return OutputInterface
+     */
+    protected function output(): OutputInterface
+    {
+        return $this->output;
+    }
 }

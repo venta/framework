@@ -12,7 +12,7 @@ use Venta\ServiceProvider\AbstractServiceProvider;
  *
  * @package Venta\Framework\ServiceProvider
  */
-class ConsoleServiceProvider extends AbstractServiceProvider
+final class ConsoleServiceProvider extends AbstractServiceProvider
 {
 
     /**
@@ -20,7 +20,7 @@ class ConsoleServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container->bindClass(CommandCollectionContract::class, CommandCollection::class, true);
+        $this->container()->bindClass(CommandCollectionContract::class, CommandCollection::class, true);
 
         $this->provideCommands(
             Shell::class

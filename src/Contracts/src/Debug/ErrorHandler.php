@@ -1,14 +1,14 @@
 <?php declare(strict_types = 1);
 
-namespace Venta\Contracts\ErrorHandler;
+namespace Venta\Contracts\Debug;
 
 use Throwable;
 
 /**
- * Interface ErrorHandler
+ * Interface Debug
  * Registers as shutdown function, exception handler and error handler.
  *
- * @package Venta\Contracts\ErrorHandler
+ * @package Venta\Contracts\Debug
  */
 interface ErrorHandler
 {
@@ -25,10 +25,10 @@ interface ErrorHandler
      * @param int $severity
      * @param string $message
      * @param string $filename
-     * @param int $lineNumber
+     * @param int $line
      * @return bool
      */
-    public function handleError(int $severity, string $message, string $filename, int $lineNumber): bool;
+    public function handleError(int $severity, string $message, string $filename, int $line): bool;
 
     /**
      * Handles php shutdown in case of fatal error (self::FATAL).
@@ -40,9 +40,9 @@ interface ErrorHandler
     /**
      * Handles uncaught throwable (exceptions and errors).
      *
-     * @param Throwable $throwable
+     * @param Throwable $e
      * @return void
      */
-    public function handleThrowable(Throwable $throwable);
+    public function handleThrowable(Throwable $e);
 
 }

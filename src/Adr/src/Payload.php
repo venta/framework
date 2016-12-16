@@ -40,7 +40,7 @@ class Payload implements PayloadContract
     /**
      * @inheritDoc
      */
-    public function getInput(): array
+    public function input(): array
     {
         return $this->input;
     }
@@ -48,7 +48,7 @@ class Payload implements PayloadContract
     /**
      * @inheritDoc
      */
-    public function getOutput()
+    public function output()
     {
         return $this->output;
     }
@@ -56,7 +56,7 @@ class Payload implements PayloadContract
     /**
      * @inheritDoc
      */
-    public function getStatus(): string
+    public function status(): string
     {
         return $this->status;
     }

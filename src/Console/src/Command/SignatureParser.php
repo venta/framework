@@ -10,29 +10,29 @@ use Venta\Contracts\Console\SignatureParser as SignatureParserContract;
  *
  * @package Venta\Console
  */
-class SignatureParser implements SignatureParserContract
+final class SignatureParser implements SignatureParserContract
 {
     /**
-     * RegExp to match arguments
+     * RegExp to match arguments.
      * name[]?:description
      *
      * @var string
      */
-    protected $argumentsMatcher = '/^(?:\-\-)?([a-z]+)?(\[\])?(=)?(.*?)?$/';
+    private $argumentsMatcher = '/^(?:\-\-)?([a-z]+)?(\[\])?(=)?(.*?)?$/';
 
     /**
-     * Parameters matcher string
+     * Parameters matcher string.
      *
      * @var string
      */
-    protected $parametersMatcher = '/{(.*?)}/';
+    private $parametersMatcher = '/{(.*?)}/';
 
     /**
-     * Full signature string holder
+     * Full signature string holder.
      *
      * @var string
      */
-    protected $signature;
+    private $signature;
 
     /**
      * @throws \Exception
@@ -54,7 +54,7 @@ class SignatureParser implements SignatureParserContract
      * @param bool $optional
      * @return int
      */
-    protected function defineType($array = false, $optional = false): int
+    private function defineType($array = false, $optional = false): int
     {
         $type = ($optional) ? InputArgument::OPTIONAL : InputArgument::REQUIRED;
 
@@ -70,7 +70,7 @@ class SignatureParser implements SignatureParserContract
      *
      * @return array
      */
-    protected function getParameters(): array
+    private function getParameters(): array
     {
         $matches = [];
         preg_match_all($this->parametersMatcher, $this->signature, $matches);
@@ -84,7 +84,7 @@ class SignatureParser implements SignatureParserContract
      *
      * @return array
      */
-    protected function parseParameters(): array
+    private function parseParameters(): array
     {
         $arguments = [];
         $options = [];

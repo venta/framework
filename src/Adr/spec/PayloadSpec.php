@@ -23,20 +23,20 @@ class PayloadSpec extends ObjectBehavior
     function it_has_immutable_input()
     {
         $payload = $this->withInput(['input']);
-        $payload->getInput()->shouldContain('input');
-        $this->getInput()->shouldBeEmpty();
+        $payload->input()->shouldContain('input');
+        $this->input()->shouldBeEmpty();
     }
 
     function it_has_immutable_output()
     {
         $payload = $this->withOutput('output');
-        $payload->getOutput()->shouldBe('output');
-        $this->getInput()->shouldBeEmpty();
+        $payload->output()->shouldBe('output');
+        $this->input()->shouldBeEmpty();
     }
 
     function it_has_status()
     {
-        $this->getStatus()->shouldBe('status');
+        $this->status()->shouldBe('status');
     }
 
     function it_is_initializable()

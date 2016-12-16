@@ -11,17 +11,17 @@ use Venta\Framework\Kernel\AbstractKernelBootstrap;
  *
  * @package Venta\Framework\Kernel\Bootstrap
  */
-class EnvironmentDetection extends AbstractKernelBootstrap
+final class EnvironmentDetection extends AbstractKernelBootstrap
 {
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function __invoke()
     {
-        $filePath = rtrim($this->kernel->getRootPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.env';
+        $filePath = rtrim($this->kernel()->rootPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . '.env';
 
         $envLoader = new Loader($filePath);
-        if ($this->kernel->isCli()) {
+        if ($this->kernel()->isCli()) {
             // todo: Load different env fire for each environment.
             $env = (new ArgvInput)->getParameterOption(['--env', '-e']);
             if ($env) {

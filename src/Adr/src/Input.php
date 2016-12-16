@@ -2,8 +2,8 @@
 
 namespace Venta\Adr;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Venta\Contracts\Adr\Input as InputContract;
-use Venta\Contracts\Http\Request;
 
 /**
  * Class Input
@@ -15,7 +15,7 @@ final class Input implements InputContract
     /**
      * @inheritDoc
      */
-    public function process(Request $request): array
+    public function process(ServerRequestInterface $request): array
     {
         return [
             array_replace(

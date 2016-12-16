@@ -42,18 +42,18 @@ class RouteGroup extends RouteCollection implements RouteGroupContract
     /**
      * @inheritDoc
      */
-    public function getRoutes(): array
+    public function all(): array
     {
         $routes = [];
         /** @var Route $route */
-        foreach (parent::getRoutes() as $route) {
-            if (!$route->getHost() && $this->host) {
+        foreach (parent::all() as $route) {
+            if (!$route->host() && $this->host) {
                 $route = $route->withHost($this->host);
             }
-            if (!$route->getScheme() && $this->scheme) {
+            if (!$route->scheme() && $this->scheme) {
                 $route = $route->secure();
             }
-            $routes[] = $route->withPath($this->addPathPrefix($route->getPath()));
+            $routes[] = $route->withPath($this->addPathPrefix($route->path()));
         }
 
         return $routes;
@@ -97,8 +97,9 @@ class RouteGroup extends RouteCollection implements RouteGroupContract
      */
     private function addPathPrefix(string $path): string
     {
-        return $this->prefix == '/' || $this->prefix == '' ? $path :
-            sprintf('/%s/%s', trim($this->prefix, '/'), ltrim($path, '/'));
+        return $this->prefix == '/' || $this->prefix == ''
+            ? $path
+            : sprintf('/%s/%s', trim($this->prefix, '/'), ltrim($path, '/'));
     }
 
 }

@@ -22,6 +22,6 @@ interface ImmutableRouteCollection
      *
      * @return Route[]
      */
-    public function getRoutes(): array;
+    public function all(): array;
 
 }

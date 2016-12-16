@@ -11,13 +11,13 @@ use Venta\ServiceProvider\AbstractServiceProvider;
  *
  * @package Venta\Framework
  */
-class EventServiceProvider extends AbstractServiceProvider
+final class EventServiceProvider extends AbstractServiceProvider
 {
     /**
      * @inheritDoc
      */
     public function boot()
     {
-        $this->container->bindClass(EventDispatcher::class, ContainerAwareEventDispatcher::class, true);
+        $this->container()->bindClass(EventDispatcher::class, ContainerAwareEventDispatcher::class, true);
     }
 }

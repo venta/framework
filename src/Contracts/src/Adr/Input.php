@@ -2,7 +2,7 @@
 
 namespace Venta\Contracts\Adr;
 
-use Venta\Contracts\Http\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Interface Input
@@ -13,11 +13,11 @@ interface Input
 {
 
     /**
-     * Converts request to an array of arguments for Domain handler.
+     * Converts request to an array of arguments for the domain handler.
      *
-     * @param Request $request
+     * @param ServerRequestInterface $request
      * @return array
      */
-    public function process(Request $request): array;
+    public function process(ServerRequestInterface $request): array;
 
 }

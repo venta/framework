@@ -11,19 +11,19 @@ use Venta\Framework\Kernel\AbstractKernelBootstrap;
  *
  * @package Venta\Framework\Kernel\Bootstrap
  */
-class ConfigurationLoading extends AbstractKernelBootstrap
+final class ConfigurationLoading extends AbstractKernelBootstrap
 {
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function __invoke()
     {
         /** @var ConfigFactory $configFactory */
-        $configFactory = $this->container->get(ConfigFactory::class);
+        $configFactory = $this->container()->get(ConfigFactory::class);
 
         // todo: implement arbitrary config files loading.
-        $config = $configFactory->create(include $this->kernel->getRootPath() . '/config/app.php');
+        $config = $configFactory->create([]);
 
-        $this->container->bindInstance(Config::class, $config);
+        $this->container()->bindInstance(Config::class, $config);
     }
 }

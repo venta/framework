@@ -10,15 +10,17 @@ use Venta\Framework\Kernel\Resolver\ServiceProviderDependencyResolver;
  *
  * @package Kernel\Bootstrap
  */
-class ServiceProviderBootSequenceResolving extends AbstractKernelBootstrap
+final class ServiceProviderBootSequenceResolving extends AbstractKernelBootstrap
 {
 
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function __invoke()
     {
-        $this->container->bindInstance(ServiceProviderDependencyResolver::class, new ServiceProviderDependencyResolver);
+        $this->container()->bindInstance(
+            ServiceProviderDependencyResolver::class, new ServiceProviderDependencyResolver
+        );
     }
 
 }

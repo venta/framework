@@ -14,14 +14,14 @@ interface ServiceProvider
      *
      * @return array
      */
-    public static function getDependencies(): array;
+    public static function dependencies(): array;
 
     /**
      * Returns the service provider name.
      *
      * @return string
      */
-    public static function getName(): string;
+    public static function name(): string;
 
     /**
      * Boots the service provider.

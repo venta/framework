@@ -23,18 +23,18 @@ abstract class AbstractServiceProvider implements ServiceProvider
     protected static $name;
 
     /**
-     * Container instance.
-     *
-     * @var Container
-     */
-    protected $container;
-
-    /**
      * Application config.
      *
      * @var Config
      */
     private $appConfig;
+
+    /**
+     * Container instance.
+     *
+     * @var Container
+     */
+    private $container;
 
     /**
      * AbstractServiceProvider constructor.
@@ -51,7 +51,7 @@ abstract class AbstractServiceProvider implements ServiceProvider
     /**
      * @inheritdoc
      */
-    public static function getDependencies(): array
+    public static function dependencies(): array
     {
         return [];
     }
@@ -59,7 +59,7 @@ abstract class AbstractServiceProvider implements ServiceProvider
     /**
      * @inheritdoc
      */
-    final public static function getName(): string
+    final public static function name(): string
     {
         return static::$name ?: static::class;
     }
@@ -68,6 +68,14 @@ abstract class AbstractServiceProvider implements ServiceProvider
      * @inheritdoc
      */
     abstract public function boot();
+
+    /**
+     * @return Container
+     */
+    protected function container(): Container
+    {
+        return $this->container;
+    }
 
     /**
      * Merges config params from service provider with the global configuration.
@@ -102,7 +110,7 @@ abstract class AbstractServiceProvider implements ServiceProvider
         /** @var CommandCollection $commandCollector */
         $commandCollector = $this->container->get(CommandCollection::class);
         foreach ($commandClasses as $commandClass) {
-            $commandCollector->addCommand($commandClass);
+            $commandCollector->add($commandClass);
         }
     }
 }

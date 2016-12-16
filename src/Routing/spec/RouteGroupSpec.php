@@ -21,7 +21,7 @@ class RouteGroupSpec extends ObjectBehavior
         })->shouldBeAnInstanceOf(RouteGroup::class);
 
         // todo: implement with specs
-        assert(in_array($route, $group->getRoutes()));
+        assert(in_array($route, $group->all()));
     }
 
     function it_is_initializable()
@@ -32,22 +32,22 @@ class RouteGroupSpec extends ObjectBehavior
     function it_sets_host_on_route()
     {
         $this->setHost('host')->shouldBe($this);
-        $routes = $this->getRoutes();
-        $routes[0]->getHost()->shouldBe('host');
+        $routes = $this->all();
+        $routes[0]->host()->shouldBe('host');
     }
 
     function it_sets_prefix_on_route()
     {
         $this->setPrefix('prefix')->shouldBe($this);
-        $routes = $this->getRoutes();
-        $routes[0]->getPath()->shouldBe('/prefix/url');
+        $routes = $this->all();
+        $routes[0]->path()->shouldBe('/prefix/url');
     }
 
     function it_sets_scheme_on_route()
     {
         $this->setScheme('https')->shouldBe($this);
-        $routes = $this->getRoutes();
-        $routes[0]->getScheme()->shouldBe('https');
+        $routes = $this->all();
+        $routes[0]->scheme()->shouldBe('https');
     }
 
 }

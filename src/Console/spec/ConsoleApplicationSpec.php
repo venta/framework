@@ -15,7 +15,7 @@ class ConsoleApplicationSpec extends ObjectBehavior
     function it_is_initializable(Kernel $kernel, Container $container, Application $symfonyConsoleApplication)
     {
         $kernel->boot()->shouldBeCalledTimes(1)->willReturn($container);
-        $kernel->getVersion()->shouldBeCalled();
+        $kernel->version()->shouldBeCalled();
         $container->get(Application::class)->willReturn($symfonyConsoleApplication);
 
         $this->beConstructedWith($kernel);

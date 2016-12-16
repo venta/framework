@@ -31,14 +31,14 @@ interface Kernel
      *
      * @return string
      */
-    public function getEnvironment(): string;
+    public function environment(): string;
 
     /**
      * Returns kernel version.
      *
      * @return string
      */
-    public function getVersion(): string;
+    public function version(): string;
 
     /**
      * If running in cli.
@@ -52,6 +52,6 @@ interface Kernel
      *
      * @return string
      */
-    public function getRootPath(): string;
+    public function rootPath(): string;
 
 }

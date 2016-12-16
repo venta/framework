@@ -17,10 +17,14 @@ use Venta\Http\HttpApplication;
 class HttpApplicationSpec extends ObjectBehavior
 {
 
+    function let(Kernel $kernel)
+    {
+        $this->beConstructedWith($kernel);
+    }
+
     function it_is_initializable_and_boots_kernel(Kernel $kernel, Container $container)
     {
         $kernel->boot()->willReturn($container)->shouldBeCalled();
-        $this->beConstructedWith($kernel);
         $this->shouldHaveType(HttpApplication::class);
         $this->shouldImplement(Delegate::class);
     }
@@ -36,12 +40,12 @@ class HttpApplicationSpec extends ObjectBehavior
         MiddlewarePipeline $pipeline
     ) {
         $kernel->boot()->willReturn($container);
-        $this->beConstructedWith($kernel);
-        $container->get(MiddlewarePipelineFactory::class)->willReturn($factory);
-        $factory->create([])->willReturn($pipeline);
         $container->get(Config::class)->willReturn($config);
-        $config->get('middlewares', [])->willReturnArgument(1);
         $container->get(Router::class)->willReturn($router);
+        $container->get(MiddlewarePipelineFactory::class)->willReturn($factory);
+
+        $factory->create([])->willReturn($pipeline);
+//        $config->get('middlewares', [])->willReturnArgument(1);
         $pipeline->process($request, $router)->willReturn($response);
 
         $this->run($request)->shouldBe($response);

@@ -24,19 +24,19 @@ interface Payload
      *
      * @return array
      */
-    public function getInput(): array;
+    public function input(): array;
 
     /**
      * Returns Domain handling result.
      *
      * @return mixed
      */
-    public function getOutput();
+    public function output();
 
     /**
      * Returns Domain handling status.
      *
      * @return string
      */
-    public function getStatus(): string;
+    public function status(): string;
 }

@@ -42,16 +42,17 @@ abstract class AbstractKernel implements Kernel
     {
         $container = $this->initServiceContainer();
 
-        foreach ($this->registerKernelModules() as $kernelModuleClass) {
-            $this->initKernelModule($kernelModuleClass, $container);
+        foreach ($this->getBootstraps() as $bootstrapClass) {
+            $this->invokeBootstrap($bootstrapClass, $container);
         }
 
         /** @var Config $config */
         $config = $container->get(Config::class);
 
-        // Here we boot service providers on by one. The correct order is ensured be resolver.
+        // Here we boot service providers on by one. The correct order is ensured by resolver.
+        /** @var ServiceProviderDependencyResolver $resolver */
         $resolver = $container->get(ServiceProviderDependencyResolver::class);
-        foreach ($resolver->resolve($this->registerServiceProviders()) as $providerClass) {
+        foreach ($resolver($this->registerServiceProviders()) as $providerClass) {
             $this->bootServiceProvider($providerClass, $container, $config);
         }
 
@@ -66,7 +67,7 @@ abstract class AbstractKernel implements Kernel
     /**
      * @inheritDoc
      */
-    public function getEnvironment(): string
+    public function environment(): string
     {
         return getenv('APP_ENV') ?: 'local';
     }
@@ -74,12 +75,12 @@ abstract class AbstractKernel implements Kernel
     /**
      * @return string
      */
-    abstract public function getRootPath(): string;
+    abstract public function rootPath(): string;
 
     /**
      * @inheritDoc
      */
-    public function getVersion(): string
+    public function version(): string
     {
         return self::VERSION;
     }
@@ -102,56 +103,21 @@ abstract class AbstractKernel implements Kernel
      */
     protected function bootServiceProvider(string $providerClass, Container $container, Config $baseConfig)
     {
-        // Ensure service provider implements contract.
-        if (!is_subclass_of($providerClass, AbstractServiceProvider::class)) {
-            throw new InvalidArgumentException(
-                sprintf('Class "%s" must be a subclass of "%s".',
-                    $providerClass, AbstractServiceProvider::class
-                )
-            );
-        }
+        $this->ensureServiceProvider($providerClass);
 
-        // Instantiate and boot service provider.
         /** @var ServiceProvider $provider */
         $provider = new $providerClass($container, $baseConfig);
         $provider->boot();
-
-        // todo: dispatch event
     }
 
     /**
-     * Initializes kernel module by class name.
-     * This is the ultimate point where kernel module functionality is enabled.
+     * Returns list of kernel bootstraps.
+     * This is a main place to tune default kernel behavior.
+     * Change carefully, as it may cause kernel failure.
      *
-     * @param string $kernelModuleClass
-     * @param Container $container
-     * @throws InvalidArgumentException
+     * @return string[]
      */
-    protected function initKernelModule(string $kernelModuleClass, Container $container)
-    {
-        if (!is_subclass_of($kernelModuleClass, AbstractKernelBootstrap::class)) {
-            throw new InvalidArgumentException(
-                sprintf('Class "%s" must be a subclass of "%s".',
-                    $kernelModuleClass, AbstractKernelBootstrap::class
-                )
-            );
-        }
-
-        /** @var AbstractKernelBootstrap $module */
-        $module = new $kernelModuleClass($container, $this);
-        $module->boot();
-
-        // todo: dispatch event
-    }
-
-    /**
-     * Registers kernel modules.
-     * This is a main place to define primary kernel functionality.
-     * Be careful changing this method, it may cause kernel failure.
-     *
-     * @return array
-     */
-    protected function registerKernelModules(): array
+    protected function getBootstraps(): array
     {
         $modules = [
             EnvironmentDetection::class,
@@ -160,12 +126,27 @@ abstract class AbstractKernel implements Kernel
             ErrorHandling::class,
         ];
 
-        // Here we can add environment dependant modules
+        // Here we can add environment dependant modules.
         //if ($this->getEnvironment() === \Venta\Contracts\Kernel\Kernel::ENV_LOCAL) {
         //    $modules[] = 'KernelModule';
         //}
 
         return $modules;
+    }
+
+    /**
+     * Invokes kernel bootstrap.
+     * This is the point where specific kernel functionality defined by bootstrap is enabled.
+     *
+     * @param string $bootstrapClass
+     * @param Container $container
+     * @throws InvalidArgumentException
+     */
+    protected function invokeBootstrap(string $bootstrapClass, Container $container)
+    {
+        $this->ensureBootstrap($bootstrapClass);
+
+        (new $bootstrapClass($container, $this))();
     }
 
     /**
@@ -176,22 +157,70 @@ abstract class AbstractKernel implements Kernel
     abstract protected function registerServiceProviders(): array;
 
     /**
-     * Initializes service container.
+     * Adds default service inflections.
+     *
+     * @param Container $container
      */
-    private function initServiceContainer()
+    private function addDefaultInflections(Container $container)
     {
-        /** @var Container $container */
-        $container = new $this->containerClass;
+        $container->addInflection(ContainerAware::class, 'setContainer', ['container' => $container]);
+        $container->addInflection(LoggerAwareInterface::class, 'setLogger');
+        $container->addInflection(ResponseFactoryAware::class, 'setResponseFactory');
+    }
 
+    /**
+     * Binds default services to container.
+     *
+     * @param Container $container
+     */
+    private function bindDefaultServices(Container $container)
+    {
         $container->bindInstance(Container::class, $container);
         $container->bindInstance(Kernel::class, $this);
 
         $container->bindClass(ConfigFactoryContract::class, ConfigFactory::class, true);
+    }
 
-        // Register default inflections.
-        $container->addInflection(ContainerAware::class, 'setContainer', ['container' => $container]);
-        $container->addInflection(LoggerAwareInterface::class, 'setLogger');
-        $container->addInflection(ResponseFactoryAware::class, 'setResponseFactory');
+    /**
+     * Ensures bootstrap class extends abstract kernel bootstrap.
+     *
+     * @param string $bootstrapClass
+     * @throws InvalidArgumentException
+     */
+    private function ensureBootstrap(string $bootstrapClass)
+    {
+        if (!is_subclass_of($bootstrapClass, AbstractKernelBootstrap::class)) {
+            throw new InvalidArgumentException(
+                sprintf('Class "%s" must be a subclass of "%s".', $bootstrapClass, AbstractKernelBootstrap::class)
+            );
+        }
+    }
+
+    /**
+     * Ensures service provider implements contract.
+     *
+     * @param string $providerClass
+     * @throws InvalidArgumentException
+     */
+    private function ensureServiceProvider(string $providerClass)
+    {
+        if (!is_subclass_of($providerClass, AbstractServiceProvider::class)) {
+            throw new InvalidArgumentException(
+                sprintf('Class "%s" must be a subclass of "%s".', $providerClass, AbstractServiceProvider::class)
+            );
+        }
+    }
+
+    /**
+     * Initializes service container.
+     */
+    private function initServiceContainer(): Container
+    {
+        /** @var Container $container */
+        $container = new $this->containerClass;
+
+        $this->bindDefaultServices($container);
+        $this->addDefaultInflections($container);
 
         return $container;
     }
