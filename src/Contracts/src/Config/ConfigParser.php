@@ -17,4 +17,10 @@ interface ConfigParser
      */
     public function fromString(string $configuration): array;
 
+    /**
+     * Returns an array of file extensions, that can be parsed with this parser.
+     *
+     * @return array
+     */
+    public function supportedExtensions(): array;
 }

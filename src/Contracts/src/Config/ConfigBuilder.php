@@ -21,7 +21,7 @@ interface ConfigBuilder
      * Merges configuration data.
      *
      * @param array $config
-     * @return Config
+     * @return void
      */
     public function merge(array $config);
 
