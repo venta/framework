@@ -1,37 +1,36 @@
 {
     "name": "venta/config",
-    "description": "The Venta Config package",
+    "description": "The Venta Config package.",
+    "keywords": [
+        "venta",
+        "config"
+    ],
     "authors": [
         {
-            "name": "Konstantins Zukovs",
-            "email": "kz@scandiweb.com"
+            "name": "Venta Core Team",
+            "email": "team@venta.io"
         },
         {
-            "name": "Alexey Rehov",
-            "email": "aleksejs@scandiweb.com"
-        },
-        {
-            "name": "Vsevolods Mihailovs",
-            "email": "vsevolods@scandiweb.com"
-        },
-        {
-            "name": "Ilja Lapkovskis",
-            "email": "ilja@scandiweb.com"
+            "name": "Venta Community",
+            "homepage": "https://github.com/venta/config/contributors"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "Venta\\Config\\": "src/"
-        }
+    "support": {
+        "issues": "https://github.com/venta/framework/issues"
     },
-    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.0",
+        "venta/contracts": "dev-master"
+    },
     "require-dev": {
         "phpspec/phpspec": "^3.1",
         "henrikbjorn/phpspec-code-coverage": "^3.0",
         "php-vfs/php-vfs": "@stable"
     },
-    "require": {
-        "php": "^7.0",
-        "venta/contracts": "dev-master"
-    }
+    "autoload": {
+        "psr-4": {
+            "Venta\\Config\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
 }

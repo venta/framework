@@ -1,13 +1,30 @@
 {
     "name": "venta/debug",
-    "description": "The Venta Debug package",
+    "description": "The Venta Debug package.",
+    "keywords": [
+        "venta",
+        "debug"
+    ],
     "authors": [
         {
-            "name": "Venta team",
-            "email": "venta@scandiweb.com",
-            "link": "https://github.com/venta/debug/contributors"
+            "name": "Venta Core Team",
+            "email": "team@venta.io"
+        },
+        {
+            "name": "Venta Community",
+            "homepage": "https://github.com/venta/debug/contributors"
         }
     ],
+    "support": {
+        "issues": "https://github.com/venta/framework/issues"
+    },
+    "require": {
+        "php": "^7.0",
+        "venta/contracts": "dev-master"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.1"
+    },
     "autoload": {
         "psr-4": {
             "Venta\\Debug\\": "src/"
@@ -18,12 +35,5 @@
             "stub\\Venta\\Debug": "stub/"
         }
     },
-    "minimum-stability": "dev",
-    "require-dev": {
-        "phpspec/phpspec": "^3.1"
-    },
-    "require": {
-        "php": "^7.0",
-        "venta/contracts": "dev-master"
-    }
+    "minimum-stability": "dev"
 }

@@ -1,52 +1,25 @@
 {
     "name": "venta/framework",
-    "description": "Venta Framework",
+    "description": "The Venta Framework.",
+    "keywords": [
+        "venta",
+        "framework",
+        "adr",
+        "php7"
+    ],
+    "type": "project",
     "authors": [
         {
-            "name": "Konstantins Zukovs",
-            "email": "kz@scandiweb.com"
+            "name": "Venta Core Team",
+            "email": "team@venta.io"
         },
         {
-            "name": "Alexey Rehov",
-            "email": "aleksejs@scandiweb.com"
-        },
-        {
-            "name": "Vsevolods Mihailovs",
-            "email": "vsevolods@scandiweb.com"
+            "name": "Venta Community",
+            "homepage": "https://github.com/venta/framework/contributors"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "Venta\\Adr\\": "src/Adr/src",
-            "Venta\\Cache\\": "src/Cache/src",
-            "Venta\\Config\\": "src/Config/src",
-            "Venta\\Console\\": "src/Console/src",
-            "Venta\\Container\\": "src/Container/src",
-            "Venta\\Contracts\\": "src/Contracts/src",
-            "Venta\\Debug\\": "src/Debug/src",
-            "Venta\\Event\\": "src/Event/src",
-            "Venta\\Framework\\": "src/Framework",
-            "Venta\\Http\\": "src/Http/src",
-            "Venta\\Mail\\": "src/Mail/src",
-            "Venta\\Routing\\": "src/Routing/src",
-            "Venta\\ServiceProvider\\": "src/ServiceProvider/src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "stub\\Venta\\Console\\": "src/Console/stub",
-            "stub\\Venta\\Event\\": "src/Event/stub"
-        },
-        "files": [
-            "src/Container/tests/bootstrap.php"
-        ]
-    },
-    "minimum-stability": "dev",
-    "require-dev": {
-        "phpspec/phpspec": "^3.1",
-        "phpunit/phpunit": "^5.4",
-        "mockery/mockery": "^0.9.5",
-        "henrikbjorn/phpspec-code-coverage": "^3.0"
+    "support": {
+        "issues": "https://github.com/venta/framework/issues"
     },
     "require": {
         "php": "~7.0",
@@ -72,5 +45,38 @@
         "venta/console": "self.version",
         "venta/event": "self.version",
         "venta/service-provider": "self.version"
-    }
+    },
+    "autoload": {
+        "psr-4": {
+            "Venta\\Adr\\": "src/Adr/src/",
+            "Venta\\Cache\\": "src/Cache/src/",
+            "Venta\\Config\\": "src/Config/src/",
+            "Venta\\Console\\": "src/Console/src/",
+            "Venta\\Container\\": "src/Container/src/",
+            "Venta\\Contracts\\": "src/Contracts/src/",
+            "Venta\\Debug\\": "src/Debug/src/",
+            "Venta\\Event\\": "src/Event/src/",
+            "Venta\\Framework\\": "src/Framework/",
+            "Venta\\Http\\": "src/Http/src/",
+            "Venta\\Mail\\": "src/Mail/src/",
+            "Venta\\Routing\\": "src/Routing/src/",
+            "Venta\\ServiceProvider\\": "src/ServiceProvider/src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "stub\\Venta\\Console\\": "src/Console/stub/",
+            "stub\\Venta\\Event\\": "src/Event/stub/"
+        },
+        "files": [
+            "src/Container/tests/bootstrap.php"
+        ]
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.1",
+        "phpunit/phpunit": "^5.4",
+        "mockery/mockery": "^0.9.5",
+        "henrikbjorn/phpspec-code-coverage": "^3.0"
+    },
+    "minimum-stability": "dev"
 }
