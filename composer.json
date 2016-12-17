@@ -35,7 +35,8 @@
         "cache/namespaced-cache": "^0.1",
         "psy/psysh": "@stable",
         "php-ds/php-ds": "^1.1",
-        "swiftmailer/swiftmailer": "^5.4.2"
+        "swiftmailer/swiftmailer": "^5.4.2",
+        "league/flysystem": "^1.0"
     },
     "replace": {
         "venta/contracts": "self.version",

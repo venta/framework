@@ -11,6 +11,14 @@ namespace Venta\Contracts\Config;
 interface ConfigBuilder
 {
     /**
+     * Add configuration parser to parsers collection.
+     *
+     * @param ConfigFileParser $parser
+     * @return void
+     */
+    public function addFileParser(ConfigFileParser $parser);
+
+    /**
      * Builds Config instance with collected values.
      *
      * @return Config
@@ -36,8 +44,8 @@ interface ConfigBuilder
     /**
      * Appends a value to a config array.
      *
-     * @param $path
-     * @param $value
+     * @param string $path
+     * @param mixed  $value
      * @return void
      */
     public function push(string $path, $value);
@@ -46,7 +54,7 @@ interface ConfigBuilder
      * Sets value to the configuration data.
      *
      * @param string $path
-     * @param $value
+     * @param mixed  $value
      * @return void
      */
     public function set(string $path, $value);
