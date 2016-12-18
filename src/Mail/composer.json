@@ -1,10 +1,8 @@
 {
     "name": "venta/mail",
     "description": "The Venta Mail package.",
-    "keywords": [
-        "venta",
-        "mail"
-    ],
+    "keywords": ["venta", "mail"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Venta Core Team",

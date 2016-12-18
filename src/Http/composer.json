@@ -1,10 +1,8 @@
 {
     "name": "venta/http",
     "description": "The Venta Http package.",
-    "keywords": [
-        "venta",
-        "http"
-    ],
+    "keywords": ["venta", "http"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Venta Core Team",
