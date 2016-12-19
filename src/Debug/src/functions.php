@@ -7,7 +7,7 @@ if (!function_exists('dd')) {
     /**
      * Dumps the provided variable and stops the script execution.
      *
-     * @param array ...$args
+     * @param mixed ...$args
      */
     function dd(...$args)
     {
