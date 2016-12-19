@@ -4,6 +4,7 @@ namespace Venta\Framework\Kernel;
 
 use InvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
+use Venta\Config\ConfigBuilder;
 use Venta\Config\ConfigFactory;
 use Venta\Config\Parser\Json;
 use Venta\Contracts\Config\Config;
@@ -73,6 +74,14 @@ abstract class AbstractKernel implements Kernel
     }
 
     /**
+     * @inheritDoc
+     */
+    public function isCli(): bool
+    {
+        return php_sapi_name() === 'cli';
+    }
+
+    /**
      * @return string
      */
     abstract public function rootPath(): string;
@@ -86,14 +95,6 @@ abstract class AbstractKernel implements Kernel
     }
 
     /**
-     * @inheritDoc
-     */
-    public function isCli(): bool
-    {
-        return php_sapi_name() === 'cli';
-    }
-
-    /**
      * Boots service provider with base config.
      *
      * @param string $providerClass
@@ -101,8 +102,9 @@ abstract class AbstractKernel implements Kernel
      * @param ConfigBuilderContract $configBuilder
      * @throws InvalidArgumentException
      */
-    protected function bootServiceProvider(string $providerClass, Container $container, ConfigBuilderContract $configBuilder)
-    {
+    protected function bootServiceProvider(
+        string $providerClass, Container $container, ConfigBuilderContract $configBuilder
+    ) {
         $this->ensureServiceProvider($providerClass);
 
         /** @var ServiceProvider $provider */
@@ -179,6 +181,22 @@ abstract class AbstractKernel implements Kernel
         $container->bindInstance(Kernel::class, $this);
 
         $container->bindClass(ConfigFactoryContract::class, ConfigFactory::class, true);
+        $container->bindClass(ConfigBuilderContract::class, ConfigBuilder::class, true);
+    }
+
+    /**
+     * Creates and returns configuration builder instance.
+     *
+     * @param Container $container
+     * @return ConfigBuilderContract
+     */
+    private function createConfigurationBuilder(Container $container)
+    {
+        /** @var ConfigBuilderContract $builder */
+        $builder = $container->get(ConfigBuilderContract::class);
+        $builder->addFileParser($container->get(Json::class));
+
+        return $builder;
     }
 
     /**
@@ -223,20 +241,5 @@ abstract class AbstractKernel implements Kernel
         $this->addDefaultInflections($container);
 
         return $container;
-    }
-
-    /**
-     * Creates and returns configuration builder instance.
-     *
-     * @param Container $container
-     * @return ConfigBuilderContract
-     */
-    private function createConfigurationBuilder(Container $container)
-    {
-        /** @var ConfigBuilderContract $builder */
-        $builder = $container->get(ConfigBuilderContract::class);
-        $builder->addFileParser($container->get(Json::class));
-
-        return $builder;
     }
 }
