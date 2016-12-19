@@ -1,10 +1,8 @@
 {
     "name": "venta/contracts",
     "description": "The Venta Contracts package.",
-    "keywords": [
-        "venta",
-        "contracts"
-    ],
+    "keywords": ["venta", "contracts"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Venta Core Team",

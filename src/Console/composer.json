@@ -1,10 +1,8 @@
 {
     "name": "venta/console",
     "description": "The Venta Console package.",
-    "keywords": [
-        "venta",
-        "console"
-    ],
+    "keywords": ["venta", "console"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Venta Core Team",

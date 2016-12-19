@@ -1,10 +1,8 @@
 {
     "name": "venta/cache",
     "description": "The Venta Cache package.",
-    "keywords": [
-        "venta",
-        "cache"
-    ],
+    "keywords": ["venta", "cache"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Venta Core Team",

@@ -1,13 +1,9 @@
 {
     "name": "venta/framework",
     "description": "The Venta Framework.",
-    "keywords": [
-        "venta",
-        "framework",
-        "adr",
-        "php7"
-    ],
+    "keywords": ["venta", "framework", "adr", "php7"],
     "type": "project",
+    "license": "MIT",
     "authors": [
         {
             "name": "Venta Core Team",
