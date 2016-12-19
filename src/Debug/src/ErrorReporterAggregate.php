@@ -3,15 +3,17 @@
 namespace Venta\Debug;
 
 use IteratorAggregate;
+use Throwable;
 use Venta\Contracts\Container\Container;
-use Venta\Contracts\Debug\ErrorReporterStack as ErrorReporterStackContract;
+use Venta\Contracts\Debug\ErrorReporter;
+use Venta\Contracts\Debug\ErrorReporterAggregate as ErrorReporterStackContract;
 
 /**
  * Class ErrorReporterStack
  *
  * @package Venta\Debug
  */
-final class ErrorReporterStack implements IteratorAggregate, ErrorReporterStackContract
+final class ErrorReporterAggregate implements IteratorAggregate, ErrorReporterStackContract
 {
     /**
      * @var Container
@@ -51,6 +53,17 @@ final class ErrorReporterStack implements IteratorAggregate, ErrorReporterStackC
         array_unshift($this->reporterClasses, $reporterClass);
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function report(Throwable $e)
+    {
+        /** @var ErrorReporter $reporter */
+        foreach ($this->getIterator() as $reporter) {
+            $reporter->report($e);
+        }
     }
 
 }

@@ -6,17 +6,17 @@ namespace Venta\Contracts\Debug;
 use Traversable;
 
 /**
- * Interface ErrorReporterStack
+ * Interface ErrorReporterAggregate
  *
  * @package Venta\Contracts\Debug
  */
-interface ErrorReporterStack extends Traversable
+interface ErrorReporterAggregate extends ErrorReporter, Traversable
 {
     /**
      * Adds error reporter class to the stack.
      *
      * @param string $reporterClass
-     * @return ErrorReporterStack
+     * @return ErrorReporterAggregate
      */
-    public function push(string $reporterClass): ErrorReporterStack;
+    public function push(string $reporterClass): ErrorReporterAggregate;
 }

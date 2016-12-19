@@ -9,11 +9,11 @@ use Throwable;
 use Venta\Contracts\Debug\ErrorReporter;
 
 /**
- * Class ErrorLogReporter
+ * Class LogErrorReporter
  *
  * @package Venta\Debug\Reporter
  */
-final class ErrorLogReporter implements ErrorReporter
+final class LogErrorReporter implements ErrorReporter
 {
     /**
      * @var LoggerInterface

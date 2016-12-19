@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Venta\Contracts\Debug\ErrorReporter;
 
-class ErrorLogReporterSpec extends ObjectBehavior
+class LogErrorReporterSpec extends ObjectBehavior
 {
     function let(LoggerInterface $logger)
     {

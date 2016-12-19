@@ -6,7 +6,7 @@ use ErrorException;
 use Throwable;
 use Venta\Contracts\Debug\ErrorHandler as ErrorHandlerContract;
 use Venta\Contracts\Debug\ErrorRenderer;
-use Venta\Contracts\Debug\ErrorReporterStack;
+use Venta\Contracts\Debug\ErrorReporterAggregate;
 
 /**
  * Class ErrorHandler
@@ -31,9 +31,9 @@ final class ErrorHandler implements ErrorHandlerContract
     private $renderer;
 
     /**
-     * The error reporter pipeline.
+     * The error reporter aggregate.
      *
-     * @var ErrorReporterStack
+     * @var ErrorReporterAggregate
      */
     private $reporters;
 
@@ -41,9 +41,9 @@ final class ErrorHandler implements ErrorHandlerContract
      * ErrorHandler constructor.
      *
      * @param ErrorRenderer $renderer
-     * @param ErrorReporterStack $reporters
+     * @param ErrorReporterAggregate $reporters
      */
-    public function __construct(ErrorRenderer $renderer, ErrorReporterStack $reporters)
+    public function __construct(ErrorRenderer $renderer, ErrorReporterAggregate $reporters)
     {
         $this->renderer = $renderer;
         $this->reporters = $reporters;
@@ -88,10 +88,7 @@ final class ErrorHandler implements ErrorHandlerContract
      */
     public function handleThrowable(Throwable $e)
     {
-        foreach ($this->reporters as $reporter) {
-            $reporter->report($e);
-        }
-
+        $this->reporters->report($e);
         $this->renderer->render($e);
     }
 

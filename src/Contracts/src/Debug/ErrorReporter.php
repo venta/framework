@@ -15,7 +15,7 @@ interface ErrorReporter
      * Reports throwable error.
      *
      * @param Throwable $e
-     * @return bool
+     * @return void
      */
     public function report(Throwable $e);
 }

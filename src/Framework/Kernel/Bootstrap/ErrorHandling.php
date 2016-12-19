@@ -4,10 +4,10 @@ namespace Venta\Framework\Kernel\Bootstrap;
 
 use Venta\Contracts\Debug\ErrorHandler as ErrorHandlerContract;
 use Venta\Contracts\Debug\ErrorRenderer as ErrorRendererContract;
-use Venta\Contracts\Debug\ErrorReporterStack as ErrorReporterStackContract;
+use Venta\Contracts\Debug\ErrorReporterAggregate as ErrorReporterAggregateContract;
 use Venta\Debug\ErrorHandler;
-use Venta\Debug\ErrorReporterStack;
-use Venta\Debug\Reporter\ErrorLogReporter;
+use Venta\Debug\ErrorReporterAggregate;
+use Venta\Debug\Reporter\LogErrorReporter;
 use Venta\Framework\Debug\Renderer\ConsoleErrorRenderer;
 use Venta\Framework\Debug\Renderer\HttpErrorRenderer;
 use Venta\Framework\Kernel\AbstractKernelBootstrap;
@@ -54,10 +54,10 @@ final class ErrorHandling extends AbstractKernelBootstrap
     private function registerErrorReporters()
     {
         $this->container()->bindFactory(
-            ErrorReporterStackContract::class,
+            ErrorReporterAggregateContract::class,
             function () {
-                $reporters = new ErrorReporterStack($this->container());
-                $reporters->push(ErrorLogReporter::class);
+                $reporters = new ErrorReporterAggregate($this->container());
+                $reporters->push(LogErrorReporter::class);
 
                 return $reporters;
             },
