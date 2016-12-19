@@ -5,7 +5,9 @@ namespace Venta\Framework\Kernel;
 use InvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
 use Venta\Config\ConfigFactory;
+use Venta\Config\Parser\Json;
 use Venta\Contracts\Config\Config;
+use Venta\Contracts\Config\ConfigBuilder as ConfigBuilderContract;
 use Venta\Contracts\Config\ConfigFactory as ConfigFactoryContract;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Container\ContainerAware;
@@ -46,20 +48,18 @@ abstract class AbstractKernel implements Kernel
             $this->invokeBootstrap($bootstrapClass, $container);
         }
 
-        /** @var Config $config */
-        $config = $container->get(Config::class);
-
         // Here we boot service providers on by one. The correct order is ensured by resolver.
         /** @var ServiceProviderDependencyResolver $resolver */
         $resolver = $container->get(ServiceProviderDependencyResolver::class);
+        $configBuilder = $this->createConfigurationBuilder($container);
         foreach ($resolver($this->registerServiceProviders()) as $providerClass) {
-            $this->bootServiceProvider($providerClass, $container, $config);
+            $this->bootServiceProvider($providerClass, $container, $configBuilder);
         }
 
         // When all service providers have been booted
         // we can be sure that all possible config changes were already made.
-        // At this point we lock the configuration to prevent any changes during application run.
-        $config->lock();
+        // At this point we are creating Config class instance from Config Builder.
+        $container->bindInstance(Config::class, $configBuilder->build());
 
         return $container;
     }
@@ -98,15 +98,15 @@ abstract class AbstractKernel implements Kernel
      *
      * @param string $providerClass
      * @param Container $container
-     * @param Config $baseConfig
+     * @param ConfigBuilderContract $configBuilder
      * @throws InvalidArgumentException
      */
-    protected function bootServiceProvider(string $providerClass, Container $container, Config $baseConfig)
+    protected function bootServiceProvider(string $providerClass, Container $container, ConfigBuilderContract $configBuilder)
     {
         $this->ensureServiceProvider($providerClass);
 
         /** @var ServiceProvider $provider */
-        $provider = new $providerClass($container, $baseConfig);
+        $provider = new $providerClass($container, $configBuilder);
         $provider->boot();
     }
 
@@ -223,5 +223,20 @@ abstract class AbstractKernel implements Kernel
         $this->addDefaultInflections($container);
 
         return $container;
+    }
+
+    /**
+     * Creates and returns configuration builder instance.
+     *
+     * @param Container $container
+     * @return ConfigBuilderContract
+     */
+    private function createConfigurationBuilder(Container $container)
+    {
+        /** @var ConfigBuilderContract $builder */
+        $builder = $container->get(ConfigBuilderContract::class);
+        $builder->addFileParser($container->get(Json::class));
+
+        return $builder;
     }
 }
