@@ -4,12 +4,8 @@ namespace Venta\Framework\Kernel;
 
 use InvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
-use Venta\Config\ConfigBuilder;
-use Venta\Config\ConfigFactory;
-use Venta\Config\Parser\Json;
 use Venta\Contracts\Config\Config;
 use Venta\Contracts\Config\ConfigBuilder as ConfigBuilderContract;
-use Venta\Contracts\Config\ConfigFactory as ConfigFactoryContract;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Container\ContainerAware;
 use Venta\Contracts\Http\ResponseFactoryAware;
@@ -52,7 +48,7 @@ abstract class AbstractKernel implements Kernel
         // Here we boot service providers on by one. The correct order is ensured by resolver.
         /** @var ServiceProviderDependencyResolver $resolver */
         $resolver = $container->get(ServiceProviderDependencyResolver::class);
-        $configBuilder = $this->createConfigurationBuilder($container);
+        $configBuilder = $container->get(ConfigBuilderContract::class);
         foreach ($resolver($this->registerServiceProviders()) as $providerClass) {
             $this->bootServiceProvider($providerClass, $container, $configBuilder);
         }
@@ -179,24 +175,6 @@ abstract class AbstractKernel implements Kernel
     {
         $container->bindInstance(Container::class, $container);
         $container->bindInstance(Kernel::class, $this);
-
-        $container->bindClass(ConfigFactoryContract::class, ConfigFactory::class, true);
-        $container->bindClass(ConfigBuilderContract::class, ConfigBuilder::class, true);
-    }
-
-    /**
-     * Creates and returns configuration builder instance.
-     *
-     * @param Container $container
-     * @return ConfigBuilderContract
-     */
-    private function createConfigurationBuilder(Container $container)
-    {
-        /** @var ConfigBuilderContract $builder */
-        $builder = $container->get(ConfigBuilderContract::class);
-        $builder->addFileParser($container->get(Json::class));
-
-        return $builder;
     }
 
     /**

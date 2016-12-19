@@ -2,8 +2,14 @@
 
 namespace Venta\Framework\Kernel\Bootstrap;
 
-use Venta\Contracts\Config\Config;
-use Venta\Contracts\Config\ConfigFactory;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use Venta\Config\ConfigBuilder;
+use Venta\Config\ConfigFactory;
+use Venta\Config\Parser\Json;
+use Venta\Contracts\Config\Config as ConfigContract;
+use Venta\Contracts\Config\ConfigBuilder as ConfigBuilderContract;
+use Venta\Contracts\Config\ConfigFactory as ConfigFactoryContract;
 use Venta\Framework\Kernel\AbstractKernelBootstrap;
 
 /**
@@ -18,12 +24,12 @@ final class ConfigurationLoading extends AbstractKernelBootstrap
      */
     public function __invoke()
     {
-        /** @var ConfigFactory $configFactory */
-        $configFactory = $this->container()->get(ConfigFactory::class);
+        $this->container()->bindClass(ConfigFactoryContract::class, ConfigFactory::class, true);
+        $this->container()->bindFactory(ConfigBuilderContract::class, function () {
+            $builder = new ConfigBuilder();
+            $builder->addFileParser(new Json(new Filesystem(new Local($this->kernel()->rootPath() . '/config'))));
 
-        // todo: implement arbitrary config files loading.
-        $config = $configFactory->create([]);
-
-        $this->container()->bindInstance(Config::class, $config);
+            return $builder;
+        }, true);
     }
 }
