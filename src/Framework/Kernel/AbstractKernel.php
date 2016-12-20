@@ -51,12 +51,11 @@ abstract class AbstractKernel implements Kernel
         $configBuilder = $container->get(ConfigBuilderContract::class);
         foreach ($resolver($this->registerServiceProviders()) as $providerClass) {
             $this->bootServiceProvider($providerClass, $container, $configBuilder);
-        }
 
-        // When all service providers have been booted
-        // we can be sure that all possible config changes were already made.
-        // At this point we are creating Config class instance from Config Builder.
-        $container->bindInstance(Config::class, $configBuilder->build());
+            // Building configuration after each service provider
+            // in order to configuration be accessible in service providers
+            $container->bindInstance(Config::class, $configBuilder->build());
+        }
 
         return $container;
     }

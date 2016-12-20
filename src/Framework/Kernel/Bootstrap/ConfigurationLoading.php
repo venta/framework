@@ -25,9 +25,17 @@ final class ConfigurationLoading extends AbstractKernelBootstrap
     public function __invoke()
     {
         $this->container()->bindClass(ConfigFactoryContract::class, ConfigFactory::class, true);
+
         $this->container()->bindFactory(ConfigBuilderContract::class, function () {
+            $configFolder = $this->kernel()->rootPath() . '/config';
+            $applicationConfig = $configFolder . '/app.php';
+
             $builder = new ConfigBuilder();
-            $builder->addFileParser(new Json(new Filesystem(new Local($this->kernel()->rootPath() . '/config'))));
+            $builder->addFileParser(new Json(new Filesystem(new Local($configFolder))));
+
+            if (file_exists($applicationConfig)) {
+                $builder->merge(include $applicationConfig);
+            }
 
             return $builder;
         }, true);
