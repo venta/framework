@@ -123,9 +123,14 @@ class Filesystem implements FilesystemContract
     /**
      * @inheritDoc
      */
-    public function metadata($path): MetadataContract
+    public function metadata($path)
     {
-        return new Metadata($this->flysystem->getMetadata($path));
+        $metadata = $this->flysystem->getMetadata($path);
+        if (is_array($metadata)) {
+            return new Metadata($metadata);
+        }
+
+        return null;
     }
 
     /**

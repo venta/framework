@@ -96,9 +96,9 @@ interface Filesystem
      * Get a file's metadata.
      *
      * @param string $path The path to the file.
-     * @return Metadata The file metadata.
+     * @return Metadata|null The file metadata.
      */
-    public function metadata($path): Metadata;
+    public function metadata($path);
 
     /**
      * Rename a file.
