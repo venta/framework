@@ -13,6 +13,14 @@ use Psr\Http\Message\UriInterface;
 interface UrlGenerator
 {
     /**
+     * Returns URI of passed in local asset.
+     *
+     * @param string $asset
+     * @return UriInterface
+     */
+    public function toAsset(string $asset): UriInterface;
+
+    /**
      * Returns an URI of the current route.
      *
      * @param array $variables
@@ -30,5 +38,4 @@ interface UrlGenerator
      * @return UriInterface
      */
     public function toRoute(string $routeName, array $variables = [], array $query = []): UriInterface;
-
 }
