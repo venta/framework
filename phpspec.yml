@@ -39,6 +39,12 @@ suites:
         src_path: src/Debug/src
         spec_path: src/Debug
 
+    filesystem_suite:
+        namespace: Venta\Filesystem
+        psr4_prefix: Venta\Filesystem
+        src_path: src/Filesystem/src
+        spec_path: src/Filesystem
+
     routing_suite:
         namespace: Venta\Routing
         psr4_prefix: Venta\Routing

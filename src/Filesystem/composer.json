@@ -1,0 +1,33 @@
+{
+    "name": "venta/filesystem",
+    "description": "The Venta Filesystem package.",
+    "keywords": ["venta", "filesystem"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Venta Core Team",
+            "email": "team@venta.io"
+        },
+        {
+            "name": "Venta Community",
+            "homepage": "https://github.com/venta/filesystem/contributors"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/venta/framework/issues"
+    },
+    "require": {
+        "php": "^7.0",
+        "venta/contracts": "dev-master",
+        "league/flysystem": "^1.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Venta\\Filesystem\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}

@@ -57,6 +57,7 @@
             "Venta\\Contracts\\": "src/Contracts/src/",
             "Venta\\Debug\\": "src/Debug/src/",
             "Venta\\Event\\": "src/Event/src/",
+            "Venta\\Filesystem\\": "src/Filesystem/src/",
             "Venta\\Framework\\": "src/Framework/",
             "Venta\\Http\\": "src/Http/src/",
             "Venta\\Mail\\": "src/Mail/src/",

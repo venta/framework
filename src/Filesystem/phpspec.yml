@@ -1,0 +1,4 @@
+suites:
+    filesystem_suite:
+        namespace: Venta\Filesystem
+        psr4_prefix: Venta\Filesystem
