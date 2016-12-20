@@ -2,8 +2,10 @@
 
 namespace Venta\Framework\ServiceProvider;
 
+use Cache\Adapter\Filesystem\FilesystemCachePool;
 use Cache\Adapter\PHPArray\ArrayCachePool;
 use InvalidArgumentException;
+use League\Flysystem\Filesystem;
 use Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
 use Throwable;
@@ -54,25 +56,25 @@ class CacheServiceProvider extends AbstractServiceProvider
                 case 'void':
                 case 'null':
                     $this->container()
-                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Void\VoidCachePool', true);
+                        ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Void\VoidCachePool', true);
                     break;
                 case 'file':
                 case 'files':
                 case 'filesystem':
                     $this->container()
-                         ->bindFactory(CacheItemPoolInterface::class, $this->filesystemCachePoolFactory(), true);
+                        ->bindFactory(CacheItemPoolInterface::class, $this->filesystemCachePoolFactory(), true);
                     break;
                 case 'redis':
                     $this->container()
-                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Redis\RedisCachePool', true);
+                        ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Redis\RedisCachePool', true);
                     break;
                 case 'predis':
                     $this->container()
-                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Predis\PredisCachePool', true);
+                        ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Predis\PredisCachePool', true);
                     break;
                 case 'memcached':
                     $this->container()
-                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Memcached\MemcachedCachePool', true);
+                        ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Memcached\MemcachedCachePool', true);
                     break;
                 default:
                     $this->container()->bindClass(
@@ -91,13 +93,8 @@ class CacheServiceProvider extends AbstractServiceProvider
      */
     protected function filesystemCachePoolFactory(): callable
     {
-        return function () {
-            $adapter = new \League\Flysystem\Adapter\Local($this->container()->get(Kernel::class)->rootPath());
-
-            return new \Cache\Adapter\Filesystem\FilesystemCachePool(
-                new \League\Flysystem\Filesystem($adapter),
-                'storage/cache'
-            );
+        return function (Filesystem $flysystem) {
+            return new FilesystemCachePool($flysystem, 'storage/cache');
         };
     }
 
