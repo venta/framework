@@ -17,9 +17,10 @@ interface Config extends Countable, IteratorAggregate, JsonSerializable
      * Returns config value for provided key.
      *
      * @param string $key
+     * @param mixed $default
      * @return mixed
      */
-    public function __get(string $key);
+    public function get(string $key, $default = null);
 
     /**
      * Checks if config contains value for provided key.
@@ -27,7 +28,7 @@ interface Config extends Countable, IteratorAggregate, JsonSerializable
      * @param $key
      * @return bool
      */
-    public function __isset(string $key): bool;
+    public function has(string $key): bool;
 
     /**
      * Returns array representation of config.

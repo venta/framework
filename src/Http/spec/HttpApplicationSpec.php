@@ -44,6 +44,7 @@ class HttpApplicationSpec extends ObjectBehavior
         $container->get(Router::class)->willReturn($router);
         $container->get(MiddlewarePipelineFactory::class)->willReturn($factory);
 
+        $config->get('middlewares', [])->willReturn([]);
         $factory->create([])->willReturn($pipeline);
         $pipeline->process($request, $router)->willReturn($response);
 
