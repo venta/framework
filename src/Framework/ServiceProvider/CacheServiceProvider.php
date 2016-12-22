@@ -13,7 +13,6 @@ use Venta\Cache\Cache;
 use Venta\Contracts\Cache\Cache as CacheContract;
 use Venta\Contracts\Config\Config;
 use Venta\Contracts\Debug\ErrorHandler;
-use Venta\Contracts\Kernel\Kernel;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
 /**
@@ -42,13 +41,14 @@ class CacheServiceProvider extends AbstractServiceProvider
     public function boot()
     {
         $this->container()->bindClass(CacheContract::class, Cache::class);
-        $this->tryLoadConfig();
+        /** @var Config $config */
         $config = $this->container()->get(Config::class);
         try {
-            if (!isset($config->cache->driver)) {
+            $cacheDriver = $config->get('cache.driver');
+            if ($cacheDriver === null) {
                 throw new RuntimeException('Undefined cache driver.');
             }
-            switch ($config->cache->driver) {
+            switch ($cacheDriver) {
                 case 'array':
                 case 'memory':
                     $this->container()->bindClass(CacheItemPoolInterface::class, ArrayCachePool::class, true);
@@ -56,25 +56,25 @@ class CacheServiceProvider extends AbstractServiceProvider
                 case 'void':
                 case 'null':
                     $this->container()
-                        ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Void\VoidCachePool', true);
+                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Void\VoidCachePool', true);
                     break;
                 case 'file':
                 case 'files':
                 case 'filesystem':
                     $this->container()
-                        ->bindFactory(CacheItemPoolInterface::class, $this->filesystemCachePoolFactory(), true);
+                         ->bindFactory(CacheItemPoolInterface::class, $this->filesystemCachePoolFactory(), true);
                     break;
                 case 'redis':
                     $this->container()
-                        ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Redis\RedisCachePool', true);
+                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Redis\RedisCachePool', true);
                     break;
                 case 'predis':
                     $this->container()
-                        ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Predis\PredisCachePool', true);
+                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Predis\PredisCachePool', true);
                     break;
                 case 'memcached':
                     $this->container()
-                        ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Memcached\MemcachedCachePool', true);
+                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Memcached\MemcachedCachePool', true);
                     break;
                 default:
                     $this->container()->bindClass(
@@ -97,19 +97,4 @@ class CacheServiceProvider extends AbstractServiceProvider
             return new FilesystemCachePool($flysystem, 'storage/cache');
         };
     }
-
-    /**
-     * Tries to load cache config from /src/config folder.
-     *
-     * @return void
-     */
-    private function tryLoadConfig()
-    {
-        try {
-            $this->loadConfigFromFiles($this->container()->get(Kernel::class)->rootPath() . '/config/cache.php');
-        } catch (Throwable $e) {
-            $this->container()->get(ErrorHandler::class)->handleThrowable($e);
-        }
-    }
-
 }
