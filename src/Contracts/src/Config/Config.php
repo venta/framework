@@ -2,7 +2,6 @@
 
 namespace Venta\Contracts\Config;
 
-use Countable;
 use JsonSerializable;
 use Traversable;
 
@@ -11,7 +10,7 @@ use Traversable;
  *
  * @package Venta\Contracts\Config
  */
-interface Config extends Countable, Traversable, JsonSerializable
+interface Config extends Traversable, JsonSerializable
 {
     /**
      * Returns array representation of config.
