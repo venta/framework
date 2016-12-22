@@ -22,7 +22,7 @@ final class ConfigurationLoading extends AbstractKernelBootstrap
         $config = [];
         $configFolder = $this->kernel()->rootPath() . '/config';
         foreach (Finder::create()->files()->name('*.php')->in($configFolder) as $file) {
-            $config = array_merge_recursive($config, require $file->getPath());
+            $config = array_replace_recursive($config, require $file->getPathname());
         }
 
         $this->container()->bindInstance(ConfigContract::class, new Config($config));
