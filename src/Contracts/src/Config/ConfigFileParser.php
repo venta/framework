@@ -8,7 +8,7 @@ namespace Venta\Contracts\Config;
  *
  * @package Venta\Contracts\Config
  */
-interface ConfigFileParser extends ConfigParser
+interface ConfigFileParser
 {
     /**
      * Parses configuration file.
@@ -16,5 +16,12 @@ interface ConfigFileParser extends ConfigParser
      * @param string $filename
      * @return array
      */
-    public function fromFile(string $filename): array;
+    public function parseFile(string $filename): array;
+
+    /**
+     * Returns an array of file extensions, that can be parsed with this parser.
+     *
+     * @return array
+     */
+    public function supportedExtensions(): array;
 }
