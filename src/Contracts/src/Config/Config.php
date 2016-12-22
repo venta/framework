@@ -3,16 +3,23 @@
 namespace Venta\Contracts\Config;
 
 use Countable;
-use IteratorAggregate;
 use JsonSerializable;
+use Traversable;
 
 /**
  * Interface Config
  *
  * @package Venta\Contracts\Config
  */
-interface Config extends Countable, IteratorAggregate, JsonSerializable
+interface Config extends Countable, Traversable, JsonSerializable
 {
+    /**
+     * Returns array representation of config.
+     *
+     * @return array
+     */
+    public function all(): array;
+
     /**
      * Returns config value for provided key.
      *
@@ -29,12 +36,5 @@ interface Config extends Countable, IteratorAggregate, JsonSerializable
      * @return bool
      */
     public function has(string $key): bool;
-
-    /**
-     * Returns array representation of config.
-     *
-     * @return array
-     */
-    public function toArray(): array;
 
 }

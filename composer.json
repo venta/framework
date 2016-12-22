@@ -33,7 +33,8 @@
         "swiftmailer/swiftmailer": "^5.4.2",
         "league/flysystem": "^1.0",
         "symfony/var-dumper": "^3.2",
-        "cache/session-handler": "^0.2"
+        "cache/session-handler": "^0.2",
+        "symfony/finder": "^3.2"
     },
     "replace": {
         "venta/contracts": "self.version",

@@ -4,8 +4,10 @@ namespace Venta\Framework\Kernel;
 
 use InvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
+use Venta\Config\ConfigProxy;
+use Venta\Config\MutableConfig;
 use Venta\Contracts\Config\Config;
-use Venta\Contracts\Config\ConfigBuilder as ConfigBuilderContract;
+use Venta\Contracts\Config\MutableConfig as MutableConfigContract;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Container\ContainerAware;
 use Venta\Contracts\Http\ResponseFactoryAware;
@@ -45,16 +47,16 @@ abstract class AbstractKernel implements Kernel
             $this->invokeBootstrap($bootstrapClass, $container);
         }
 
+        $appConfig = $container->get(Config::class)->all();
+        $config = new MutableConfig($appConfig);
+        $container->bindInstance(Config::class, new ConfigProxy($config));
+
         // Here we boot service providers on by one. The correct order is ensured by resolver.
         /** @var ServiceProviderDependencyResolver $resolver */
         $resolver = $container->get(ServiceProviderDependencyResolver::class);
-        $configBuilder = $container->get(ConfigBuilderContract::class);
         foreach ($resolver($this->registerServiceProviders()) as $providerClass) {
-            $this->bootServiceProvider($providerClass, $container, $configBuilder);
-
-            // Building configuration after each service provider
-            // in order to configuration be accessible in service providers
-            $container->bindInstance(Config::class, $configBuilder->build());
+            $this->bootServiceProvider($providerClass, $container, $config);
+            $config->merge($appConfig);
         }
 
         return $container;
@@ -94,16 +96,17 @@ abstract class AbstractKernel implements Kernel
      *
      * @param string $providerClass
      * @param Container $container
-     * @param ConfigBuilderContract $configBuilder
-     * @throws InvalidArgumentException
+     * @param MutableConfigContract $mutableConfig
      */
     protected function bootServiceProvider(
-        string $providerClass, Container $container, ConfigBuilderContract $configBuilder
+        string $providerClass,
+        Container $container,
+        MutableConfigContract $mutableConfig
     ) {
         $this->ensureServiceProvider($providerClass);
 
         /** @var ServiceProvider $provider */
-        $provider = new $providerClass($container, $configBuilder);
+        $provider = new $providerClass($container, $mutableConfig);
         $provider->boot();
     }
 

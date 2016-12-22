@@ -2,14 +2,9 @@
 
 namespace Venta\Framework\Kernel\Bootstrap;
 
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-use Venta\Config\ConfigBuilder;
-use Venta\Config\ConfigFactory;
-use Venta\Config\Parser\Json;
+use Symfony\Component\Finder\Finder;
+use Venta\Config\Config;
 use Venta\Contracts\Config\Config as ConfigContract;
-use Venta\Contracts\Config\ConfigBuilder as ConfigBuilderContract;
-use Venta\Contracts\Config\ConfigFactory as ConfigFactoryContract;
 use Venta\Framework\Kernel\AbstractKernelBootstrap;
 
 /**
@@ -24,20 +19,12 @@ final class ConfigurationLoading extends AbstractKernelBootstrap
      */
     public function __invoke()
     {
-        $this->container()->bindClass(ConfigFactoryContract::class, ConfigFactory::class, true);
+        $config = [];
+        $configFolder = $this->kernel()->rootPath() . '/config';
+        foreach (Finder::create()->files()->name('*.php')->in($configFolder) as $file) {
+            $config = array_merge_recursive($config, require $file->getPath());
+        }
 
-        $this->container()->bindFactory(ConfigBuilderContract::class, function () {
-            $configFolder = $this->kernel()->rootPath() . '/config';
-            $applicationConfig = $configFolder . '/app.php';
-
-            $builder = new ConfigBuilder();
-            $builder->addFileParser(new Json(new Filesystem(new Local($configFolder))));
-
-            if (file_exists($applicationConfig)) {
-                $builder->merge(include $applicationConfig);
-            }
-
-            return $builder;
-        }, true);
+        $this->container()->bindInstance(ConfigContract::class, new Config($config));
     }
 }
