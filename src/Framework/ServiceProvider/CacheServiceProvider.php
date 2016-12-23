@@ -8,11 +8,9 @@ use InvalidArgumentException;
 use League\Flysystem\Filesystem;
 use Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
-use Throwable;
 use Venta\Cache\Cache;
 use Venta\Contracts\Cache\Cache as CacheContract;
 use Venta\Contracts\Config\Config;
-use Venta\Contracts\Debug\ErrorHandler;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
 /**
@@ -43,48 +41,45 @@ class CacheServiceProvider extends AbstractServiceProvider
         $this->container()->bindClass(CacheContract::class, Cache::class);
         /** @var Config $config */
         $config = $this->container()->get(Config::class);
-        try {
-            $cacheDriver = $config->get('cache.driver');
-            if ($cacheDriver === null) {
-                throw new RuntimeException('Undefined cache driver.');
-            }
-            switch ($cacheDriver) {
-                case 'array':
-                case 'memory':
-                    $this->container()->bindClass(CacheItemPoolInterface::class, ArrayCachePool::class, true);
-                    break;
-                case 'void':
-                case 'null':
-                    $this->container()
-                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Void\VoidCachePool', true);
-                    break;
-                case 'file':
-                case 'files':
-                case 'filesystem':
-                    $this->container()
-                         ->bindFactory(CacheItemPoolInterface::class, $this->filesystemCachePoolFactory(), true);
-                    break;
-                case 'redis':
-                    $this->container()
-                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Redis\RedisCachePool', true);
-                    break;
-                case 'predis':
-                    $this->container()
-                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Predis\PredisCachePool', true);
-                    break;
-                case 'memcached':
-                    $this->container()
-                         ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Memcached\MemcachedCachePool', true);
-                    break;
-                default:
-                    $this->container()->bindClass(
-                        CacheItemPoolInterface::class,
-                        ([$this, $config->cache->driver . 'CachePoolFactory'])(),
-                        true
-                    );
-            }
-        } catch (Throwable $e) {
-            $this->container()->get(ErrorHandler::class)->handleThrowable($e);
+
+        $cacheDriver = $config->get('cache.driver');
+        if ($cacheDriver === null) {
+            throw new RuntimeException('Undefined cache driver.');
+        }
+        switch ($cacheDriver) {
+            case 'array':
+            case 'memory':
+                $this->container()->bindClass(CacheItemPoolInterface::class, ArrayCachePool::class, true);
+                break;
+            case 'void':
+            case 'null':
+                $this->container()
+                     ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Void\VoidCachePool', true);
+                break;
+            case 'file':
+            case 'files':
+            case 'filesystem':
+                $this->container()
+                     ->bindFactory(CacheItemPoolInterface::class, $this->filesystemCachePoolFactory(), true);
+                break;
+            case 'redis':
+                $this->container()
+                     ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Redis\RedisCachePool', true);
+                break;
+            case 'predis':
+                $this->container()
+                     ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Predis\PredisCachePool', true);
+                break;
+            case 'memcached':
+                $this->container()
+                     ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Memcached\MemcachedCachePool', true);
+                break;
+            default:
+                $this->container()->bindClass(
+                    CacheItemPoolInterface::class,
+                    ([$this, $cacheDriver . 'CachePoolFactory'])(),
+                    true
+                );
         }
     }
 
