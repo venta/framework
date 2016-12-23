@@ -15,6 +15,18 @@ class FilesystemSpec extends ObjectBehavior
         $this->beConstructedWith($flysystem);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function getMatchers()
+    {
+        return [
+            'haveValue' => function ($subject, $value) {
+                return in_array($value, $subject);
+            },
+        ];
+    }
+
     function it_can_append_and_prepend(FilesystemInterface $flysystem)
     {
         $flysystem->has('path/to/file')->willReturn(true);
@@ -54,7 +66,7 @@ class FilesystemSpec extends ObjectBehavior
         ];
         $flysystem->listContents('path/to/list', false)->willReturn([$file, $dir]);
 
-        $list = $this->list('path/to/list', false);
+        $list = $this->listAll('path/to/list', false);
         $list->shouldHaveCount(2);
         $list->shouldHaveValue(new \Venta\Filesystem\Metadata($file));
         $list->shouldHaveValue(new \Venta\Filesystem\Metadata($dir));
@@ -113,18 +125,6 @@ class FilesystemSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldImplement(Filesystem::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getMatchers()
-    {
-        return [
-            'haveValue' => function ($subject, $value) {
-                return in_array($value, $subject);
-            },
-        ];
     }
 
 

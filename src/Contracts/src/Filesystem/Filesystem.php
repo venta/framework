@@ -70,7 +70,7 @@ interface Filesystem
      *
      * @return Metadata[] A list of file metadata.
      */
-    public function list(string $path = '.', bool $recursive = false): array;
+    public function listAll(string $path = '.', bool $recursive = false): array;
 
     /**
      * List directories in a directory.

@@ -3,6 +3,7 @@
 namespace Venta\Filesystem;
 
 use League\Flysystem\FilesystemInterface;
+use League\Flysystem\UnreadableFileException;
 use Venta\Contracts\Filesystem\Filesystem as FilesystemContract;
 use Venta\Contracts\Filesystem\Metadata as MetadataContract;
 
@@ -84,10 +85,12 @@ class Filesystem implements FilesystemContract
     /**
      * @inheritDoc
      */
-    public function list(string $path = '.', bool $recursive = false): array
+    public function listAll(string $path = '.', bool $recursive = false): array
     {
         return array_map(
-            function($item){ return new Metadata($item); },
+            function ($item) {
+                return new Metadata($item);
+            },
             $this->flysystem->listContents($path, $recursive)
         );
     }
@@ -98,10 +101,14 @@ class Filesystem implements FilesystemContract
     public function listDirectories(string $path = '.', bool $recursive = false): array
     {
         return array_map(
-            function($item){ return new Metadata($item); },
+            function ($item) {
+                return new Metadata($item);
+            },
             array_filter(
                 $this->flysystem->listContents($path, $recursive),
-                function($item){ return $item['type'] === MetadataContract::TYPE_DIR; }
+                function ($item) {
+                    return $item['type'] === MetadataContract::TYPE_DIR;
+                }
             )
         );
     }
@@ -112,10 +119,14 @@ class Filesystem implements FilesystemContract
     public function listFiles(string $path = '.', bool $recursive = false): array
     {
         return array_map(
-            function($item){ return new Metadata($item); },
+            function ($item) {
+                return new Metadata($item);
+            },
             array_filter(
                 $this->flysystem->listContents($path, $recursive),
-                function($item){ return $item['type'] === MetadataContract::TYPE_FILE; }
+                function ($item) {
+                    return $item['type'] === MetadataContract::TYPE_FILE;
+                }
             )
         );
     }
@@ -158,7 +169,12 @@ class Filesystem implements FilesystemContract
      */
     public function read(string $path): string
     {
-        return $this->flysystem->read($path);
+        $content = $this->flysystem->read($path);
+        if ($content === false) {
+            throw new UnreadableFileException(sprintf('Unable to read file "%s".', $path));
+        }
+
+        return $content;
     }
 
     /**
