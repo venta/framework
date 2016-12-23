@@ -57,7 +57,7 @@ class CookieJarSpec extends ObjectBehavior
         $relative = '+10 days';
 
         $this->add('dateTime', 'value', $dateTime)->shouldBeNull();
-        $this->add('immutableDateTime', 'value', $dateTime)->shouldBeNull();
+        $this->add('immutableDateTime', 'value', $immutableDateTime)->shouldBeNull();
         $this->add('dateInterval', 'value', $dateInterval)->shouldBeNull();
         $this->add('timestamp', 'value', $timestamp)->shouldBeNull();
         $this->add('relative', 'value', $relative)->shouldBeNull();
