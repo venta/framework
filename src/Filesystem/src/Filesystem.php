@@ -12,7 +12,7 @@ use Venta\Contracts\Filesystem\Metadata as MetadataContract;
  *
  * @package Venta\Filesystem
  */
-class Filesystem implements FilesystemContract
+final class Filesystem implements FilesystemContract
 {
 
     /**
@@ -87,12 +87,7 @@ class Filesystem implements FilesystemContract
      */
     public function listAll(string $path = '.', bool $recursive = false): array
     {
-        return array_map(
-            function ($item) {
-                return new Metadata($item);
-            },
-            $this->flysystem->listContents($path, $recursive)
-        );
+        return array_map([$this, 'createMetadata'], $this->flysystem->listContents($path, $recursive));
     }
 
     /**
@@ -101,9 +96,7 @@ class Filesystem implements FilesystemContract
     public function listDirectories(string $path = '.', bool $recursive = false): array
     {
         return array_map(
-            function ($item) {
-                return new Metadata($item);
-            },
+            [$this, 'createMetadata'],
             array_filter(
                 $this->flysystem->listContents($path, $recursive),
                 function ($item) {
@@ -119,9 +112,7 @@ class Filesystem implements FilesystemContract
     public function listFiles(string $path = '.', bool $recursive = false): array
     {
         return array_map(
-            function ($item) {
-                return new Metadata($item);
-            },
+            [$this, 'createMetadata'],
             array_filter(
                 $this->flysystem->listContents($path, $recursive),
                 function ($item) {
@@ -138,7 +129,7 @@ class Filesystem implements FilesystemContract
     {
         $metadata = $this->flysystem->getMetadata($path);
         if (is_array($metadata)) {
-            return new Metadata($metadata);
+            return $this->createMetadata($metadata);
         }
 
         return null;
@@ -183,6 +174,15 @@ class Filesystem implements FilesystemContract
     public function write(string $path, string $contents, array $config = []): bool
     {
         return $this->flysystem->put($path, $contents, $config);
+    }
+
+    /**
+     * @param array $metadata
+     * @return MetadataContract
+     */
+    private function createMetadata(array $metadata): MetadataContract
+    {
+        return new Metadata($metadata);
     }
 
 }

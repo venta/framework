@@ -14,7 +14,7 @@ use Venta\ServiceProvider\AbstractServiceProvider;
  *
  * @package Venta\Framework\ServiceProvider
  */
-class FilesystemServiceProvider extends AbstractServiceProvider
+final class FilesystemServiceProvider extends AbstractServiceProvider
 {
     /**
      * @inheritDoc
