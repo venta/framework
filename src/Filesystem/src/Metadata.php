@@ -39,6 +39,14 @@ class Metadata implements MetadataContract
     /**
      * @inheritDoc
      */
+    public function path(): string
+    {
+        return $this->data['path'] ?? '';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function size(): int
     {
         return $this->data['size'] ?? 0;
@@ -47,7 +55,7 @@ class Metadata implements MetadataContract
     /**
      * @inheritDoc
      */
-    public function timestamp(): DateTimeInterface
+    public function timestamp()
     {
         if (!isset($this->data['timestamp'])) {
             return null;
@@ -66,14 +74,6 @@ class Metadata implements MetadataContract
     public function type(): string
     {
         return $this->data['type'] ?? '';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function path(): string
-    {
-        return $this->data['path'] ?? '';
     }
 
 }
