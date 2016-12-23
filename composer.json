@@ -29,8 +29,6 @@
         "cache/array-adapter": "^0.4",
         "cache/namespaced-cache": "^0.1",
         "psy/psysh": "@stable",
-        "php-ds/php-ds": "^1.1",
-        "swiftmailer/swiftmailer": "^5.4.2",
         "league/flysystem": "^1.0",
         "symfony/var-dumper": "^3.2",
         "cache/session-handler": "^0.2",
@@ -61,7 +59,6 @@
             "Venta\\Filesystem\\": "src/Filesystem/src/",
             "Venta\\Framework\\": "src/Framework/",
             "Venta\\Http\\": "src/Http/src/",
-            "Venta\\Mail\\": "src/Mail/src/",
             "Venta\\Routing\\": "src/Routing/src/",
             "Venta\\ServiceProvider\\": "src/ServiceProvider/src/"
         }
