@@ -1,7 +1,7 @@
 {
     "name": "venta/adr",
     "description": "The Venta ADR package.",
-    "keywords": ["venta", "ard"],
+    "keywords": ["venta", "adr"],
     "license": "MIT",
     "authors": [
         {
