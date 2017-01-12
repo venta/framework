@@ -54,10 +54,10 @@ interface Container extends ContainerInterface
      * Decorates previous implementation.
      *
      * @param $id
-     * @param callable $callback
+     * @param callable|string $decorator Class name or callback to decorate with.
      * @return void
      */
-    public function decorate($id, callable $callback);
+    public function decorate($id, $decorator);
 
     /**
      * {@inheritDoc}
