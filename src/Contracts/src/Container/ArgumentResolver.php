@@ -2,7 +2,6 @@
 
 namespace Venta\Contracts\Container;
 
-use Closure;
 use ReflectionFunctionAbstract;
 
 /**
@@ -12,14 +11,6 @@ use ReflectionFunctionAbstract;
  */
 interface ArgumentResolver
 {
-
-    /**
-     * Creates argument resolving closure for subject function.
-     *
-     * @param ReflectionFunctionAbstract $function
-     * @return Closure
-     */
-    public function createCallback(ReflectionFunctionAbstract $function): Closure;
 
     /**
      * Resolves function arguments and replaces them with provided values.
