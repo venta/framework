@@ -13,16 +13,6 @@ interface Container extends ContainerInterface
 {
 
     /**
-     * Register method to be called after service instantiation.
-     *
-     * @param string $id
-     * @param string $method
-     * @param array $arguments
-     * @return void
-     */
-    public function addInflection(string $id, string $method, array $arguments = []);
-
-    /**
      * Register class name definition.
      *
      * @param string $id Contract (interface) name.
@@ -74,6 +64,16 @@ interface Container extends ContainerInterface
      * @param array $arguments
      */
     public function get($id, array $arguments = []);
+
+    /**
+     * Register method to be called after service instantiation.
+     *
+     * @param string $id Class or interface method to check against.
+     * @param string $method Method name to call on service instance.
+     * @param array $arguments
+     * @return void
+     */
+    public function inflect(string $id, string $method, array $arguments = []);
 
     /**
      * Defines, if passed in item is callable by container.

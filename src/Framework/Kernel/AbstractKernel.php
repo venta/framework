@@ -163,9 +163,9 @@ abstract class AbstractKernel implements Kernel
      */
     private function addDefaultInflections(Container $container)
     {
-        $container->addInflection(ContainerAware::class, 'setContainer', ['container' => $container]);
-        $container->addInflection(LoggerAwareInterface::class, 'setLogger');
-        $container->addInflection(ResponseFactoryAware::class, 'setResponseFactory');
+        $container->inflect(ContainerAware::class, 'setContainer', ['container' => $container]);
+        $container->inflect(LoggerAwareInterface::class, 'setLogger');
+        $container->inflect(ResponseFactoryAware::class, 'setResponseFactory');
     }
 
     /**
