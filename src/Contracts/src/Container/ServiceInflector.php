@@ -3,11 +3,11 @@
 namespace Venta\Contracts\Container;
 
 /**
- * Interface ObjectInflector
+ * Interface ServiceInflector
  *
  * @package Venta\Contracts\Container
  */
-interface ObjectInflector
+interface ServiceInflector
 {
     /**
      * Add new object inflection to be applied.
@@ -25,5 +25,5 @@ interface ObjectInflector
      * @param $object
      * @return mixed
      */
-    public function applyInflections($object);
+    public function inflect($object);
 }
