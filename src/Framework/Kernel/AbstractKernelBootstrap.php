@@ -2,7 +2,7 @@
 
 namespace Venta\Framework\Kernel;
 
-use Venta\Contracts\Container\Container;
+use Venta\Contracts\Container\MutableContainer;
 use Venta\Contracts\Kernel\Kernel;
 
 /**
@@ -13,7 +13,7 @@ use Venta\Contracts\Kernel\Kernel;
 abstract class AbstractKernelBootstrap
 {
     /**
-     * @var Container
+     * @var MutableContainer
      */
     private $container;
 
@@ -25,10 +25,10 @@ abstract class AbstractKernelBootstrap
     /**
      * AbstractKernelBootstrap constructor.
      *
-     * @param Container $container
+     * @param MutableContainer $container
      * @param Kernel $kernel
      */
-    public function __construct(Container $container, Kernel $kernel)
+    public function __construct(MutableContainer $container, Kernel $kernel)
     {
         $this->container = $container;
         $this->kernel = $kernel;
@@ -42,9 +42,9 @@ abstract class AbstractKernelBootstrap
     abstract public function __invoke();
 
     /**
-     * @return Container
+     * @return MutableContainer
      */
-    protected function container(): Container
+    protected function container(): MutableContainer
     {
         return $this->container;
     }
