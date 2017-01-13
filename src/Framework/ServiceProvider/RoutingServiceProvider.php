@@ -16,7 +16,6 @@ use Venta\Contracts\Routing\RouteDispatcherFactory as RouteDispatcherFactoryCont
 use Venta\Contracts\Routing\RouteGroup as RouteGroupContract;
 use Venta\Contracts\Routing\RouteMatcher as RouteMatcherContract;
 use Venta\Contracts\Routing\RouteParser as RouteParserContract;
-use Venta\Contracts\Routing\RouteProcessor;
 use Venta\Contracts\Routing\RouteProcessor as RouteProcessorContract;
 use Venta\Contracts\Routing\Router as RouterContract;
 use Venta\Contracts\Routing\UrlGenerator as UrlGeneratorContract;
@@ -75,10 +74,6 @@ final class RoutingServiceProvider extends AbstractServiceProvider
             return new RouteCollector(new FastRouteRouteParser\Std(), new GroupCountBased);
         }, true);
 
-        $this->container()->decorate(
-            RouteCollectionContract::class,
-            function ($routes, RouteProcessor $processor) {
-                return new ProcessingRouteCollection($routes, $processor);
-        });
+        $this->container()->addDecorator(RouteCollectionContract::class, ProcessingRouteCollection::class);
     }
 }

@@ -3,11 +3,11 @@
 namespace Venta\Contracts\Container;
 
 /**
- * Interface ServiceRegistry
+ * Interface MutableContainer
  *
  * @package Venta\Contracts\Container
  */
-interface ServiceRegistry
+interface MutableContainer extends Container
 {
     /**
      * Decorates previous implementation.

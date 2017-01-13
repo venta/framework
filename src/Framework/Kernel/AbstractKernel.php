@@ -6,10 +6,12 @@ use InvalidArgumentException;
 use Psr\Log\LoggerAwareInterface;
 use Venta\Config\ConfigProxy;
 use Venta\Config\MutableConfig;
+use Venta\Container\ContainerProxy;
 use Venta\Contracts\Config\Config;
 use Venta\Contracts\Config\MutableConfig as MutableConfigContract;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Container\ContainerAware;
+use Venta\Contracts\Container\MutableContainer;
 use Venta\Contracts\Http\ResponseFactoryAware;
 use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\ServiceProvider\ServiceProvider;
@@ -34,7 +36,7 @@ abstract class AbstractKernel implements Kernel
      *
      * @var string
      */
-    protected $containerClass = \Venta\Container\Container::class;
+    protected $containerClass = \Venta\Container\MutableContainer::class;
 
     /**
      * @inheritDoc
@@ -95,12 +97,12 @@ abstract class AbstractKernel implements Kernel
      * Boots service provider with base config.
      *
      * @param string $providerClass
-     * @param Container $container
+     * @param MutableContainer $container
      * @param MutableConfigContract $mutableConfig
      */
     protected function bootServiceProvider(
         string $providerClass,
-        Container $container,
+        MutableContainer $container,
         MutableConfigContract $mutableConfig
     ) {
         $this->ensureServiceProvider($providerClass);
@@ -139,10 +141,10 @@ abstract class AbstractKernel implements Kernel
      * This is the point where specific kernel functionality defined by bootstrap is enabled.
      *
      * @param string $bootstrapClass
-     * @param Container $container
+     * @param MutableContainer $container
      * @throws InvalidArgumentException
      */
-    protected function invokeBootstrap(string $bootstrapClass, Container $container)
+    protected function invokeBootstrap(string $bootstrapClass, MutableContainer $container)
     {
         $this->ensureBootstrap($bootstrapClass);
 
@@ -159,23 +161,23 @@ abstract class AbstractKernel implements Kernel
     /**
      * Adds default service inflections.
      *
-     * @param Container $container
+     * @param MutableContainer $container
      */
-    private function addDefaultInflections(Container $container)
+    private function addDefaultInflections(MutableContainer $container)
     {
-        $container->inflect(ContainerAware::class, 'setContainer', ['container' => $container]);
-        $container->inflect(LoggerAwareInterface::class, 'setLogger');
-        $container->inflect(ResponseFactoryAware::class, 'setResponseFactory');
+        $container->addInflection(ContainerAware::class, 'setContainer');
+        $container->addInflection(LoggerAwareInterface::class, 'setLogger');
+        $container->addInflection(ResponseFactoryAware::class, 'setResponseFactory');
     }
 
     /**
      * Binds default services to container.
      *
-     * @param Container $container
+     * @param MutableContainer $container
      */
-    private function bindDefaultServices(Container $container)
+    private function bindDefaultServices(MutableContainer $container)
     {
-        $container->bindInstance(Container::class, $container);
+        $container->bindInstance(MutableContainer::class, new ContainerProxy($container));
         $container->bindInstance(Kernel::class, $this);
     }
 
@@ -212,9 +214,9 @@ abstract class AbstractKernel implements Kernel
     /**
      * Initializes service container.
      */
-    private function initServiceContainer(): Container
+    private function initServiceContainer(): MutableContainer
     {
-        /** @var Container $container */
+        /** @var MutableContainer $container */
         $container = new $this->containerClass;
 
         $this->bindDefaultServices($container);
