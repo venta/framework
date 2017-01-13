@@ -177,7 +177,7 @@ abstract class AbstractKernel implements Kernel
      */
     private function bindDefaultServices(MutableContainer $container)
     {
-        $container->bindInstance(MutableContainer::class, new ContainerProxy($container));
+        $container->bindInstance(Container::class, new ContainerProxy($container));
         $container->bindInstance(Kernel::class, $this);
     }
 
