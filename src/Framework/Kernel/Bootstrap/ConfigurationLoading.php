@@ -25,6 +25,6 @@ final class ConfigurationLoading extends AbstractKernelBootstrap
             $config = array_replace_recursive($config, require $file->getPathname());
         }
 
-        $this->container()->bindInstance(ConfigContract::class, new Config($config));
+        $this->container()->bind(ConfigContract::class, new Config($config));
     }
 }

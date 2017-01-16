@@ -21,11 +21,11 @@ final class FilesystemServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container()->bindFactory(Filesystem::class, function () {
+        $this->container()->factory(Filesystem::class, function () {
             return new Filesystem(new Local($this->kernel()->rootPath()));
         });
-        $this->container()->bindClass(FilesystemInterface::class, Filesystem::class);
-        $this->container()->bindClass(VentaFilesystemContract::class, VentaFilesystem::class);
+        $this->container()->bind(FilesystemInterface::class, Filesystem::class);
+        $this->container()->bind(VentaFilesystemContract::class, VentaFilesystem::class);
     }
 
 }

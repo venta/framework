@@ -23,7 +23,7 @@ final class Logging extends AbstractKernelBootstrap
     public function __invoke()
     {
         // todo: implement multi-channel configuration.
-        $this->container()->bindFactory(
+        $this->container()->factory(
             LoggerInterface::class, function (Config $config) {
 
             $handler = new StreamHandler(

@@ -20,7 +20,7 @@ final class ConsoleServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container()->bindClass(CommandCollectionContract::class, CommandCollection::class);
+        $this->container()->bind(CommandCollectionContract::class, CommandCollection::class);
 
         $this->provideCommands(
             Shell::class

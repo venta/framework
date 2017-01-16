@@ -51,7 +51,7 @@ abstract class AbstractKernel implements Kernel
 
         $appConfig = $container->get(Config::class)->all();
         $config = new MutableConfig($appConfig);
-        $container->bindInstance(Config::class, new ConfigProxy($config));
+        $container->bind(Config::class, new ConfigProxy($config));
 
         // Here we boot service providers on by one. The correct order is ensured by resolver.
         /** @var ServiceProviderDependencyResolver $resolver */
@@ -177,8 +177,8 @@ abstract class AbstractKernel implements Kernel
      */
     private function bindDefaultServices(MutableContainer $container)
     {
-        $container->bindInstance(Container::class, new ContainerProxy($container));
-        $container->bindInstance(Kernel::class, $this);
+        $container->bind(Container::class, new ContainerProxy($container));
+        $container->bind(Kernel::class, $this);
     }
 
     /**

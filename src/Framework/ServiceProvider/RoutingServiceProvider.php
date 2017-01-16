@@ -46,26 +46,23 @@ final class RoutingServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container()->bindClass(FastrouteDispatcherFactory::class, GroupCountBasedDispatcherFactory::class);
-        $this->container()->bindClass(
-            RequestRouteCollectionFactoryContract::class,
-            RequestRouteCollectionFactory::class
-        );
-        $this->container()->bindClass(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class);
-        $this->container()->bindClass(RouteCollectionContract::class, RouteCollection::class);
-        $this->container()->bindClass(ImmutableRouteCollectionContract::class, RouteCollectionContract::class);
-        $this->container()->bindClass(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class);
-        $this->container()->bindClass(RouteMatcherContract::class, RouteMatcher::class);
-        $this->container()->bindClass(RouteParserContract::class, RouteParser::class);
-        $this->container()->bindClass(RouterContract::class, Router::class);
-        $this->container()->bindClass(RouteProcessorContract::class, RoutePathProcessor::class);
+        $this->container()->bind(FastrouteDispatcherFactory::class, GroupCountBasedDispatcherFactory::class);
+        $this->container()->bind(RequestRouteCollectionFactoryContract::class, RequestRouteCollectionFactory::class);
+        $this->container()->bind(MiddlewarePipelineFactoryContract::class, MiddlewarePipelineFactory::class);
+        $this->container()->bind(RouteCollectionContract::class, RouteCollection::class);
+        $this->container()->bind(ImmutableRouteCollectionContract::class, RouteCollectionContract::class);
+        $this->container()->bind(RouteDispatcherFactoryContract::class, RouteDispatcherFactory::class);
+        $this->container()->bind(RouteMatcherContract::class, RouteMatcher::class);
+        $this->container()->bind(RouteParserContract::class, RouteParser::class);
+        $this->container()->bind(RouterContract::class, Router::class);
+        $this->container()->bind(RouteProcessorContract::class, RoutePathProcessor::class);
 
-        $this->container()->bindClass(UriInterface::class, Uri::class);
-        $this->container()->bindClass(UrlGeneratorContract::class, UrlGenerator::class);
+        $this->container()->bind(UriInterface::class, Uri::class);
+        $this->container()->bind(UrlGeneratorContract::class, UrlGenerator::class);
 
-        $this->container()->bindClass(RouteGroupContract::class, RouteGroup::class, false);
+        $this->container()->bind(RouteGroupContract::class, RouteGroup::class);
 
-        $this->container()->bindFactory(RouteCollector::class, function () {
+        $this->container()->factory(RouteCollector::class, function () {
             return new RouteCollector(new FastRouteRouteParser\Std(), new GroupCountBased);
         }, true);
 

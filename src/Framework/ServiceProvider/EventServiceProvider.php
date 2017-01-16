@@ -18,6 +18,6 @@ final class EventServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container()->bindClass(EventDispatcher::class, ContainerAwareEventDispatcher::class);
+        $this->container()->bind(EventDispatcher::class, ContainerAwareEventDispatcher::class);
     }
 }

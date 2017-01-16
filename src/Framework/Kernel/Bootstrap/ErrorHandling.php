@@ -24,7 +24,7 @@ final class ErrorHandling extends AbstractKernelBootstrap
      */
     public function __invoke()
     {
-        $this->container()->bindClass(ErrorHandlerContract::class, ErrorHandler::class, true);
+        $this->container()->bind(ErrorHandlerContract::class, ErrorHandler::class);
 
         $this->registerErrorRenderer();
         $this->registerErrorReporters();
@@ -42,9 +42,9 @@ final class ErrorHandling extends AbstractKernelBootstrap
     private function registerErrorRenderer()
     {
         if ($this->kernel()->isCli()) {
-            $this->container()->bindClass(ErrorRendererContract::class, ConsoleErrorRenderer::class, true);
+            $this->container()->bind(ErrorRendererContract::class, ConsoleErrorRenderer::class);
         } else {
-            $this->container()->bindClass(ErrorRendererContract::class, HttpErrorRenderer::class, true);
+            $this->container()->bind(ErrorRendererContract::class, HttpErrorRenderer::class);
         }
     }
 
@@ -53,7 +53,7 @@ final class ErrorHandling extends AbstractKernelBootstrap
      */
     private function registerErrorReporters()
     {
-        $this->container()->bindFactory(
+        $this->container()->factory(
             ErrorReporterAggregateContract::class,
             function () {
                 $reporters = new ErrorReporterAggregate($this->container());

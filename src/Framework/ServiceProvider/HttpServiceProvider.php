@@ -25,11 +25,11 @@ final class HttpServiceProvider extends AbstractServiceProvider
      */
     public function boot()
     {
-        $this->container()->bindClass(ResponseFactoryContract::class, ResponseFactory::class);
-        $this->container()->bindClass(ResponseEmitterContract::class, ResponseEmitter::class);
-        $this->container()->bindClass(CookieJarContract::class, CookieJar::class);
+        $this->container()->bind(ResponseFactoryContract::class, ResponseFactory::class);
+        $this->container()->bind(ResponseEmitterContract::class, ResponseEmitter::class);
+        $this->container()->bind(CookieJarContract::class, CookieJar::class);
 
-        $this->container()->bindFactory(
+        $this->container()->factory(
             ServerRequestInterface::class,
             [ServerRequestFactory::class, 'fromGlobals'],
             true

@@ -32,11 +32,10 @@ interface MutableContainer extends Container
      * Register class name definition.
      *
      * @param string $id Contract (interface) name.
-     * @param string $class Contract implementation class name.
-     * @param bool $shared
+     * @param string|object $service
      * @return void
      */
-    public function bindClass(string $id, string $class, $shared = true);
+    public function bind(string $id, $service);
 
     /**
      * Register callable factory definition.
@@ -46,15 +45,6 @@ interface MutableContainer extends Container
      * @param bool $shared
      * @return void
      */
-    public function bindFactory(string $id, $callable, $shared = false);
-
-    /**
-     * Register concrete object.
-     *
-     * @param string $id
-     * @param object $instance
-     * @return void
-     */
-    public function bindInstance(string $id, $instance);
+    public function factory(string $id, $callable, $shared = false);
 
 }
