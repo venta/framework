@@ -36,7 +36,7 @@ interface MutableContainer extends Container
      * @param bool $shared
      * @return void
      */
-    public function bindClass(string $id, string $class, $shared = false);
+    public function bindClass(string $id, string $class, $shared = true);
 
     /**
      * Register callable factory definition.

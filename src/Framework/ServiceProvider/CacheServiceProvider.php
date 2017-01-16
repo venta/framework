@@ -49,36 +49,32 @@ class CacheServiceProvider extends AbstractServiceProvider
         switch ($cacheDriver) {
             case 'array':
             case 'memory':
-                $this->container()->bindClass(CacheItemPoolInterface::class, ArrayCachePool::class, true);
+                $this->container()->bindClass(CacheItemPoolInterface::class, ArrayCachePool::class);
                 break;
             case 'void':
             case 'null':
-                $this->container()
-                     ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Void\VoidCachePool', true);
+                $this->container()->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Void\VoidCachePool');
                 break;
             case 'file':
             case 'files':
             case 'filesystem':
                 $this->container()
-                     ->bindFactory(CacheItemPoolInterface::class, $this->filesystemCachePoolFactory(), true);
+                    ->bindFactory(CacheItemPoolInterface::class, $this->filesystemCachePoolFactory(), true);
                 break;
             case 'redis':
-                $this->container()
-                     ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Redis\RedisCachePool', true);
+                $this->container()->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Redis\RedisCachePool');
                 break;
             case 'predis':
-                $this->container()
-                     ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Predis\PredisCachePool', true);
+                $this->container()->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Predis\PredisCachePool');
                 break;
             case 'memcached':
                 $this->container()
-                     ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Memcached\MemcachedCachePool', true);
+                    ->bindClass(CacheItemPoolInterface::class, 'Cache\Adapter\Memcached\MemcachedCachePool');
                 break;
             default:
                 $this->container()->bindClass(
                     CacheItemPoolInterface::class,
-                    ([$this, $cacheDriver . 'CachePoolFactory'])(),
-                    true
+                    ([$this, $cacheDriver . 'CachePoolFactory'])()
                 );
         }
     }
