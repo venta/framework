@@ -37,11 +37,6 @@ abstract class AbstractKernel implements Kernel
     protected $containerClass = \Venta\Container\MutableContainer::class;
 
     /**
-     * @var ServiceProvider[]
-     */
-    private $providers = [];
-
-    /**
      * @inheritDoc
      */
     public function boot(): Container
@@ -56,20 +51,20 @@ abstract class AbstractKernel implements Kernel
         $config = new MutableConfig($appConfig);
         $container->bind(Config::class, new ConfigProxy($config));
 
-        // Here we initializing service providers and collect container bindings.
-        foreach ($this->registerServiceProviders() as $providerClass) {
-            $this->ensureServiceProvider($providerClass);
-            /** @var AbstractServiceProvider $provider */
-            $this->providers[] = $provider = new $providerClass($container->get(Container::class), $config);
-            $provider->bind($container);
-            $config->merge($appConfig);
-        }
-
-        // Booting service providers on by one allows
-        foreach ($this->providers as $provider) {
+        array_map(function(AbstractServiceProvider $provider) use ($config, $appConfig) {
             $provider->boot();
             $config->merge($appConfig);
-        }
+
+            return $provider;
+        }, array_map(function ($providerClass) use ($config, $appConfig, $container) {
+            $this->ensureServiceProvider($providerClass);
+            /** @var AbstractServiceProvider|ServiceProvider $provider */
+            $provider = new $providerClass($container->get(Container::class), $config);
+            $provider->bind($container);
+            $config->merge($appConfig);
+
+            return $provider;
+        }, $this->registerServiceProviders()));
 
         return $container->get(Container::class);
     }
