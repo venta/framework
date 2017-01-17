@@ -77,8 +77,8 @@
     "require-dev": {
         "phpspec/phpspec": "^3.1",
         "phpunit/phpunit": "^5.4",
-        "mockery/mockery": "^0.9.5",
-        "henrikbjorn/phpspec-code-coverage": "^3.0"
+        "henrikbjorn/phpspec-code-coverage": "^3.0",
+        "mockery/mockery": "dev-master"
     },
     "minimum-stability": "dev"
 }
