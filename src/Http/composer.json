@@ -22,7 +22,8 @@
         "zendframework/zend-diactoros": "^1.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.4"
+        "phpspec/phpspec": "^3.1",
+        "php-mock/php-mock-prophecy": "^0.0.2"
     },
     "autoload": {
         "psr-4": {

@@ -78,7 +78,8 @@
         "phpspec/phpspec": "^3.1",
         "phpunit/phpunit": "^5.4",
         "henrikbjorn/phpspec-code-coverage": "^3.0",
-        "mockery/mockery": "dev-master"
+        "mockery/mockery": "dev-master",
+        "php-mock/php-mock-prophecy": "^0.0.2"
     },
     "minimum-stability": "dev"
 }
