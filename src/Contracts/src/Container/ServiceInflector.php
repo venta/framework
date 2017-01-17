@@ -17,7 +17,7 @@ interface ServiceInflector
      * @param array $arguments
      * @return void
      */
-    public function addInflection(string $id, string $method, array $arguments = []);
+    public function add(string $id, string $method, array $arguments = []);
 
     /**
      * Apply inflections to the subject object.
@@ -25,5 +25,5 @@ interface ServiceInflector
      * @param $object
      * @return mixed
      */
-    public function inflect($object);
+    public function apply($object);
 }

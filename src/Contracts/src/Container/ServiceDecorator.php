@@ -16,7 +16,7 @@ interface ServiceDecorator
      * @param callable|string $decorator Class name or callback to decorate with.
      * @return void
      */
-    public function addDecorator(string $id, $decorator);
+    public function add(string $id, $decorator);
 
     /**
      *
@@ -25,6 +25,6 @@ interface ServiceDecorator
      * @param bool $once
      * @return mixed
      */
-    public function decorate(string $id, $object, bool $once = false);
+    public function apply(string $id, $object, bool $once = false);
 
 }

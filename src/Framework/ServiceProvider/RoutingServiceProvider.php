@@ -66,6 +66,6 @@ final class RoutingServiceProvider extends AbstractServiceProvider
             return new RouteCollector(new FastRouteRouteParser\Std(), new GroupCountBased);
         }, true);
 
-        $this->container()->addDecorator(RouteCollectionContract::class, ProcessingRouteCollection::class);
+        $this->container()->decorate(RouteCollectionContract::class, ProcessingRouteCollection::class);
     }
 }
