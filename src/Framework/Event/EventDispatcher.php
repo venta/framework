@@ -2,7 +2,7 @@
 
 namespace Venta\Framework\Event;
 
-use Venta\Contracts\Container\Container;
+use Venta\Contracts\Container\Invoker;
 use Venta\Contracts\Event\Event as EventContract;
 use Venta\Event\EventDispatcher as BaseEventDispatcher;
 
@@ -14,18 +14,18 @@ use Venta\Event\EventDispatcher as BaseEventDispatcher;
 class EventDispatcher extends BaseEventDispatcher
 {
     /**
-     * @var Container
+     * @var Invoker
      */
-    private $container;
+    private $invoker;
 
     /**
-     * CommandCollector constructor.
+     * EventDispatcher constructor.
      *
-     * @param Container $container
+     * @param Invoker $container
      */
-    public function __construct(Container $container)
+    public function __construct(Invoker $container)
     {
-        $this->container = $container;
+        $this->invoker = $container;
     }
 
     /**
@@ -33,7 +33,7 @@ class EventDispatcher extends BaseEventDispatcher
      */
     protected function callListener($listener, EventContract $event)
     {
-        $this->container->call($listener, [$event]);
+        $this->invoker->call($listener, [$event]);
     }
 
     /**
@@ -41,6 +41,6 @@ class EventDispatcher extends BaseEventDispatcher
      */
     protected function canBeCalled($listener): bool
     {
-        return $this->container->isCallable($listener);
+        return $this->invoker->isCallable($listener);
     }
 }
