@@ -2,6 +2,7 @@
 
 namespace Venta\Framework\ServiceProvider;
 
+use Venta\Contracts\Container\MutableContainer;
 use Venta\Contracts\Event\EventDispatcher;
 use Venta\Framework\Event\EventDispatcher as ContainerAwareEventDispatcher;
 use Venta\ServiceProvider\AbstractServiceProvider;
@@ -16,8 +17,8 @@ final class EventServiceProvider extends AbstractServiceProvider
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function bind(MutableContainer $container)
     {
-        $this->container()->bind(EventDispatcher::class, ContainerAwareEventDispatcher::class);
+        $container->bind(EventDispatcher::class, ContainerAwareEventDispatcher::class);
     }
 }

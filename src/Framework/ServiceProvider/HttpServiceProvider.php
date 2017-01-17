@@ -3,6 +3,7 @@
 namespace Venta\Framework\ServiceProvider;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Venta\Contracts\Container\MutableContainer;
 use Venta\Contracts\Http\CookieJar as CookieJarContract;
 use Venta\Contracts\Http\ResponseEmitter as ResponseEmitterContract;
 use Venta\Contracts\Http\ResponseFactory as ResponseFactoryContract;
@@ -23,16 +24,12 @@ final class HttpServiceProvider extends AbstractServiceProvider
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function bind(MutableContainer $container)
     {
-        $this->container()->bind(ResponseFactoryContract::class, ResponseFactory::class);
-        $this->container()->bind(ResponseEmitterContract::class, ResponseEmitter::class);
-        $this->container()->bind(CookieJarContract::class, CookieJar::class);
+        $container->bind(ResponseFactoryContract::class, ResponseFactory::class);
+        $container->bind(ResponseEmitterContract::class, ResponseEmitter::class);
+        $container->bind(CookieJarContract::class, CookieJar::class);
 
-        $this->container()->factory(
-            ServerRequestInterface::class,
-            [ServerRequestFactory::class, 'fromGlobals'],
-            true
-        );
+        $container->factory(ServerRequestInterface::class, [ServerRequestFactory::class, 'fromGlobals'], true);
     }
 }

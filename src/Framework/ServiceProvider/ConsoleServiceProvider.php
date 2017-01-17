@@ -4,6 +4,7 @@ namespace Venta\Framework\ServiceProvider;
 
 use Venta\Console\CommandCollection;
 use Venta\Contracts\Console\CommandCollection as CommandCollectionContract;
+use Venta\Contracts\Container\MutableContainer;
 use Venta\Framework\Commands\Shell;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
@@ -18,9 +19,9 @@ final class ConsoleServiceProvider extends AbstractServiceProvider
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function bind(MutableContainer $container)
     {
-        $this->container()->bind(CommandCollectionContract::class, CommandCollection::class);
+        $container->bind(CommandCollectionContract::class, CommandCollection::class);
 
         $this->provideCommands(
             Shell::class

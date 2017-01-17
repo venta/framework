@@ -5,6 +5,7 @@ namespace Venta\Framework\ServiceProvider;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use Venta\Contracts\Container\MutableContainer;
 use Venta\Contracts\Filesystem\Filesystem as VentaFilesystemContract;
 use Venta\Filesystem\Filesystem as VentaFilesystem;
 use Venta\ServiceProvider\AbstractServiceProvider;
@@ -19,13 +20,13 @@ final class FilesystemServiceProvider extends AbstractServiceProvider
     /**
      * @inheritDoc
      */
-    public function boot()
+    public function bind(MutableContainer $container)
     {
-        $this->container()->factory(Filesystem::class, function () {
+        $container->factory(Filesystem::class, function () {
             return new Filesystem(new Local($this->kernel()->rootPath()));
         });
-        $this->container()->bind(FilesystemInterface::class, Filesystem::class);
-        $this->container()->bind(VentaFilesystemContract::class, VentaFilesystem::class);
+        $container->bind(FilesystemInterface::class, Filesystem::class);
+        $container->bind(VentaFilesystemContract::class, VentaFilesystem::class);
     }
 
 }

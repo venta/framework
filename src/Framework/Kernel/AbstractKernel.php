@@ -8,7 +8,6 @@ use Venta\Config\ConfigProxy;
 use Venta\Config\MutableConfig;
 use Venta\Container\ContainerProxy;
 use Venta\Contracts\Config\Config;
-use Venta\Contracts\Config\MutableConfig as MutableConfigContract;
 use Venta\Contracts\Container\Container;
 use Venta\Contracts\Container\ContainerAware;
 use Venta\Contracts\Container\MutableContainer;
@@ -19,7 +18,6 @@ use Venta\Framework\Kernel\Bootstrap\ConfigurationLoading;
 use Venta\Framework\Kernel\Bootstrap\EnvironmentDetection;
 use Venta\Framework\Kernel\Bootstrap\ErrorHandling;
 use Venta\Framework\Kernel\Bootstrap\Logging;
-use Venta\Framework\Kernel\Resolver\ServiceProviderDependencyResolver;
 use Venta\ServiceProvider\AbstractServiceProvider;
 
 /**
@@ -39,6 +37,11 @@ abstract class AbstractKernel implements Kernel
     protected $containerClass = \Venta\Container\MutableContainer::class;
 
     /**
+     * @var ServiceProvider[]
+     */
+    private $providers = [];
+
+    /**
      * @inheritDoc
      */
     public function boot(): Container
@@ -53,15 +56,22 @@ abstract class AbstractKernel implements Kernel
         $config = new MutableConfig($appConfig);
         $container->bind(Config::class, new ConfigProxy($config));
 
-        // Here we boot service providers on by one. The correct order is ensured by resolver.
-        /** @var ServiceProviderDependencyResolver $resolver */
-        $resolver = $container->get(ServiceProviderDependencyResolver::class);
-        foreach ($resolver($this->registerServiceProviders()) as $providerClass) {
-            $this->bootServiceProvider($providerClass, $container, $config);
+        // Here we initializing service providers and collect container bindings.
+        foreach ($this->registerServiceProviders() as $providerClass) {
+            $this->ensureServiceProvider($providerClass);
+            /** @var AbstractServiceProvider $provider */
+            $this->providers[] = $provider = new $providerClass($container->get(Container::class), $config);
+            $provider->bind($container);
             $config->merge($appConfig);
         }
 
-        return $container;
+        // Booting service providers on by one allows
+        foreach ($this->providers as $provider) {
+            $provider->boot();
+            $config->merge($appConfig);
+        }
+
+        return $container->get(Container::class);
     }
 
     /**
@@ -91,25 +101,6 @@ abstract class AbstractKernel implements Kernel
     public function version(): string
     {
         return self::VERSION;
-    }
-
-    /**
-     * Boots service provider with base config.
-     *
-     * @param string $providerClass
-     * @param MutableContainer $container
-     * @param MutableConfigContract $mutableConfig
-     */
-    protected function bootServiceProvider(
-        string $providerClass,
-        MutableContainer $container,
-        MutableConfigContract $mutableConfig
-    ) {
-        $this->ensureServiceProvider($providerClass);
-
-        /** @var ServiceProvider $provider */
-        $provider = new $providerClass($container, $mutableConfig);
-        $provider->boot();
     }
 
     /**

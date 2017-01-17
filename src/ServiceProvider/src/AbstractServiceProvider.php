@@ -4,7 +4,7 @@ namespace Venta\ServiceProvider;
 
 use Venta\Contracts\Config\MutableConfig;
 use Venta\Contracts\Console\CommandCollection;
-use Venta\Contracts\Container\MutableContainer;
+use Venta\Contracts\Container\Container;
 use Venta\Contracts\Kernel\Kernel;
 use Venta\Contracts\Routing\RouteCollection;
 use Venta\Contracts\ServiceProvider\ServiceProvider;
@@ -16,12 +16,6 @@ use Venta\Contracts\ServiceProvider\ServiceProvider;
  */
 abstract class AbstractServiceProvider implements ServiceProvider
 {
-    /**
-     * Service provider name.
-     *
-     * @var string
-     */
-    protected static $name;
 
     /**
      * Application config.
@@ -33,43 +27,28 @@ abstract class AbstractServiceProvider implements ServiceProvider
     /**
      * Container instance.
      *
-     * @var MutableContainer
+     * @var Container
      */
     private $container;
 
     /**
      * AbstractServiceProvider constructor.
      *
-     * @param MutableContainer $mutableContainer
+     * @param Container $container
      * @param MutableConfig $mutableConfig
      */
-    public function __construct(MutableContainer $mutableContainer, MutableConfig $mutableConfig)
+    public function __construct(Container $container, MutableConfig $mutableConfig)
     {
-        $this->container = $mutableContainer;
+        $this->container = $container;
         $this->config = $mutableConfig;
     }
 
-
     /**
      * @inheritdoc
      */
-    public static function dependencies(): array
+    public function boot()
     {
-        return [];
     }
-
-    /**
-     * @inheritdoc
-     */
-    final public static function name(): string
-    {
-        return static::$name ?: static::class;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    abstract public function boot();
 
     /**
      * @return MutableConfig
@@ -80,9 +59,9 @@ abstract class AbstractServiceProvider implements ServiceProvider
     }
 
     /**
-     * @return MutableContainer
+     * @return Container
      */
-    protected function container(): MutableContainer
+    protected function container(): Container
     {
         return $this->container;
     }

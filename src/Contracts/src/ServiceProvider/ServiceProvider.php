@@ -2,6 +2,8 @@
 
 namespace Venta\Contracts\ServiceProvider;
 
+use Venta\Contracts\Container\MutableContainer;
+
 /**
  * Interface ServiceProvider.
  *
@@ -9,24 +11,17 @@ namespace Venta\Contracts\ServiceProvider;
  */
 interface ServiceProvider
 {
-    /**
-     * Returns a list of service provider names the package depends on.
-     *
-     * @return array
-     */
-    public static function dependencies(): array;
 
     /**
-     * Returns the service provider name.
-     *
-     * @return string
+     * @param MutableContainer $container
+     * @return void
      */
-    public static function name(): string;
+    public function bind(MutableContainer $container);
 
     /**
      * Boots the service provider.
      *
-     * @return mixed
+     * @return void
      */
     public function boot();
 
