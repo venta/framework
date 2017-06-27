@@ -261,7 +261,11 @@ abstract class AbstractContainer implements ContainerContract
         $constructor = $reflection->getConstructor();
 
         if ($constructor && $constructor->getNumberOfParameters() > 0) {
-            $invokable = new Invokable($constructor);
+            if ($constructor->getDeclaringClass() !== $class) {
+                $invokable = new Invokable([$class, '__construct']);
+            } else {
+                $invokable = new Invokable($constructor);
+            }
 
             return function (array $arguments = []) use ($invokable) {
                 return $this->invoker->invoke($invokable, $arguments);
